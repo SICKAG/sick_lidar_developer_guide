@@ -1,0 +1,1459 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="A practical guide to integrate SICK LiDAR sensors (picoScan100)." name="description"/>
+<meta content="SICK" name="author"/>
+<link href="https://sick-lidar-developer-guide-1a59e3.gitlab-pages.sickcn.net/rest-api-openapi/" rel="canonical"/>
+<link href="../recording/sdk-logging/" rel="prev"/>
+<link href="../cola/" rel="next"/>
+<link href="../assets/SICK-logo.svg" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>REST API (OpenAPI) - SICK LiDAR Developer Guide</title>
+<link href="../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
+<link href="../sick-brand.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="custom" data-md-color-primary="custom" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#rest-api-openapi">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SICK LiDAR Developer Guide" class="md-header__button md-logo" data-md-component="logo" href=".." title="SICK LiDAR Developer Guide">
+<img alt="logo" src="../assets/SICK-logo.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SICK LiDAR Developer Guide
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              REST API (OpenAPI)
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="custom" data-md-color-media="" data-md-color-primary="custom" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SICK LiDAR Developer Guide" class="md-nav__button md-logo" data-md-component="logo" href=".." title="SICK LiDAR Developer Guide">
+<img alt="logo" src="../assets/SICK-logo.svg"/>
+</a>
+    SICK LiDAR Developer Guide
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested" data-title="Home">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_1" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested" data-title="picoScan100">
+<input class="md-nav__toggle md-toggle" id="__nav_1_2" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../picoScan100/">
+<span class="md-ellipsis">
+    
+  
+    picoScan100
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_1_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_1_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    picoScan100
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../picoScan100/configuration/">
+<span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../picoScan100/application/">
+<span class="md-ellipsis">
+    
+  
+    Application
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../picoScan100/diagnostics/">
+<span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../picoScan100/licenses/">
+<span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../changelog/picoScan100/">
+<span class="md-ellipsis">
+    
+  
+    Release notes
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../connect-and-set-up/">
+<span class="md-ellipsis">
+    
+  
+    Connect &amp; set up
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Simulation">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Simulation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtual-sensor-lab/">
+<span class="md-ellipsis">
+    
+  
+    Virtual Sensor Lab
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../nvidia-omniverse-simulation/">
+<span class="md-ellipsis">
+    
+  
+    NVIDIA Isaac Sim
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Visualization">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualization
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sopasair/">
+<span class="md-ellipsis">
+    
+  
+    SOPASair
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sentio-creator/">
+<span class="md-ellipsis">
+    
+  
+    Sentio Creator
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sopas-et/">
+<span class="md-ellipsis">
+    
+  
+    SOPAS ET
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cloudcompare/">
+<span class="md-ellipsis">
+    
+  
+    CloudCompare
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Recording">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Recording
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Recording
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../recording/pcap-network-capture/">
+<span class="md-ellipsis">
+    
+  
+    Wireshark (.pcap)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../recording/ros-bag-recording/">
+<span class="md-ellipsis">
+    
+  
+    ROS bag (.db3)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../recording/sopas-data-recording/">
+<span class="md-ellipsis">
+    
+  
+    SOPAS ET (.csv)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../recording/api-based-recording/">
+<span class="md-ellipsis">
+    
+  
+    ScanSegmentAPI (.json)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../recording/sdk-logging/">
+<span class="md-ellipsis">
+    
+  
+    sick_perception_sdk
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested" data-title="Configuration">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuration
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    REST API (OpenAPI)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    REST API (OpenAPI)
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#base-url-and-json-envelope">
+<span class="md-ellipsis">
+      
+        Base URL and JSON envelope
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reading-vs-writing">
+<span class="md-ellipsis">
+      
+        Reading vs. writing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#user-levels">
+<span class="md-ellipsis">
+      
+        User levels
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#authentication">
+<span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+</a>
+<nav aria-label="Authentication" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#challenge-response-authentication">
+<span class="md-ellipsis">
+      
+        Challenge-Response Authentication
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#session-token-authentication">
+<span class="md-ellipsis">
+      
+        Session Token Authentication
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#openapi">
+<span class="md-ellipsis">
+      
+        OpenAPI
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#related-articles">
+<span class="md-ellipsis">
+      
+        Related Articles
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cola/">
+<span class="md-ellipsis">
+    
+  
+    CoLa (Telegram Listing)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../configuration-backup-and-restore/">
+<span class="md-ellipsis">
+    
+  
+    Backup &amp; restore
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../https-and-certificates/">
+<span class="md-ellipsis">
+    
+  
+    HTTPS &amp; certificates
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../insomnia/">
+<span class="md-ellipsis">
+    
+  
+    Insomnia
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../postman/">
+<span class="md-ellipsis">
+    
+  
+    Postman
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Data Streaming">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Data Streaming
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Streaming
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../data-format/">
+<span class="md-ellipsis">
+    
+  
+    Compact format
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../wireshark-dissector/">
+<span class="md-ellipsis">
+    
+  
+    Wireshark Dissector
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../msgpack/">
+<span class="md-ellipsis">
+    
+  
+    MSGPACK format
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cola-lmdscandata/">
+<span class="md-ellipsis">
+    
+  
+    LMDscandata
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../websocket-events/">
+<span class="md-ellipsis">
+    
+  
+    WebSocket events
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Object Detection">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Object Detection
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Object Detection
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../field-evaluation-and-distance-api/">
+<span class="md-ellipsis">
+    
+  
+    Field Evaluation
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../editing-field-polygons/">
+<span class="md-ellipsis">
+    
+  
+    Editing field polygons
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../distance-dependent/">
+<span class="md-ellipsis">
+    
+  
+    Distance-dependent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../teach-in/">
+<span class="md-ellipsis">
+    
+  
+    Teach In
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Robot Operating System">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Robot Operating System
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Operating System
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../native-ros-2/">
+<span class="md-ellipsis">
+    
+  
+    Native ROS 2
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../client-side-driver/">
+<span class="md-ellipsis">
+    
+  
+    sick_scan_xd
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Programming Languages">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Programming Languages
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_9_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_9">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Programming Languages
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../c-plus-plus/">
+<span class="md-ellipsis">
+    
+  
+    C++
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../python/">
+<span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../c-sharp/">
+<span class="md-ellipsis">
+    
+  
+    C#
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../matlab/">
+<span class="md-ellipsis">
+    
+  
+    MATLAB
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested" data-title="Miscellaneous">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Miscellaneous
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_10_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_10">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Miscellaneous
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../firmware-update/">
+<span class="md-ellipsis">
+    
+  
+    Firmware update
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../device-discovery/">
+<span class="md-ellipsis">
+    
+  
+    Device discovery
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../user-levels/">
+<span class="md-ellipsis">
+    
+  
+    User levels
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../plc-integration/">
+<span class="md-ellipsis">
+    
+  
+    PLC integration
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../ntp-time-synchronization/">
+<span class="md-ellipsis">
+    
+  
+    NTP Time Synchronization
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../ptp-time-synchronization/">
+<span class="md-ellipsis">
+    
+  
+    PTP Time Synchronization
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cybersecurity/">
+<span class="md-ellipsis">
+    
+  
+    Cybersecurity
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../integrity-and-checksums/">
+<span class="md-ellipsis">
+    
+  
+    Integrity &amp; checksums
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../3d-point-clouds-with-2d-lidars/">
+<span class="md-ellipsis">
+    
+  
+    3D with 2D LiDARs
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../troubleshooting-and-support/">
+<span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contact/">
+<span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#base-url-and-json-envelope">
+<span class="md-ellipsis">
+      
+        Base URL and JSON envelope
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reading-vs-writing">
+<span class="md-ellipsis">
+      
+        Reading vs. writing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#user-levels">
+<span class="md-ellipsis">
+      
+        User levels
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#authentication">
+<span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+</a>
+<nav aria-label="Authentication" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#challenge-response-authentication">
+<span class="md-ellipsis">
+      
+        Challenge-Response Authentication
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#session-token-authentication">
+<span class="md-ellipsis">
+      
+        Session Token Authentication
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#openapi">
+<span class="md-ellipsis">
+      
+        OpenAPI
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#related-articles">
+<span class="md-ellipsis">
+      
+        Related Articles
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="rest-api-openapi">REST API / OpenAPI<a class="headerlink" href="#rest-api-openapi" title="Permanent link">¶</a></h1>
+<div class="chips">
+<span class="chips-label">Compatible with: </span>
+<span class="chip chip--pico">picoScan100</span>
+</div>
+<p>The REST API is the primary way to configure and control the picoScan. It is a JSON-over-HTTP interface on port 80 (or 443 with <a href="../https-and-certificates/">HTTPS</a>) that mirrors the SOPASair web UI: every variable and method you see in the UI is reachable programmatically.</p>
+<h2 id="base-url-and-json-envelope">Base URL and JSON envelope<a class="headerlink" href="#base-url-and-json-envelope" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>http[s]://&lt;device-ip&gt;/api/&lt;VariableOrMethod&gt;
+</code></pre></div>
+<p>Every response uses the same envelope. A <code>status</code> of <code>0</code> in the header means success:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">"header"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ok"</span><span class="w"> </span><span class="p">},</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"&lt;VariableName&gt;"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;value&gt;</span><span class="w"> </span><span class="p">}</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="reading-vs-writing">Reading vs. writing<a class="headerlink" href="#reading-vs-writing" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Method</th>
+<th>Authentication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read a parameter</td>
+<td><code>GET /api/&lt;Variable&gt;</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>Write a parameter</td>
+<td><code>POST /api/&lt;Variable&gt;</code></td>
+<td><a href="#challenge-response-authentication">Challenge-response</a></td>
+</tr>
+<tr>
+<td>Call a method (reboot, defaults, teach-in, …)</td>
+<td><code>POST /api/&lt;Method&gt;</code></td>
+<td><a href="#challenge-response-authentication">Challenge-response</a></td>
+</tr>
+<tr>
+<td>Binary file transfer (backup, firmware)</td>
+<td><code>GET</code>/<code>PUT /api/parameterbackup</code>, <code>PUT /api/update</code></td>
+<td><a href="#session-token-authentication">Session token</a></td>
+</tr>
+</tbody>
+</table>
+<p>Read the current device location with <code>GET /api/LocationName</code> (no auth required):</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">{</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">"header"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ok"</span><span class="w"> </span><span class="p">},</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"LocationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"picoScan150 25420067"</span><span class="w"> </span><span class="p">}</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>Every writable parameter follows the same pattern. The <code>data</code> key must match the endpoint name exactly, including capitalisation. See <a href="#authentication">Authentication</a> for the full write sequence.</p>
+<p>A <code>POST</code> to a parameter only changes the in-RAM working copy. This change is lost on power-cycle until you persist it:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="err">POST /api/WriteEeprom      # persist current RAM parameters to flash</span>
+</code></pre></div>
+<p><code>RebootDevice</code> also persists RAM to EEPROM before rebooting. A <code>SoftReset</code> or a hard power-cycle discards unsaved changes. See <a href="../integrity-and-checksums/">Integrity &amp; checksums</a> for how this shows up in <code>MD5Parameters</code>.</p>
+<h2 id="user-levels">User levels<a class="headerlink" href="#user-levels" title="Permanent link">¶</a></h2>
+<p>Writes require an authenticated user level. Only Service is enabled at the factory.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Factory default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maintenance</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Authorized Client</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>Enabled</td>
+</tr>
+</tbody>
+</table>
+<p>Change credentials with <code>changePassword</code> and enable other levels with <code>EnableUserLevel</code>. See <a href="../user-levels/">User levels</a> for the activation requirement and setup guidance.</p>
+<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">¶</a></h2>
+<p>The REST API supports two authentication methods depending on the operation type:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Use case</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Challenge-Response</strong></td>
+<td>Writes (parameters, methods) via <code>POST</code></td>
+<td><a href="#challenge-response-authentication">Challenge-response</a></td>
+</tr>
+<tr>
+<td><strong>Session Token</strong></td>
+<td>Binary file transfer (backup, firmware updates)</td>
+<td><a href="#session-token-authentication">Session token</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="challenge-response-authentication">Challenge-Response Authentication<a class="headerlink" href="#challenge-response-authentication" title="Permanent link">¶</a></h3>
+<p>All write operations (<code>POST</code>) require challenge-response authentication. This mechanism ensures the client proves it knows the password using a SHA-256 hash chain, without transmitting the password itself:</p>
+<ol>
+<li>Request a challenge from the device</li>
+<li>Compute a hash response using the challenge nonce, password, and realm</li>
+<li>Send the authenticated request with the hash</li>
+</ol>
+<p>The nonce is single-use; fetch a fresh challenge before each <code>POST</code>. For client libraries and automation, add a pre-request script to compute the hash automatically.</p>
+<h3 id="session-token-authentication">Session Token Authentication<a class="headerlink" href="#session-token-authentication" title="Permanent link">¶</a></h3>
+<p>File transfer operations (backup/restore configurations, firmware updates) use session token authentication:</p>
+<ol>
+<li>Authenticate once to receive a session token</li>
+<li>Use the token to upload or download files</li>
+<li>Session tokens remain valid across multiple operations</li>
+</ol>
+<p>This approach is more efficient for large binary transfers compared to challenge-response hashing per request.</p>
+<h2 id="openapi">OpenAPI<a class="headerlink" href="#openapi" title="Permanent link">¶</a></h2>
+<p>OpenAPI (formerly Swagger) is a machine-readable specification of every REST endpoint, including paths, request and response schemas, and parameters. Feed it to a code generator to create a typed REST client in almost any language, or import it directly into a REST client to prepare every endpoint without entering URLs manually.</p>
+<p>SICK publishes an OpenAPI description of the REST interface with each firmware. Find <code>openapi.yaml</code> for your device and firmware on the applicable SICK product page under <em>Software</em>, or through the device REST interface.</p>
+<p>Import the OpenAPI file into <a href="../postman/">Postman</a> or <a href="../insomnia/">Insomnia</a> to create a ready-made endpoint collection. Because writes require challenge-response, add a collection-level pre-request script that fetches a fresh challenge and computes the response hash automatically; see <a href="#challenge-response-authentication">Challenge Response Authentication</a> for the algorithm.</p>
+<p>If you see "Access Denied" on a POST in Insomnia, install the SICK challenge-response plugin so the hash is computed for you.</p>
+<p>Download the <a href="../assets/other/sick_rest_insomnia_plugin.rar">SICK REST Insomnia plugin</a>.</p>
+<p>A <code>POST</code> may return HTTP 429 when the REST rate limit is hit; apply exponential back-off. A 401 / Access Denied error almost always means a stale <code>nonce</code> (fetch a new challenge per request) or a user level that is not enabled.</p>
+<p>Sample OpenAPI descriptions for the Service interface, shipped with this guide for reference:</p>
+<ul>
+<li><a href="../assets/picoScan100/other/picoScan150_picoScan_2.3.3.0R_OpenApi.yaml">picoScan150 v2.3.3.0R - Service OpenAPI (YAML)</a></li>
+<li><a href="../assets/picoScan100/other/picoScan120_picoScan120_2.3.3.0R_OpenApi.yaml">picoScan120 v2.3.3.0R - Service OpenAPI (YAML)</a></li>
+</ul>
+<p>Always match the file to your device's actual firmware version; endpoints, parameters, and schemas change between releases.</p>
+<p>The full endpoint reference below is rendered directly from the OpenAPI files above. Expand an endpoint to see its parameters, request body, and response schema, or use <strong>Try it out</strong> against a reachable device (writes still require <a href="#challenge-response-authentication">challenge-response</a>).</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"/><input id="__tabbed_1_2" name="__tabbed_1" type="radio"/><div class="tabbed-labels"><label for="__tabbed_1_1">picoScan150</label><label for="__tabbed_1_2">picoScan120</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><iframe class="swagger-ui-iframe" frameborder="0" id="29c6a79e" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-29c6a79e.html" style="display:none;" width="100%"></iframe></p>
+</div>
+<div class="tabbed-block">
+<p><iframe class="swagger-ui-iframe" frameborder="0" id="95899e00" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-95899e00.html" style="display:none;" width="100%"></iframe></p>
+</div>
+</div>
+</div>
+<h2 id="related-articles">Related Articles<a class="headerlink" href="#related-articles" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://support.sick.com/sick-knowledgebase/article?id=f27c99cc-1a57-f011-877b-000d3a48f570">How to use the OpenAPI file with Insomnia</a></li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="sick-footer">
+<nav aria-label="Legal information" class="sick-footer__links">
+<span class="sick-footer__item">
+<a href="https://www.sick.com/de/en/imprint/s/imprint" rel="noopener noreferrer" target="_blank">Imprint</a>
+<span aria-hidden="true">|</span>
+</span>
+<span class="sick-footer__item">
+<a href="https://www.sick.com/de/en/terms-and-conditions/s/tac" rel="noopener noreferrer" target="_blank">Terms and Conditions</a>
+<span aria-hidden="true">|</span>
+</span>
+<span class="sick-footer__item">
+<a href="https://www.sick.com/de/en/terms-of-use/s/terms-of-use" rel="noopener noreferrer" target="_blank">Terms of use</a>
+<span aria-hidden="true">|</span>
+</span>
+<span class="sick-footer__item">
+<a href="https://www.sick.com/de/en/sick-data-privacy-declaration/w/dataprotection" rel="noopener noreferrer" target="_blank">Privacy Policy</a>
+<span aria-hidden="true">|</span>
+</span>
+</nav>
+<div class="sick-footer__item sick-footer__version">
+<span>Version: v0.1.4</span>
+<span aria-hidden="true">|</span>
+<span>Last update: 2026-09-09</span>
+</div>
+<div class="sick-footer__item sick-footer__copyright">
+<span aria-hidden="true">|</span>
+    © 2026 SICK AG
+  </div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.expand", "navigation.top", "navigation.tracking", "navigation.indexes", "navigation.path", "content.code.copy", "content.code.annotate", "toc.follow", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "v0.1.4"}</script>
+<script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+<script src="../javascripts/copy-for-ai.js?v=3"></script>
+<script>document$.subscribe(() => {
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) {
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+            let ticking = false;
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        
+            const dark_scheme_name = "slate"
+            
+            const schemeAttr = document.body.getAttribute("data-md-color-scheme");
+            const isMediaPrefersScheme = document.body.getAttribute("data-md-color-media") === "(prefers-color-scheme: dark)";
+
+            if (!isMediaPrefersScheme) {
+                window.__init_is_dark_mode = (schemeAttr === dark_scheme_name);
+            } else {
+                const computedScheme = window.getComputedStyle(document.body).getPropertyValue('color-scheme');
+                window.__init_is_dark_mode = computedScheme === "dark";
+            }
+            const options = {
+                attributeFilter: ['data-md-color-scheme'],
+            };
+            function color_scheme_callback(mutations) {
+                for (let mutation of mutations) {
+                    if (mutation.attributeName === "data-md-color-scheme") {
+                        scheme = document.body.getAttribute("data-md-color-scheme")
+                        var iframe_list = document.getElementsByClassName("swagger-ui-iframe")
+                        for(var i = 0; i < iframe_list.length; i++) {
+                            var ele = iframe_list.item(i);
+                            if (ele) {
+                                if (scheme === dark_scheme_name) {
+                                    ele.contentWindow.enable_dark_mode();
+                                } else {
+                                    ele.contentWindow.disable_dark_mode();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            observer = new MutationObserver(color_scheme_callback);
+            observer.observe(document.body, options);
+            })</script></body>
+</html>
