@@ -1,0 +1,3111 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A practical guide to integrate SICK LiDAR sensors (picoScan100).">
+      
+      
+        <meta name="author" content="SICK">
+      
+      
+        <link rel="canonical" href="https://sick-lidar-developer-guide-1a59e3.gitlab-pages.sickcn.net/msgpack-format/">
+      
+      
+        <link rel="prev" href="../compact-format/">
+      
+      
+        <link rel="next" href="../lmdscandata-format/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/SICK-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>MSGPACK Format - SICK LiDAR Developer Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../sick-brand.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#msgpack-format" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SICK LiDAR Developer Guide" class="md-header__button md-logo" aria-label="SICK LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SICK LiDAR Developer Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MSGPACK Format
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SICK LiDAR Developer Guide" class="md-nav__button md-logo" aria-label="SICK LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    SICK LiDAR Developer Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Home">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href=".." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="picoScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../picoScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    picoScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    picoScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picoScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graphical User Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picoScan100/cola-telegram-listing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoLa Telegram Listing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picoScan100/rest-api-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picoScan100/cybersecurity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picoScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/release-notes-picoscan100/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-and-set-up/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connect & Set Up
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Simulation">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-sensor-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Sensor Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nvidia-isaac-sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Isaac Sim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Visualization">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sentio-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentio Creator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sopas-et/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPAS ET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudcompare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CloudCompare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Recording">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recording
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recording
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recording/wireshark-pcap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wireshark | pcap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recording/ros-bag-db3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Bag | db3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recording/scansegmentapi-json/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScanSegmentAPI | JSON
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recording/sick-perception-sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sick_perception_sdk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Configuration">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cola-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoLa Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration-backup-and-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../https-and-certificates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPS & Certificates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../insomnia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insomnia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postman/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Postman
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested" data-title="Data Streaming">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Streaming
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Streaming
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compact-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compact Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSGPACK Format
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSGPACK Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#framing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Framing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#msgpack-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MSGPACK Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MSGPACK Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#used-msgpack-keywords-and-associated-uint8-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Used MSGPACK Keywords And Associated uint8 Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serialization-of-a-segment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of A Segment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serialization Of A Segment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notation Used
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-the-scansegment-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of The ScanSegment Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-the-scan-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of The Scan Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lmdscandata-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMDscandata Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../websocket-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebSocket Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter-details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Object Detection">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Object Detection
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Object Detection
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../field-evaluation-and-distance-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Robot Operating System">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Operating System
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Operating System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-ros-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Native ROS 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sick-scan-xd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sick_scan_xd
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Programming Languages">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming Languages
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Programming Languages
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../c-plus-plus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../c-sharp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C#
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matlab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MATLAB
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="Miscellaneous">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Miscellaneous
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Miscellaneous
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware-update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware Update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../device-discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-levels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Levels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plc-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PLC Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checksums/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checksums
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-point-clouds-with-2d-lidars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D With 2D LiDARs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-and-support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#framing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Framing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#msgpack-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MSGPACK Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MSGPACK Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#used-msgpack-keywords-and-associated-uint8-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Used MSGPACK Keywords And Associated uint8 Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serialization-of-a-segment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of A Segment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serialization Of A Segment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notation Used
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-the-scansegment-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of The ScanSegment Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-the-scan-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of The Scan Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization-of-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization Of Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="msgpack-format">MSGPACK Format<a class="headerlink" href="#msgpack-format" title="Permanent link">&para;</a></h1>
+<div class="chips">
+  <span class="chips-label">Compatible with: </span>
+  <span class="chip chip--pico">picoScan100</span>
+</div>
+
+<p>The measurement data are transmitted segment by segment, i.e., each transmitted data package contains a segment (cf. the Segmented data output section in the operating instructions). Each segment can be interpreted separately, i.e., it is not necessary to collect all segments in a frame (=all measurement data recorded in one revolution) to start processing. This makes it possible to reduce the latency between the generation of the measurement data and the processing of that data on the client side. The MSGPACK format encodes the measurement data according to the MSGPACK standard (see also <www.msgpack.org>), which has the advantage that the data packages can be easily parsed using the standard libraries available for numerous programming languages. The MSGPACK format is self-describing. Each data field is described by a keyword, so it is easy to determine which data field is currently being read without having to know the exact structure of the data.</p>
+<h2 id="framing">Framing<a class="headerlink" href="#framing" title="Permanent link">&para;</a></h2>
+<p>The data packages transmitted in MSGPACK format are enclosed within a frame:</p>
+<p>The actual MSGPACK payload data is preceded by 4 <code>&lt;STX&gt;</code> characters (hex code 0x02) and the size of the actual payload data (without the checksum at the end) in bytes as a uint32 value. Following the MSGPACK data is a CRC32 checksum calculated on the MSGPACK data only (without the <code>&lt;STX&gt;</code> characters and packet size). The little-endian representation is used for both the size of the payload and the checksum.</p>
+<table>
+<thead>
+<tr>
+<th>4 Bytes</th>
+<th>4 Bytes</th>
+<th>4 Bytes</th>
+<th>Variable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\x02\x02\x02\x02</code></td>
+<td>Size of MSGPACK buffer in bytes</td>
+<td>MSGPACK buffer</td>
+<td>CRC32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="msgpack-keywords">MSGPACK Keywords<a class="headerlink" href="#msgpack-keywords" title="Permanent link">&para;</a></h2>
+<p>To reduce the bandwidth on the transmission line, the keywords used in MSGPACK are encoded as uint8 values. The bandwidth savings from this are significant, but the user must interpret the read uint8 keywords according to the following table. The description of the keywords in the table is for overview purposes only. A detailed description can be found in the sections referred to in the respective table rows. Exactly the same names for the keywords are used there.</p>
+<p>The data packages can be read using standard MSGPACK parsers after removing the framing. For some parsers, options must be set to allow uint8 values as keywords. For the Python msgpack module, for example, the option <code>strict_map_key=False</code> must be set:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">unpacked</span> <span class="o">=</span> <span class="n">msgpack</span><span class="o">.</span><span class="n">unpackb</span><span class="p">(</span><span class="n">msgpackValue</span><span class="p">,</span> <span class="n">strict_map_key</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="used-msgpack-keywords-and-associated-uint8-codes">Used MSGPACK Keywords And Associated uint8 Codes<a class="headerlink" href="#used-msgpack-keywords-and-associated-uint8-codes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Keyword name</th>
+<th>Uint8 value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>classname</td>
+<td>0x10</td>
+<td>Keyword for the Scan (see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>") and ScanSegment (see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>") classes represented in the data</td>
+</tr>
+<tr>
+<td>data</td>
+<td>0x11</td>
+<td>Keyword for the data part, which belongs to the Array, Scan or ScanSegment classes, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"; see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"; see "<a href="#serialization-of-arrays">Serialization of arrays</a>".</td>
+</tr>
+<tr>
+<td>numOfElems</td>
+<td>0x12</td>
+<td>Number of elements in an array, see "<a href="#serialization-of-arrays">Serialization of arrays</a>"</td>
+</tr>
+<tr>
+<td>elemSz</td>
+<td>0x13</td>
+<td>Size of an array element in bytes, see "<a href="#serialization-of-arrays">Serialization of arrays</a>"</td>
+</tr>
+<tr>
+<td>endian</td>
+<td>0x14</td>
+<td>Keyword describing the endianness of the array elements, see "<a href="#serialization-of-arrays">Serialization of arrays</a>"</td>
+</tr>
+<tr>
+<td>elemTypes</td>
+<td>0x15</td>
+<td>Keyword for the type of array elements, see "<a href="#serialization-of-arrays">Serialization of arrays</a>"</td>
+</tr>
+<tr>
+<td>Little</td>
+<td>0x30</td>
+<td>Keyword for endianness "little"</td>
+</tr>
+<tr>
+<td>float32</td>
+<td>0x31</td>
+<td>Data type float32</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>0x32</td>
+<td>Data type uint32</td>
+</tr>
+<tr>
+<td>uint8</td>
+<td>0x33</td>
+<td>Data type uint8</td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>0x34</td>
+<td>Data type uint16</td>
+</tr>
+<tr>
+<td>ChannelTheta</td>
+<td>0x50</td>
+<td>Data channel with azimuth angles, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ChannelPhi</td>
+<td>0x51</td>
+<td>Data channel with elevation angles, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>DistValues</td>
+<td>0x52</td>
+<td>Channel with distance values, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>RssiValues</td>
+<td>0x53</td>
+<td>Channel with RSSI values, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>PropertiesValues</td>
+<td>0x54</td>
+<td>Channel with further properties of a measurement beam, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>" and see "Representation of beam characteristics (Properties)"</td>
+</tr>
+<tr>
+<td>Scan</td>
+<td>0x70</td>
+<td>Keyword for the "Scan" class, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>TimestampStart</td>
+<td>0x71</td>
+<td>Start time stamp of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>TimestampStop</td>
+<td>0x72</td>
+<td>Stop time stamp of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ThetaStart</td>
+<td>0x73</td>
+<td>Azimuth start angle of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ThetaStop</td>
+<td>0x74</td>
+<td>Azimuth stop angle of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ScanNumber</td>
+<td>0x75</td>
+<td>Number of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ModuleId</td>
+<td>0x76</td>
+<td>ModuleID of a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>BeamCount</td>
+<td>0x77</td>
+<td>Number of beams in a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>EchoCount</td>
+<td>0x78</td>
+<td>Number of echoes in a scan, see "<a href="#serialization-of-the-scan-class">Serialization of the Scan class</a>"</td>
+</tr>
+<tr>
+<td>ScanSegment</td>
+<td>0x90</td>
+<td>Keyword for the "ScanSegment" class, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>SegmentCounter</td>
+<td>0x91</td>
+<td>Segment number of a segment, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>FrameNumber</td>
+<td>0x92</td>
+<td>Frame number of a segment, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>0x93</td>
+<td>Availability of a segment, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>SenderId</td>
+<td>0x94</td>
+<td>SenderID of a segment, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>SegmentData</td>
+<td>0x96</td>
+<td>Array with the actual measurement data for each layer, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>LayerId</td>
+<td>0xA0</td>
+<td>Array with layer IDs, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+<tr>
+<td>TelegramCounter</td>
+<td>0xB0</td>
+<td>Telegram counter, see "<a href="#serialization-of-the-scansegment-class">Serialization of the ScanSegment class</a>"</td>
+</tr>
+</tbody>
+</table>
+<h2 id="serialization-of-a-segment">Serialization Of A Segment<a class="headerlink" href="#serialization-of-a-segment" title="Permanent link">&para;</a></h2>
+<p>Each data package transmits one segment enclosed within a frame as described below. A segment contains various fields, which are described below. The actual measurement data is located in the SegmentData field, which contains one element of the <a href="#serialization-of-the-scan-class">Scan class</a> for each layer of the sensor.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ScanSegment
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── TelegramCounter
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── TimeStampTransmit
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── SegmentCounter
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── FrameNumber
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── Availability
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>├── SenderId
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>├── LayerId
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>└── SegmentData
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ├── Scan 1
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    ├── Scan 2
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    ├── ...
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    └── Scan N
+</code></pre></div>
+<p>The data of a segment are encoded in MSGPACK format. In addition to some metadata, the ScanSegment class contains an array named SegmentData that contains an object of type Scan for each layer of the sensor. The following exception should be noted: Measurement data in arrays such as distance, RSSI, angle etc. are binary coded here to allow easier serialization (see "<a href="#serialization-of-arrays">Serialization of arrays</a>").</p>
+<h3 id="notation-used">Notation Used<a class="headerlink" href="#notation-used" title="Permanent link">&para;</a></h3>
+<p>The following notes on the notation used relate to the description of the structures encoded in MSGPACK:</p>
+<ul>
+<li>
+<p><code>msgpack_map_header</code> is used to denote the header of a msgpack map as per the <a href="https://github.com/msgpack/msgpack/blob/master/spec.md#map-format-family">MSGPACK specification</a></p>
+</li>
+<li>
+<p>The keyword names and other names used in the structures correspond to those from <a href="#used-msgpack-keywords-and-associated-uint8-codes">Used MSGPACK keywords and associated uint8 codes</a>.</p>
+</li>
+<li>
+<p>Angle brackets are used to specify placeholders for values referred to in the respective declarations, e.g., <code>&lt;numOfElems&gt;</code> for the number of elements of an array.</p>
+</li>
+<li>
+<p>Keywords printed in bold refer to substructures of a type, e.g., other types or arrays.</p>
+</li>
+<li>
+<p>Although a structure similar to JSON is used for the description in this document, the data is however encoded according to the <a href="https://github.com/msgpack/msgpack/blob/master/spec.md">MSGPACK specification</a></p>
+</li>
+</ul>
+<h3 id="serialization-of-the-scansegment-class">Serialization Of The ScanSegment Class<a class="headerlink" href="#serialization-of-the-scansegment-class" title="Permanent link">&para;</a></h3>
+<p>The ScanSegment class is represented as a nesting of MSGPACK maps as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">msgpack_map_header</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"classname"</span><span class="p">:</span><span class="w"> </span><span class="err">Sca</span><span class="kc">n</span><span class="err">Segme</span><span class="kc">nt</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="err">msgpack_map_header</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">"TelegramCounter"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">tele</span><span class="err">gramCou</span><span class="kc">nter</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">"TimeStampTransmit"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">imeS</span><span class="kc">ta</span><span class="err">mpTra</span><span class="kc">ns</span><span class="err">mi</span><span class="kc">t</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">"SegmentCounter"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;segme</span><span class="kc">nt</span><span class="err">Cou</span><span class="kc">nter</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">"FrameNumber"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">fra</span><span class="err">meNumber&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">"Availability"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;availabili</span><span class="kc">t</span><span class="err">y&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">"SenderId"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;se</span><span class="kc">n</span><span class="err">derId&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">"LayerId"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;layerIdVec</span><span class="kc">t</span><span class="err">or&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">"SegmentData"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;segme</span><span class="kc">nt</span><span class="err">Da</span><span class="kc">ta</span><span class="err">&gt;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>The meaning of the individual fields is shown in the following table.</p>
+<p><strong>Description of the attributes of the ScanSegment class</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TelegramCounter</td>
+<td>MSGPACK int</td>
+<td>Counts all telegrams with measurement data sent in MSGPACK format since switching on the device. The counter starts at 1.</td>
+</tr>
+<tr>
+<td>TimeStampTransmit</td>
+<td>MSGPACK int</td>
+<td>Sensor system time in µs since 1.1.1970 00:00 in UTC.</td>
+</tr>
+<tr>
+<td>SegmentCounter</td>
+<td>MSGPACK int</td>
+<td>Segment counter as described in section.</td>
+</tr>
+<tr>
+<td>FrameNumber</td>
+<td>MSGPACK int</td>
+<td>Counts the number of full revolutions since the device was started.</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>MSGPACK int</td>
+<td>Reserved</td>
+</tr>
+<tr>
+<td>SenderId</td>
+<td>MSGPACK int</td>
+<td>Device serial code. It can be used to detect on the recipient which sensor the data was sent from.</td>
+</tr>
+<tr>
+<td>LayerId</td>
+<td>MSGPACK array of int</td>
+<td>Array of layer indices. The layer indices start at 1 and increase with decreasing elevation angle.</td>
+</tr>
+<tr>
+<td>SegmentData</td>
+<td>MSGPACK array of scans</td>
+<td>Array of elements of the Scan class (see "Serialization of the Scan class") that contain the actual measurement data. The following applies: The scan at position i has the layer number LayerId[i].</td>
+</tr>
+</tbody>
+</table>
+<p>The arrays LayerId and SegmentData are MSGPACK arrays as per the MSGPACK specification and are not represented like arrays containing measurement data (see "<a href="#serialization-of-arrays">Serialization of arrays</a>").</p>
+<h3 id="serialization-of-the-scan-class">Serialization Of The Scan Class<a class="headerlink" href="#serialization-of-the-scan-class" title="Permanent link">&para;</a></h3>
+<p>The Scan class is represented as a nesting of MSGPACK maps as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">msgpack_map_header</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">"classname"</span><span class="p">:</span><span class="w"> </span><span class="err">Sca</span><span class="kc">n</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="err">msgpack_map_header</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">"TimeStampStart"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">imeS</span><span class="kc">ta</span><span class="err">mpS</span><span class="kc">tart</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">"TimeStampStop"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">imeS</span><span class="kc">ta</span><span class="err">mpS</span><span class="kc">t</span><span class="err">op&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nt">"ThetaStart"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">he</span><span class="kc">ta</span><span class="err">S</span><span class="kc">tart</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">"ThetaStop"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">he</span><span class="kc">ta</span><span class="err">S</span><span class="kc">t</span><span class="err">op&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">"ScanNumber"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;sca</span><span class="kc">n</span><span class="err">Number&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nt">"ModuleId"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;moduleId&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">"ChannelTheta"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;cha</span><span class="kc">nnel</span><span class="err">The</span><span class="kc">ta</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="nt">"ChannelPhi"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;cha</span><span class="kc">nnel</span><span class="err">Phi&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">"DistValues"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;dis</span><span class="kc">t</span><span class="err">Values&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">"RssiValues"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;rssiValues&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">"PropertyValues"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;proper</span><span class="kc">t</span><span class="err">yValues&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">"BeamCount"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;beamCou</span><span class="kc">nt</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="nt">"EchoCount"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;echoCou</span><span class="kc">nt</span><span class="err">&gt;</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="p">}</span>
+</code></pre></div>
+<p>The meaning of the individual fields is shown in the following table:</p>
+<p><strong>Description of the attributes of the Scan class</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TimeStampStart</td>
+<td>MSGPACK int</td>
+<td>Acquisition time of the first beam of the scan in µs. The device's internal time base is used or, if the sensor offers the feature, the time set externally.</td>
+</tr>
+<tr>
+<td>TimeStampStop</td>
+<td>MSGPACK int</td>
+<td>Acquisition time of the last beam of the scan in µs. The device's internal time base is used or, if the sensor offers the feature, the time set externally.</td>
+</tr>
+<tr>
+<td>ThetaStart</td>
+<td>MSGPACK int</td>
+<td>Azimuth angle of the first beam of the scan in radians.</td>
+</tr>
+<tr>
+<td>ThetaStop</td>
+<td>MSGPACK int</td>
+<td>Azimuth angle of the last beam of the scan in radians.</td>
+</tr>
+<tr>
+<td>ScanNumber</td>
+<td>MSGPACK int</td>
+<td>Not used.</td>
+</tr>
+<tr>
+<td>ModuleId</td>
+<td>MSGPACK int</td>
+<td>Number of the physical module that generated the data. In the case of the multiScan, for example, this is one of the two measuring modules.</td>
+</tr>
+<tr>
+<td>ChannelTheta</td>
+<td>array of float32</td>
+<td>Array of azimuth angles of a specific beam in radians. The encoding of the data in this array is described in "<a href="#serialization-of-arrays">Serialization of arrays</a>". The user can configure whether the array is present in the data structure.</td>
+</tr>
+<tr>
+<td>ChannelPhi</td>
+<td>array of float32</td>
+<td>Array with the elevation angle (cf. operating instructions, Coordinate system section) of the scan in radians. For single layer and multi-layer sensors, this array contains only one element. The encoding of the data in this array is described in "<a href="#serialization-of-arrays">Serialization of arrays</a>". The user can configure whether the array is present in the data structure.</td>
+</tr>
+<tr>
+<td>DistValues</td>
+<td>array of (array of float32)</td>
+<td>Array containing an array of distance values for each echo of the scan. The number of sub-arrays corresponds to the number of echoes in the scan, see also the EchoCount field below. The distance values are specified in mm. The encoding of the data in this array is described in "<a href="#serialization-of-arrays">Serialization of arrays</a>". The user can configure whether the array is present in the data structure.</td>
+</tr>
+<tr>
+<td>RssiValues</td>
+<td>array of (array of uint16)</td>
+<td>Array containing an array of RSSI values for each echo of the scan. The number of sub-arrays corresponds to the number of echoes in the scan, see also the EchoCount field below. For the representation of RSSI values, see "Representation of RSSI values". The encoding of the data in this array is described in "<a href="#serialization-of-arrays">Serialization of arrays</a>". The user can configure whether the array is present in the data structure.</td>
+</tr>
+<tr>
+<td>PropertyValues</td>
+<td>array of uint8</td>
+<td>Array with additional properties, for example "reflector", for each beam of a scan. See "Representation of beam characteristics (Properties)" for details. The encoding of the data in this array is described in "<a href="#serialization-of-arrays">Serialization of arrays</a>". This array is optional.</td>
+</tr>
+<tr>
+<td>BeamCount</td>
+<td>MSGPACK int</td>
+<td>Number of beams in the current scan.</td>
+</tr>
+<tr>
+<td>EchoCount</td>
+<td>MSGPACK int</td>
+<td>Number of echoes in the current scan.</td>
+</tr>
+</tbody>
+</table>
+<p>For more details about the MSGPACK int format family, see the <a href="https://github.com/msgpack/msgpack/blob/master/spec.md#int-format-family">official msgpack specification</a>.</p>
+<p><img alt="DistValues and RssiValues array structure" src="../assets/distvalues-rssivalues-structure.png" /></p>
+<p>The diagram illustrates the nested array structure with 3 echoes and 15 beams, showing how each beam contains values for all echoes in both DistValues and RssiValues arrays.</p>
+<h3 id="serialization-of-arrays">Serialization Of Arrays<a class="headerlink" href="#serialization-of-arrays" title="Permanent link">&para;</a></h3>
+<p>Arrays of measurement data (ChannelTheta, ChannelPhi, DistValues, RssiValues and PropertyValues) are encoded as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">msgpack_map_header</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"numOfElems"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">nu</span><span class="err">mber</span><span class="w"> </span><span class="err">o</span><span class="kc">f</span><span class="w"> </span><span class="err">array</span><span class="w"> </span><span class="err">eleme</span><span class="kc">nts</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"elemSz"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;size</span><span class="w"> </span><span class="err">o</span><span class="kc">f</span><span class="w"> </span><span class="err">o</span><span class="kc">ne</span><span class="w"> </span><span class="err">array</span><span class="w"> </span><span class="err">eleme</span><span class="kc">nt</span><span class="w"> </span><span class="err">i</span><span class="kc">n</span><span class="w"> </span><span class="err">by</span><span class="kc">tes</span><span class="err">&gt;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">"endian"</span><span class="p">:</span><span class="w"> </span><span class="err">li</span><span class="kc">ttle</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">"elemTypes"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="kc">t</span><span class="err">ypesArray&gt;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;bi</span><span class="kc">nar</span><span class="err">yDa</span><span class="kc">ta</span><span class="err">&gt;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>The meaning of the individual fields of the Array class are shown in the following table.</p>
+<p><strong>Description of the attributes of the Array class</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numOfElems</td>
+<td>Number of array elements</td>
+</tr>
+<tr>
+<td>elemSz</td>
+<td>Size of an array element in bytes, e.g., 4 for float32 or 1 for uint8.</td>
+</tr>
+<tr>
+<td>endian</td>
+<td>The value is always little</td>
+</tr>
+<tr>
+<td>elemTypes</td>
+<td>Array of element types. Only arrays with one element are supported here. Example: {float32} for an array of float32 values. To represent an array of tuples, elemTypes would therefore have multiple elements. This is not relevant, however.</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Actual payload. The data is encoded as a byte array in the MSGPACK format and can be copied directly into a structure/array after parsing the MSGPACK structure, taking into account the endianness and the data type.</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="sick-footer">
+  <nav class="sick-footer__links" aria-label="Legal information">
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/imprint/s/imprint" target="_blank" rel="noopener noreferrer">Imprint</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-and-conditions/s/tac" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-of-use/s/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of use</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/sick-data-privacy-declaration/w/dataprotection" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <span aria-hidden="true">|</span>
+    </span>
+  </nav>
+  <div class="sick-footer__item sick-footer__version">
+    <span>Version: v0.1.8</span>
+    <span aria-hidden="true">|</span>
+    <span>Last update: 2026-09-16</span>
+  </div>
+  <div class="sick-footer__item sick-footer__copyright">
+    <span aria-hidden="true">|</span>
+    © 2026 SICK AG
+  </div>
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.expand", "navigation.top", "navigation.tracking", "navigation.indexes", "navigation.path", "content.code.copy", "content.code.annotate", "toc.follow", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "v0.1.8"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../javascripts/copy-for-ai.js?v=5"></script>
+      
+    
+  </body>
+</html>
