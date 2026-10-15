@@ -1,0 +1,1527 @@
+/*
+ * SICK LiDAR Developer Guide: themed to match the sensor's own web UI
+ * ==============================================================
+ * Colours sampled directly from the device application (SICK Synergy
+ * design system). The docs use a single light appearance (dark mode
+ * has been removed); the brand blue and accents come from the device.
+ *
+ * Device palette (sampled live):
+ *   #000206  page background      #00051a / #0e1633  surfaces / cards
+ *   #262f55  borders              #4d5473  secondary       #777ea4  muted text
+ *   #e9ebf1  body text            #005aff  primary blue    #3183fe  focus
+ *   #5e97fc / #91bbff  light blue #a5e1b9  green (success)  #8a6000  warning
+ */
+
+:root {
+  --sick-bg: #000206;
+  --sick-surface: #00051a;
+  --sick-surface-2: #0e1633;
+  --sick-border: #262f55;
+  --sick-border-2: #4d5473;
+  --sick-muted: #777ea4;
+  --sick-text: #e9ebf1;
+  --sick-blue: #005aff;
+  --sick-blue-link: #5e97fc;
+  --sick-blue-foc: #3183fe;
+  --sick-blue-100: #dae7ff;
+  --sick-green: #a5e1b9;
+  --sick-green-dk: #155033;
+  --sick-amber: #ffbf32;
+}
+
+/* Fonts: device uses "SICK Intl"; Noto Sans is the site-wide web fallback. */
+:root {
+  --md-text-font: "Noto Sans";
+  --md-code-font: "Roboto Mono";
+}
+
+/* ============================================================= *
+ *  Header + tabs                                                *
+ * ============================================================= */
+/* SICK wordmark: enlarged, with extra header height so it fits */
+.md-header {
+  height: auto;
+}
+.md-header__inner {
+  min-height: 5rem;
+  align-items: center;
+}
+.md-header__button.md-logo {
+  padding: 0.3rem 0.3rem 0.3rem 0;
+}
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3.4rem;
+  width: auto;
+}
+.md-device-filter {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0.45rem;
+  color: var(--sick-bg);
+  font-size: 0.58rem;
+}
+.md-device-filter__label {
+  align-self: center;
+  margin-right: 0.15rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.md-device-filter__button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid #777;
+  border-radius: 999px;
+  background: #fff;
+  color: #202124;
+  font-size: 0.54rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.md-device-filter__name {
+  display: block;
+  white-space: nowrap;
+}
+.md-device-filter__button:hover,
+.md-device-filter__button:focus-visible {
+  border-color: #202124;
+  background-color: #f7f7f7;
+}
+.md-device-filter__button[aria-pressed="true"] {
+  border-color: #4d4d4d;
+  background-color: #fff;
+  color: #111;
+  box-shadow: inset 0 0 0 1px #4d4d4d;
+}
+.md-device-filter__button:focus-visible {
+  outline: 2px solid #202124;
+  outline-offset: 2px;
+}
+.md-device-filter__reset {
+  min-height: 2rem;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid #777;
+  border-radius: 999px;
+  background: #fff;
+  color: #202124;
+  font: inherit;
+  font-size: 0.54rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.md-device-filter__reset-short {
+  display: none;
+}
+.md-device-filter__reset:not(:disabled):hover,
+.md-device-filter__reset:focus-visible {
+  border-color: #202124;
+  background-color: #f7f7f7;
+}
+.md-device-filter__reset:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.md-device-filter__reset:focus-visible {
+  outline: 2px solid #202124;
+  outline-offset: 2px;
+}
+.md-device-filter__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.md-translate {
+  position: relative;
+  flex: 0 0 auto;
+}
+.md-translate__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid #777;
+  border-radius: 999px;
+  background: #fff;
+  color: #202124;
+  font-size: 0.54rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.md-translate__button svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentcolor;
+}
+.md-translate__button:hover,
+.md-translate__button:focus-visible {
+  border-color: #202124;
+  background-color: #f7f7f7;
+}
+.md-translate__button:focus-visible {
+  outline: 2px solid #202124;
+  outline-offset: 2px;
+}
+.md-translate__button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+.md-translate__panel {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  min-width: 11rem;
+  padding: 0.5rem;
+  border: 1px solid var(--sick-border-2);
+  border-radius: 0.25rem;
+  background: #fff;
+  box-shadow: 0 0.2rem 0.6rem rgb(0 0 0 / 20%);
+}
+.md-translate__panel[hidden] {
+  display: none;
+}
+.device-page-content-hidden,
+.device-page-filter-hidden {
+  display: none !important;
+}
+.md-device-filter__notice {
+  margin: 0.5rem 0 1rem;
+  padding: 0.65rem 0.8rem;
+  border-left: 0.2rem solid var(--sick-blue);
+  background: #eef1f8;
+  color: var(--sick-bg);
+  font-size: 0.85rem;
+}
+.device-page-filter-hidden[hidden] {
+  display: none !important;
+}
+
+@media screen and (min-width: 60em) {
+  .md-header .md-header__title {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: max-content;
+    margin-inline-end: 0;
+  }
+  /* Keep the site name in flow to size the animated title's desktop slot. */
+  .md-header__topic:first-child {
+    position: relative;
+  }
+  .md-header__topic + .md-header__topic {
+    top: 0;
+  }
+  .md-device-filter {
+    flex: 1 0 auto;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 60em) {
+  .md-device-filter {
+    gap: 0.3rem;
+    margin: 0 0.1rem;
+  }
+  .md-device-filter__label {
+    display: none;
+  }
+}
+/* Laptop widths: Material shows the full search box here, so compact the header to keep the translate button visible. */
+@media screen and (min-width: 60em) and (max-width: 76.234375em) {
+  .md-device-filter__label,
+  .md-translate__label {
+    display: none;
+  }
+  .md-search__inner {
+    width: 8rem;
+  }
+}
+@media screen and (max-width: 34em) {
+  .md-header__inner {
+    flex-wrap: wrap;
+  }
+  .md-device-filter {
+    order: 1;
+    flex: 0 0 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0.1rem 0;
+  }
+  .md-device-filter__label {
+    display: inline;
+    flex-basis: 100%;
+    text-align: center;
+  }
+  .md-translate__button {
+    padding-inline: 0.58rem;
+  }
+}
+@media screen and (max-width: 26em) {
+  .md-device-filter__label {
+    font-size: 0.52rem;
+  }
+  .md-device-filter__reset {
+    padding-inline: 0.58rem;
+  }
+  .md-device-filter__reset-full {
+    display: none;
+  }
+  .md-device-filter__reset-short {
+    display: inline;
+  }
+}
+@media screen and (max-width: 22em) {
+  .md-device-filter__label {
+    font-size: 0.48rem;
+  }
+}
+
+/* More breathing room between top-level nav categories */
+.md-nav--primary > .md-nav__list > .md-nav__item {
+  margin-top: 1.1rem;
+}
+.md-nav--primary > .md-nav__list > .md-nav__item:first-child {
+  margin-top: 0;
+}
+.md-nav--primary > .md-nav__list > .md-nav__item--section > .md-nav__link,
+.md-nav--primary > .md-nav__list > .md-nav__item--section > label.md-nav__link {
+  margin-bottom: 0.2rem;
+}
+/* Bold the top-level leaf links too (e.g. Home, Getting started), so they
+   match the bold section headings (Sensor Features, Visualization, ...). */
+.md-nav--primary > .md-nav__list > .md-nav__item:not(.md-nav__item--section) > .md-nav__link {
+  font-weight: 700;
+}
+
+/* Keep top-level section headings (Simulation, Recording, ...) bold and
+   black, matching the leaf links above. With "navigation.sections" enabled,
+   Material renders these as plain <label> elements and greys them out by
+   default; override that back to the original look. */
+.md-nav--primary > .md-nav__list > .md-nav__item--section > label.md-nav__link {
+  font-weight: 700;
+  color: var(--md-default-fg-color);
+}
+
+/* ============================================================= *
+ *  LIGHT SCHEME  (the only appearance; forced under any scheme)  *
+ * ============================================================= *
+ * These rules use the attribute-presence selector [data-md-color-scheme]
+ * (not ="default") so they win even if a returning visitor's localStorage
+ * still holds the old "slate" value and Material sets the body to slate.
+ * The full set of light base variables is redefined here so slate can never
+ * darken the page background or text. */
+[data-md-color-scheme] {
+  /* Light base (Material's default light values) */
+  --md-default-bg-color: #ffffff;
+  --md-default-bg-color--light: hsla(0, 0%, 100%, 0.7);
+  --md-default-bg-color--lighter: hsla(0, 0%, 100%, 0.3);
+  --md-default-bg-color--lightest: hsla(0, 0%, 100%, 0.12);
+  --md-default-fg-color: rgba(0, 0, 0, 0.87);
+  --md-default-fg-color--light: rgba(0, 0, 0, 0.54);
+  --md-default-fg-color--lighter: rgba(0, 0, 0, 0.32);
+  --md-default-fg-color--lightest: rgba(0, 0, 0, 0.07);
+  --md-code-fg-color: rgba(0, 0, 0, 0.87);
+
+  /* Brand tuning */
+  --md-primary-fg-color: var(--sick-bg);
+  --md-accent-fg-color: var(--sick-blue);
+  --md-typeset-a-color: var(--sick-blue);
+  --md-code-bg-color: #f4f6fb;
+  /* Footer uses the SICK dark navy legal-bar treatment. */
+  --md-footer-bg-color: #00083c;
+  --md-footer-bg-color--dark: #00051a;
+  --md-footer-fg-color: #ffffff;
+  --md-footer-fg-color--light: rgba(255, 255, 255, 0.8);
+  --md-footer-fg-color--lighter: rgba(255, 255, 255, 0.6);
+  /* Header sits on a light surface -> dark text & icons */
+  --md-primary-bg-color: #00051a;
+  --md-primary-bg-color--light: rgba(0, 5, 26, 0.6);
+}
+/* Light header + tabs to match the light appearance */
+[data-md-color-scheme] .md-header {
+  background-color: #ffffff;
+  color: var(--sick-bg);
+  border-bottom: 1px solid #e3e7f1;
+}
+[data-md-color-scheme] .md-tabs {
+  background-color: #ffffff;
+  color: var(--sick-bg);
+}
+/* Footer bar: dark legal-information strip matching the SICK website. */
+.md-footer {
+  background-color: #00083c;
+  border-top: 0;
+  color: #ffffff;
+}
+/* The mobile-only drawer header repeats the logo above the nav list; keep it
+   light too instead of Material's dark default (it also fixes an accidental
+   near-invisible dark-on-dark title text). Hidden entirely on desktop, see
+   below. */
+[data-md-color-scheme] .md-nav--primary .md-nav__title[for="__drawer"] {
+  background-color: #ffffff;
+  color: var(--sick-bg);
+  border-bottom: 1px solid #e3e7f1;
+}
+.md-nav--primary > .md-nav__title[for="__drawer"] .md-logo {
+  margin-left: -0.4rem;
+}
+/* Pill-shaped search control matching sick.com. */
+[data-md-color-scheme] .md-search__form {
+  border: 1px solid var(--sick-bg);
+  border-radius: 999px;
+  background-color: #fff;
+  box-shadow: none;
+}
+[data-md-color-scheme] .md-search__form:hover {
+  background-color: #f7f7f7;
+}
+[data-md-color-scheme] .md-search__input,
+[data-md-color-scheme] .md-search__input::placeholder,
+[data-md-color-scheme] .md-search__icon {
+  color: var(--sick-bg);
+}
+[data-md-color-scheme] .md-search__input::placeholder {
+  opacity: 1;
+}
+@media screen and (min-width: 60em) {
+  .md-search {
+    margin-right: 0.35rem;
+  }
+  .md-search__form {
+    height: 2rem;
+  }
+  .md-search__input {
+    height: 2rem;
+    font-size: 0.58rem;
+  }
+  .md-search__icon {
+    top: 0.2rem;
+  }
+}
+
+/* Footer layout: centered, wrapping items that stay intact when zoomed. */
+.md-footer-meta__inner {
+  box-sizing: border-box;
+  display: flex;
+  max-width: none;
+  width: auto;
+  padding: 1.2rem 1rem;
+}
+.sick-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.sick-footer__links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+.sick-footer__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  white-space: nowrap;
+}
+.sick-footer__version {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 0.2rem;
+}
+
+.sick-footer__links a,
+.sick-footer__links span,
+.sick-footer__version,
+.sick-footer__copyright {
+  color: #e9ebf1 !important;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: inherit;
+  opacity: 1;
+}
+.sick-footer__links a {
+  text-decoration: none;
+}
+.sick-footer__links a:hover,
+.sick-footer__links a:focus {
+  text-decoration: underline;
+}
+.sick-footer__copyright {
+  justify-content: center;
+}
+
+@media screen and (max-width: 45em) {
+  .md-footer-meta__inner {
+    padding: 1rem;
+  }
+
+  .sick-footer {
+    gap: 0.75rem;
+  }
+}
+
+.md-typeset {
+  font-size: 0.8rem;
+}
+
+/* Use the complete desktop viewport while retaining the documentation navigation. */
+@media screen and (min-width: 76.25em) {
+  .md-grid {
+    max-width: none;
+    margin-right: 2rem;
+    margin-left: 2rem;
+  }
+
+  .md-main__inner {
+    max-width: none;
+  }
+
+  .md-content {
+    max-width: none;
+    margin: 0;
+  }
+
+  .md-content__inner {
+    max-width: none;
+    margin: 0;
+    padding: 0 1.5rem;
+  }
+}
+
+/* ---------- Typography ---------- */
+.md-typeset .headerlink {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-left: 0.4rem;
+  font-size: 0;
+  vertical-align: 0.08em;
+}
+.md-typeset .headerlink::before {
+  content: "🔗";
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--sick-bg);
+  border-bottom: 2px solid var(--sick-blue);
+  padding-bottom: 0.3rem;
+  font-size: 1.4rem;
+}
+.md-typeset h2,
+.md-typeset h3 {
+  font-weight: 700;
+  color: var(--sick-bg);
+}
+
+/* ---------- Prose images: centered with a thin black border ---------- */
+.md-typeset img:not(.twemoji):not(.product-image--right):not(.openapi-logo) {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5rem;
+  border: 0;
+  border-radius: 0;
+}
+
+.md-typeset .product-image--right {
+  float: right;
+  margin: 0 0 1rem 1.5rem;
+  border: 0;
+  border-radius: 0;
+}
+/* Center the photo above its fixed-width caption column. */
+.md-typeset p:has(> .product-image--right):has(+ .product-image-caption) > .product-image--right {
+  margin: 0 calc((8rem - 80px) / 2) 0.25rem calc(1.5rem + (8rem - 80px) / 2);
+}
+
+.md-typeset .product-id-lookup {
+  margin: 0.8rem 0 1.5rem;
+}
+.md-typeset .product-overview-table th,
+.md-typeset .product-overview-table td {
+  width: 33.333%;
+  text-align: center;
+  vertical-align: middle;
+}
+.md-typeset .product-overview-table th:nth-child(n + 2),
+.md-typeset .product-overview-table td:nth-child(n + 2) {
+  border-left: 5px double #7c8898 !important;
+}
+.md-typeset .product-id-lookup > label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--sick-bg);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.md-typeset .product-id-lookup__control {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid #777;
+  border-radius: 0.35rem;
+  background: #fff;
+}
+.md-typeset .product-id-lookup__control:focus-within {
+  border-color: var(--sick-blue);
+  outline: 2px solid var(--sick-blue);
+  outline-offset: 2px;
+}
+.md-typeset .product-id-lookup__control span,
+.md-typeset .product-id-lookup__control > a {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 0 0.55rem 0.7rem;
+  color: var(--sick-bg);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.md-typeset .product-id-lookup__control > a {
+  text-decoration: underline;
+}
+.md-typeset .product-id-lookup__control input {
+  min-width: 0;
+  flex: 1 1 auto;
+  padding: 0.55rem 0.45rem 0.55rem 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--sick-bg);
+  font: inherit;
+  font-size: 0.72rem;
+}
+.md-typeset .product-id-lookup__control button {
+  padding: 0.55rem 0.85rem;
+  border: 0;
+  background: var(--sick-blue);
+  color: #fff;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.md-typeset .product-id-lookup__control button:hover {
+  background: #0046c7;
+}
+.md-typeset .product-id-lookup__status {
+  min-height: 1.2em;
+  margin: 0.35rem 0 0;
+  color: #a31212;
+  font-size: 0.68rem;
+}
+@media screen and (max-width: 34em) {
+  .md-typeset .product-id-lookup__control {
+    flex-wrap: wrap;
+  }
+  .md-typeset .product-id-lookup__control button {
+    flex-basis: 100%;
+  }
+}
+
+.md-typeset img.connector-symbol {
+  width: auto;
+  max-width: 11rem;
+  max-height: 7rem;
+  margin: 0 0 0.75rem;
+}
+.md-typeset img.openapi-logo {
+  width: min(15rem, 60%);
+  margin: 0 0 1rem;
+  border: 0;
+  box-shadow: none;
+}
+@media screen and (max-width: 34em) {
+  .md-translate__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.md-typeset h1 > button.copy-for-ai {
+  float: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.385rem 0.595rem;
+  border: 1px solid var(--sick-blue);
+  border-radius: 0;
+  background: #fff;
+  color: var(--sick-blue);
+  font-family: var(--md-text-font), sans-serif;
+  line-height: 1;
+  font-weight: 700;
+  font-size: 0.56rem;
+  cursor: pointer;
+}
+
+.md-typeset h1 > button.copy-for-ai svg {
+  width: 0.84rem;
+  height: 0.84rem;
+  min-width: 0.84rem;
+  fill: currentColor;
+}
+
+.md-typeset h1 > button.copy-for-ai:hover,
+.md-typeset h1 > button.copy-for-ai:focus-visible {
+  background: var(--sick-blue);
+  color: #fff;
+}
+
+/* ---------- Syntax highlighting: readable SICK-accented token colors ---------- */
+.md-typeset .highlight .na,
+.md-typeset .highlight .nt {
+  color: #005a9c;
+  font-weight: 600;
+}
+.md-typeset .highlight .k,
+.md-typeset .highlight .kc,
+.md-typeset .highlight .kd,
+.md-typeset .highlight .kn,
+.md-typeset .highlight .kp,
+.md-typeset .highlight .kr,
+.md-typeset .highlight .kt {
+  color: #7b2cbf;
+  font-weight: 600;
+}
+.md-typeset .highlight .s,
+.md-typeset .highlight .s1,
+.md-typeset .highlight .s2,
+.md-typeset .highlight .sa,
+.md-typeset .highlight .sb,
+.md-typeset .highlight .sc,
+.md-typeset .highlight .dl,
+.md-typeset .highlight .se,
+.md-typeset .highlight .sh,
+.md-typeset .highlight .si,
+.md-typeset .highlight .sr,
+.md-typeset .highlight .ss {
+  color: #087443;
+}
+.md-typeset .highlight .m,
+.md-typeset .highlight .mb,
+.md-typeset .highlight .mf,
+.md-typeset .highlight .mh,
+.md-typeset .highlight .mi,
+.md-typeset .highlight .mo {
+  color: #a34b00;
+}
+.md-typeset .highlight .c,
+.md-typeset .highlight .c1,
+.md-typeset .highlight .ch,
+.md-typeset .highlight .cm,
+.md-typeset .highlight .cp,
+.md-typeset .highlight .cpf,
+.md-typeset .highlight .cs {
+  color: #596b78;
+  font-style: italic;
+}
+.md-typeset .highlight .nf,
+.md-typeset .highlight .fm {
+  color: #005aff;
+  font-weight: 600;
+}
+.md-typeset .highlight .o,
+.md-typeset .highlight .ow {
+  color: #7b2cbf;
+}
+
+/* ---------- Tables: neutral academic presentation ---------- */
+/* Material offsets the scroll wrapper by -0.8rem; keep tables on the text edge. */
+.md-typeset .md-typeset__scrollwrap {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+.md-typeset .md-typeset__table {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.md-typeset table {
+  margin-inline: auto;
+}
+.md-typeset .glossary-tables .md-typeset__scrollwrap,
+.md-typeset .glossary-tables .md-typeset__table,
+.md-typeset .glossary-tables table {
+  margin-inline: 0;
+}
+.md-typeset table:not([class]) {
+  font-size: 0.78rem;
+  border: 1px solid #c7cdd6;
+  border-radius: 0;
+  overflow: hidden;
+}
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.5em 0.75em;
+  border: 1px solid #d8dde5;
+}
+.md-typeset table:not([class]) th {
+  background: #eef1f4;
+  color: #20252b;
+  font-weight: 600;
+  min-width: 0;
+}
+.md-typeset .center-table-headers th {
+  text-align: center;
+}
+.md-typeset table:not([class]) tr:nth-child(even) td {
+  background: #fafbfc;
+}
+
+.md-typeset .centered-table .md-typeset__scrollwrap {
+  text-align: center;
+}
+
+.md-typeset .centered-table table {
+  width: max-content;
+  max-width: 100%;
+}
+
+.md-typeset table.comparison-table {
+  display: table;
+  width: 100%;
+  font-size: 0.72rem;
+  border: 1px solid #9aa4b2 !important;
+  border-collapse: collapse !important;
+  border-radius: 0;
+}
+.md-typeset table.comparison-table th,
+.md-typeset table.comparison-table td {
+  padding: 0.2em 0.35em;
+  border: 1px solid #9aa4b2 !important;
+  vertical-align: top;
+}
+.md-typeset table.comparison-table p {
+  margin: 0;
+  line-height: 1.25;
+}
+.md-typeset table.comparison-table ul.compact-list,
+.md-typeset table.comparison-table ol.compact-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.md-typeset table.comparison-table li {
+  margin: 0;
+}
+.md-typeset table.comparison-table th {
+  background: #eef1f4;
+  color: #20252b;
+  font-weight: 600;
+}
+.md-typeset table.comparison-table tr:nth-child(even) td {
+  background: #fafbfc;
+}
+
+.md-typeset img.changeover-image {
+  border: 0;
+}
+
+/* ---------- Admonitions ---------- */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 8px;
+  border-width: 0 0 0 3px;
+}
+/* ---------- Admonitions: one neutral "info" style everywhere ---------- */
+/* Only `note` and `info` are used across the guide (no coloured tip/warning
+   call-outs); both get the same neutral brand-blue treatment. */
+.md-typeset .admonition.note,
+.md-typeset details.note,
+.md-typeset .admonition.info,
+.md-typeset details.info {
+  border-left-color: var(--sick-blue);
+}
+.md-typeset .note > .admonition-title,
+.md-typeset .info > .admonition-title {
+  background-color: rgba(0, 90, 255, 0.14);
+}
+
+/* ---------- Responsive wrapper for the looping MP4 "GIF" demos ---------- */
+.md-typeset .video {
+  margin: 1rem 0 1.5rem;
+  border: 1px solid var(--sick-border);
+  border-radius: 0;
+  overflow: hidden;
+}
+.md-typeset .video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Small captures: show at native size instead of upscaling to full width. */
+.md-typeset .video.video--native {
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.md-typeset .video.video--native video {
+  width: auto;
+  max-width: 100%;
+}
+/* Iframes have no intrinsic size; never shrink-wrap embedded players. */
+.md-typeset .video.video--native:has(iframe) {
+  width: auto;
+}
+.md-typeset .video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+}
+
+/* ---------- Picture/video captions ---------- */
+.md-typeset .video:has(+ p.caption) {
+  margin-bottom: 0;
+}
+.md-typeset p:has(> img:only-child):has(+ p.caption) {
+  margin-bottom: 0;
+}
+.md-typeset p:has(> img:only-child):has(+ p.caption) > img:only-child {
+  margin-bottom: 0;
+}
+.md-typeset p.caption {
+  margin: 0.25rem 0 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--sick-muted, #6b7280);
+  font-style: italic;
+  text-align: center;
+}
+.md-typeset p.table-caption {
+  margin: 1.25rem 0 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--sick-muted, #6b7280);
+  font-style: italic;
+}
+.md-typeset .centered-table p.table-caption {
+  text-align: center;
+}
+.md-typeset p.product-image-caption {
+  float: right;
+  clear: right;
+  width: 8rem;
+  margin: 0 0 1rem 1.5rem;
+  font-size: 0.65rem;
+  text-align: center;
+}
+.md-typeset p.connector-caption {
+  max-width: 11rem;
+  margin: -0.25rem 0 1.5rem;
+  text-align: center;
+}
+.md-typeset .figure-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+.md-typeset .figure-row > div {
+  min-width: 0;
+}
+.md-typeset .figure-row > div > p:first-child {
+  margin: 0;
+  text-align: center;
+}
+.md-typeset .figure-row img {
+  max-width: 100%;
+}
+.md-typeset p.caption a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- On-page table of contents ---------- */
+/* Pages without section headings set hide: toc (hooks/hide_empty_toc.py);
+   the hidden sidebar must stay hidden. Keep this scoped to the sidebar
+   layout: below 60em Material folds the table of contents into the
+   navigation drawer, so the column must not render next to the content.
+   The 60em breakpoint matches hooks/nav_breakpoint.py. */
+@media screen and (min-width: 60em) {
+  .md-sidebar--secondary:not([hidden]) {
+    display: block;
+  }
+}
+
+/* ---------- Hide the duplicate site title atop the left nav ---------- */
+/* The masthead already shows the SICK logo + "SICK LiDAR Developer Guide";
+   repeating it as the first line of the left nav column is redundant. Keep it
+   on mobile widths, where it doubles as the drawer header. The 60em
+   breakpoint matches hooks/nav_breakpoint.py. */
+@media screen and (min-width: 60em) {
+  .md-nav--primary > .md-nav__title[for="__drawer"] {
+    display: none;
+  }
+}
+
+/* Cap the overall layout width on wide desktop screens. */
+@media screen and (min-width: 76.25em) {
+  .md-grid {
+    max-width: 74rem;
+  }
+}
+
+/* ============================================================= *
+ *  Home page: lead, section labels, device and topic cards      *
+ * ============================================================= */
+.md-typeset .home-lead {
+  max-width: 58rem;
+  margin: 0 0 2.5rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* Small blue eyebrow label followed by a hairline that fills the row. */
+.md-typeset h2.home-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sick-blue);
+}
+.md-typeset h2.home-section::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e3e7ee;
+}
+.md-typeset h2.home-section .headerlink {
+  display: none;
+}
+
+/* Shared card reset; each whole card is clickable through its title link. */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  padding: 0;
+  text-align: left;
+}
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ul > li:focus-within {
+  box-shadow: none;
+}
+.md-typeset .grid.cards .device-title::after,
+.md-typeset .grid.cards .topic-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.md-typeset .grid.cards .device-title:focus-visible,
+.md-typeset .grid.cards .topic-title:focus-visible {
+  outline: none;
+}
+.md-typeset .grid.cards .device-title:focus-visible::after {
+  outline: 2px solid var(--sick-blue-foc);
+  outline-offset: 0.4rem;
+  border-radius: 0;
+}
+.md-typeset .grid.cards .topic-title:focus-visible::after {
+  outline: 2px solid var(--sick-blue-foc);
+  outline-offset: 0.4rem;
+  border-radius: 20px;
+}
+.md-typeset .grid.cards > ul > li > p {
+  margin: 0;
+}
+
+/* ---------- Device cards: large product photos in a soft studio tile ---------- */
+.md-typeset .grid.cards.devices {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 2.5rem 1.5rem;
+  margin: 0 0 3.5rem;
+}
+@media screen and (min-width: 76.25em) {
+  .md-typeset .grid.cards.devices {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.md-typeset .grid.cards.devices > ul > li > p:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  margin: 0 0 1.25rem;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 38%, #ffffff 0%, #f3f5fa 55%, #e9edf5 100%);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+/* Same relative height for every photo (cqi = card width, tile is square) so
+   the families read at one scale; object-fit keeps wide photos (LRS4000)
+   inside the tile without distortion. */
+.md-typeset .grid.cards.devices > ul > li {
+  container-type: inline-size;
+}
+.md-typeset .grid.cards.devices img {
+  display: block;
+  width: auto;
+  height: 80cqi;
+  max-width: 86cqi;
+  margin: 0 auto;
+  object-fit: contain;
+  border: 0;
+  transition: transform 0.35s ease;
+}
+.md-typeset .grid.cards.devices > ul > li:hover > p:first-child {
+  box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.22);
+  transform: translateY(-3px);
+}
+.md-typeset .grid.cards.devices > ul > li:hover img {
+  transform: scale(1.04);
+}
+.md-typeset .grid.cards.devices .device-kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+.md-typeset .grid.cards.devices .device-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--sick-bg);
+  text-decoration: none;
+}
+.md-typeset .grid.cards.devices > ul > li > p:not(:first-child) {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+.md-typeset .grid.cards.devices > ul > li > p:nth-child(4) {
+  margin-top: 0.5rem;
+}
+/* Push the call to action to the bottom so all four line up. */
+.md-typeset .grid.cards.devices > ul > li > p:last-child {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+.md-typeset .grid.cards.devices .device-cta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--sick-blue);
+  text-decoration: none;
+}
+.md-typeset .grid.cards.devices > ul > li:hover .device-title,
+.md-typeset .grid.cards.devices > ul > li:hover .device-cta {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Topic cards: app-style icon, title, and one-line summary ---------- */
+.md-typeset .grid.cards.topics {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+  gap: 2rem 1.75rem;
+  margin: 0 0 2rem;
+}
+@media screen and (min-width: 76.25em) {
+  .md-typeset .grid.cards.topics {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+.md-typeset .grid.cards.topics > ul > li > p:first-child {
+  width: 4.5rem;
+  margin: 0 0 1rem;
+}
+.md-typeset .grid.cards.topics > ul > li > p:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  border: 0;
+  border-radius: 22%;
+  box-shadow: 0 6px 16px -6px rgba(0, 90, 255, 0.45);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.md-typeset .grid.cards.topics > ul > li:hover > p:first-child img {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px -8px rgba(0, 90, 255, 0.5);
+}
+.md-typeset .grid.cards .topic-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--sick-bg);
+  text-decoration: none;
+}
+.md-typeset .grid.cards.topics > ul > li:hover .topic-title {
+  color: var(--sick-blue);
+}
+.md-typeset .grid.cards.topics > ul > li > p:not(:first-child) {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+.md-typeset .grid.cards.topics > ul > li > p:nth-child(3) {
+  margin-top: 0.35rem;
+}
+
+/* Phones: denser device tiles and a compact icon-beside-text topic list. */
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .home-lead {
+    margin-bottom: 2rem;
+    font-size: 0.8rem;
+  }
+  .md-typeset .grid.cards.devices {
+    gap: 2.25rem;
+    margin-bottom: 2.75rem;
+  }
+  .md-typeset .grid.cards.devices > ul > li > p:first-child {
+    aspect-ratio: 4 / 3;
+  }
+  .md-typeset .grid.cards.devices img {
+    height: 58cqi;
+  }
+  .md-typeset .grid.cards.topics {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .md-typeset .grid.cards.topics > ul > li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    align-content: center;
+  }
+  .md-typeset .grid.cards.topics > ul > li > p:first-child {
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: 3.5rem;
+    margin: 0;
+  }
+  .md-typeset .grid.cards.topics > ul > li > p:nth-child(3) {
+    margin-top: 0.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .grid.cards.devices > ul > li > p:first-child,
+  .md-typeset .grid.cards.devices img,
+  .md-typeset .grid.cards.topics > ul > li > p:first-child img {
+    transition: none;
+  }
+  .md-typeset .grid.cards > ul > li:hover > p:first-child,
+  .md-typeset .grid.cards > ul > li:hover img {
+    transform: none;
+  }
+}
+/* Subtle brand link underline on hover */
+.md-typeset a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- Product-compatibility chips (API Integration) ---------- */
+.md-typeset .chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  clear: both;
+  width: 100%;
+  min-width: 0;
+  gap: 0.25rem 0.5rem;
+  margin: 0.2rem 0 1.1rem;
+}
+.md-typeset .chips .chips-label {
+  display: block;
+  line-height: 1.4;
+  margin-right: 0;
+  white-space: nowrap;
+}
+.md-typeset .chip {
+  font-weight: 600;
+  white-space: nowrap;
+}
+@media screen and (max-width: 32em) {
+  .md-typeset .chips {
+    display: none;
+  }
+}
+.md-typeset .chip:has(+ .chip)::after {
+  content: ",";
+}
+
+/* ---------- "New" nav status badge (multiScan200) ---------- */
+.md-status--new:after {
+  display: none !important;
+}
+.md-status--new {
+  display: inline-block;
+  position: relative;
+  margin-left: 0.15rem;
+}
+.md-status--new::before {
+  content: "NEW";
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #7a5b00;
+  background-color: #ffc107;
+  border-radius: 0.2rem;
+  padding: 0.05rem 0.3rem;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* ---------- Typical setup diagram (data-streaming/index.md) ---------- */
+.md-typeset .setup-diagram {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem 0.6rem;
+  max-width: 28rem;
+  margin: 1.2rem 0;
+  text-align: center;
+  line-height: 1.3;
+}
+.md-typeset .setup-diagram__app {
+  grid-column: 1 / -1;
+  padding: 0.4rem;
+  background-color: #d9d9d9;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.md-typeset .setup-diagram__box {
+  padding: 0.35rem 0.2rem;
+  border: 2px solid;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.md-typeset .setup-diagram__box--rest {
+  background-color: #daf2e4;
+  border-color: #1b7a8c;
+}
+.md-typeset .setup-diagram__box--websocket {
+  background-color: #ffc000;
+  border-color: #1f2a44;
+}
+.md-typeset .setup-diagram__box--compact {
+  background-color: #fff8c5;
+  border-color: #1f2a44;
+}
+.md-typeset .setup-diagram__label {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+/* ---------- ROS integration block diagram (integration-notes/ros-integration.md) ---------- */
+.md-typeset .ros-diagram {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1rem 2rem;
+  margin: 1.2rem 0;
+}
+.md-typeset .ros-diagram__panel {
+  width: 100%;
+  margin: 0;
+}
+.md-typeset .ros-diagram__panel figcaption {
+  max-width: none;
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 700;
+  text-align: left;
+}
+.md-typeset .ros-diagram__panel svg {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
+}
+.md-typeset .ros-diagram text {
+  text-anchor: middle;
+  font-family: inherit;
+}
+.md-typeset .ros-diagram .rd-sensor {
+  fill: #26292e;
+}
+.md-typeset .ros-diagram .rd-sensor-label {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+.md-typeset .ros-diagram .rd-app {
+  fill: #cfe0ff;
+  stroke: #6f9cf5;
+}
+.md-typeset .ros-diagram .rd-app-label {
+  fill: #00083c;
+  font-size: 12px;
+}
+.md-typeset .ros-diagram .rd-ros {
+  fill: #dce7ff;
+  stroke: #6f9cf5;
+  stroke-width: 1.5;
+}
+.md-typeset .ros-diagram .rd-ros-label {
+  fill: #000206;
+  font-size: 22px;
+  font-weight: 700;
+}
+.md-typeset .ros-diagram .rd-driver {
+  fill: #2e3650;
+}
+.md-typeset .ros-diagram .rd-driver-label {
+  fill: #ffffff;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 700;
+}
+.md-typeset .ros-diagram .rd-driver-sub {
+  fill: #ffffff;
+  font-size: 11px;
+  font-style: italic;
+}
+.md-typeset .ros-diagram .rd-node {
+  fill: #c4d8ff;
+  stroke: #6f9cf5;
+}
+.md-typeset .ros-diagram .rd-node-label {
+  fill: #00083c;
+  font-size: 11px;
+}
+.md-typeset .ros-diagram .rd-compact,
+.md-typeset .ros-diagram .rd-dds {
+  stroke-width: 3;
+  stroke-dasharray: 7 4;
+}
+.md-typeset .ros-diagram .rd-compact {
+  stroke: #0a6cc4;
+}
+.md-typeset .ros-diagram .rd-dds {
+  stroke: #3a4263;
+}
+.md-typeset .ros-diagram__legend {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 2rem;
+  font-size: 0.75rem;
+}
+.md-typeset .ros-diagram__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.md-typeset .ros-diagram__legend svg {
+  width: 2.4rem;
+  height: 0.4rem;
+}
+/* ---------- Status LED symbols (LED tables on the GUI pages) ----------
+   Recreates the operating-instructions legend: a filled circle means
+   "illuminated", a circle with rays means "flashing". */
+.md-typeset .led {
+  --led-color: #000206;
+  position: relative;
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin: 0 0.35em 0 0.2em;
+  border-radius: 50%;
+  background-color: var(--led-color);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+  vertical-align: -0.05em;
+}
+.md-typeset .led + .led {
+  margin-left: 0.45em;
+}
+.md-typeset .led--red {
+  --led-color: #ff0000;
+}
+.md-typeset .led--green {
+  --led-color: #4bc373;
+}
+.md-typeset .led--yellow {
+  --led-color: #ffeb00;
+}
+.md-typeset .led--neutral {
+  --led-color: #000206;
+  box-shadow: none;
+}
+.md-typeset .led--flash::before {
+  content: "";
+  position: absolute;
+  inset: -0.3em;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--led-color) 0deg 16deg, transparent 16deg 45deg);
+  -webkit-mask: radial-gradient(circle closest-side, transparent 64%, #000 66%);
+  mask: radial-gradient(circle closest-side, transparent 64%, #000 66%);
+}
+.md-typeset .led--yellow.led--flash::before {
+  background: repeating-conic-gradient(#e0cd00 0deg 16deg, transparent 16deg 45deg);
+}
+.md-typeset td .led:first-child {
+  margin-left: 0.3em;
+}
+.md-typeset .led-legend {
+  font-size: 0.75rem;
+  color: #4b5563;
+}
