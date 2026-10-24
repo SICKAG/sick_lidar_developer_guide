@@ -1,0 +1,8 @@
+{
+  "family": "LRS4000",
+  "version": "1.10.0",
+  "file": "LRS4000_V1.10.0_OpenAPI.yaml",
+  "sha256": "37f5b1863cd4311ddb171cc37dda993eef5f02f1124f87c6722d2c6b36b026b7",
+  "operations": 130,
+  "schemas": 15
+}

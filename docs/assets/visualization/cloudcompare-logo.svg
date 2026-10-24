@@ -1,0 +1,20 @@
+<!-- Copyright EDF R&D / TELECOM ParisTech (ENST-TSI).
+     This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; version 2 or later of the License.
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     Full license: ../recording/wireshark-logo-license.txt.
+     Source: https://github.com/CloudCompare/CloudCompare/blob/9d84ae2ee02fe6c1347944ce442895c1a0c8f022/qCC/images/icon/cc_icon.svg
+     2026-10-23: added this attribution notice; artwork unchanged. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 128 128">
+  <pattern id="a" x="4" y="4" width="12" height="12" patternUnits="userSpaceOnUse">
+    <circle cx="6" cy="6" r="5" fill="#DCDCDC"/>
+  </pattern>
+  <path fill="#fff" opacity=".5" d="M0 0h128v128H0Z"/>
+  <path fill="url(#a)" d="M4 4h120 v120 H4Z"/>
+  <path id="b" fill="#005c94" d="M74 49q-5-16-22-16-30 0-30 34c0 23 16 30 29 30q18 0 24-22h11q-6 31-37 31c-20 0-38-11-39-40q2-42 42-42 27 0 33 25z"/>
+  <use xlink:href="#b" transform="translate(30)"/>
+</svg>
