@@ -1,0 +1,4873 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Level 3 multiScan270 project: publish SDK point clouds and ambient-light images over ROS 2 with Zenoh, receive field events, and select monitoring groups.">
+      
+      
+        <meta name="author" content="SICK AG">
+      
+      
+        <link rel="canonical" href="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/">
+      
+      
+        <link rel="prev" href="../smart-shelf/">
+      
+      
+        <link rel="next" href="../../troubleshooting/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/SICK-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+  <title>ROS 2 Reversing Assistant with an Ambient-Light Image | SICK</title>
+
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/fonts/fonts.css?v=2">
+    
+      <link rel="stylesheet" href="../../sick-brand.css?v=125">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/web-app/apple-touch-icon.png">
+  <meta name="application-name" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-title" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="LiDAR Developer Guide">
+  <meta property="og:title" content="ROS 2 Reversing Assistant with an Ambient-Light Image">
+  <meta property="og:description" content="Level 3 multiScan270 project: publish SDK point clouds and ambient-light images over ROS 2 with Zenoh, receive field events, and select monitoring groups.">
+  <meta property="og:url" content="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/">
+  <meta property="og:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SICK logo">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ROS 2 Reversing Assistant with an Ambient-Light Image">
+  <meta name="twitter:description" content="Level 3 multiScan270 project: publish SDK point clouds and ambient-light images over ROS 2 with Zenoh, receive field events, and select monitoring groups.">
+  <meta name="twitter:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta name="twitter:image:alt" content="SICK logo">
+  <link rel="sitemap" type="application/xml" href="https://sickag.github.io/sick_lidar_developer_guide/sitemap.xml">
+  <link rel="alternate" type="text/plain" title="LLM-friendly index (llms.txt)" href="https://sickag.github.io/sick_lidar_developer_guide/llms.txt">
+  <link rel="alternate" type="text/plain" title="Complete guide in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/llms-full.txt">
+  <link rel="alternate" type="text/markdown" title="This page in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/index.md">
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "TechArticle", "author": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "dateModified": "2026-10-30", "description": "Level 3 multiScan270 project: publish SDK point clouds and ambient-light images over ROS 2 with Zenoh, receive field events, and select monitoring groups.", "headline": "ROS 2 Reversing Assistant with an Ambient-Light Image", "image": "https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "name": "LiDAR Developer Guide", "url": "https://sickag.github.io/sick_lidar_developer_guide/"}, "publisher": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "url": "https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/", "name": "(L3) ROS 2 Reversing Assistant", "position": 1}]}]</script>
+  <script src="../../assets/javascripts/device-page-scopes.js"></script>
+  <script src="../../javascripts/matomo.js"></script>
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ros-2-reversing-assistant-with-an-ambient-light-image" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LiDAR Developer Guide" class="md-header__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LiDAR Developer Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ROS 2 Reversing Assistant with an Ambient-Light Image
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-device-filter" role="group" aria-label="Filter pages by device family">
+      <span class="md-device-filter__label">Filter by device</span>
+      <button class="md-device-filter__button md-device-filter__button--lrs4000" type="button" data-device-filter="LRS4000" aria-label="Filter by LRS4000" aria-pressed="false" title="LRS4000">
+        <span class="md-device-filter__name">LRS4000</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan100" type="button" data-device-filter="multiScan100" aria-label="Filter by multiScan100" aria-pressed="false" title="multiScan100">
+        <span class="md-device-filter__name">multiScan100</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan200" type="button" data-device-filter="multiScan200" aria-label="Filter by multiScan200" aria-pressed="false" title="multiScan200">
+        <span class="md-device-filter__name">multiScan200</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--picoscan100" type="button" data-device-filter="picoScan100" aria-label="Filter by picoScan100" aria-pressed="false" title="picoScan100">
+        <span class="md-device-filter__name">picoScan100</span>
+      </button>
+      <span class="md-device-filter__status" aria-live="polite"></span>
+    </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    <div class="md-translate notranslate" translate="no">
+      <button class="md-translate__button" type="button" data-google-translate aria-expanded="false" aria-controls="google_translate_element" aria-label="Translate this page" title="Translate this page">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.9 17.39c-.26-.8-1.01-1.39-1.9-1.39h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.984 7.984 0 0 1 2.9 12.8M11 19.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1a2 2 0 0 0 2 2m1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+      </button>
+      <div id="google_translate_element" class="md-translate__panel" hidden></div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9.4-9.8.6-14.8.6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4s-8.6-18.3-18.5-20.5C294.4 2.2 275.4 0 256 0"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      
+<script>
+  (() => {
+    const form = document.querySelector('[data-md-component="palette"]');
+    if (!form) return;
+    const inputs = Array.from(form.querySelectorAll("input"));
+    const explicit = () => __md_get("__palette_explicit") === true;
+    if (!explicit()) __md_set("__palette", null);
+    const saved = __md_get("__palette");
+    const index = saved && inputs[saved.index]
+      ? saved.index
+      : Math.max(0, inputs.findIndex(input => matchMedia(input.dataset.mdColorMedia).matches));
+    const input = inputs[index];
+    input.checked = true;
+    for (const key of ["media", "scheme", "primary", "accent"]) {
+      document.body.setAttribute("data-md-color-" + key, input.getAttribute("data-md-color-" + key));
+    }
+    let automaticChange = false;
+    form.addEventListener("change", () => {
+      if (!automaticChange) __md_set("__palette_explicit", true);
+    });
+    // Use the native control so icons and theme-color metadata stay in sync.
+    // This also works regardless of Material's media-listener ordering.
+    const preference = matchMedia("(prefers-color-scheme: light)");
+    const resetAutomatic = () => {
+      if (explicit()) return;
+      __md_set("__palette", null);
+      const next = inputs.find(input => matchMedia(input.dataset.mdColorMedia).matches) || inputs[0];
+      automaticChange = true;
+      next.click();
+      automaticChange = false;
+    };
+    if (preference.addEventListener) preference.addEventListener("change", resetAutomatic);
+    else if (preference.addListener) preference.addListener(resetAutomatic);
+  })();
+</script>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LiDAR Developer Guide" class="md-nav__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    LiDAR Developer Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Home">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lidar-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Simulation">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../simulation/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/virtual-sensor-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Sensor Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/nvidia-isaac-sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Isaac Sim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Visualization">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../visualization/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/cloudcompare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CloudCompare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/rviz2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS 2 rviz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sentio-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentio Creator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopas-et/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPAS ET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="On-Device Applications">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../on-device-applications/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Device Applications
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    On-Device Applications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/field-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/object-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Object Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/perpendicular-distance-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Perpendicular Distance Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/contamination-indication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contamination Indication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/3d-scan-recording/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Scan Recording
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Data Streaming">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-streaming/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Streaming
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Streaming
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/compact-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compact Format (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/filter-details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/lmdscandata-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMDscandata Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/msgpack-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSGPACK Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/websocket-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebSocket Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Configuration">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../configuration/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/rest-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST Interface (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/configuration-backup-and-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/cola-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoLa Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/https-and-certificates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPS & Certificates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/third-party-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-Party Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Recording">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../recording/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recording
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recording
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/ros-bag-db3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Bag | db3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/scansegmentapi-json/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScanSegmentAPI | JSON
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sick-perception-sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sick_perception_sdk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair | sc
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/wireshark-pcap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wireshark | pcap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Device-specific">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../device-specific/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device-specific
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Device-specific
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="LRS4000">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../LRS4000/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LRS4000
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LRS4000
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/motor-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motor Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan200">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan200/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan200
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan200
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="picoScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../picoScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    picoScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    picoScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Shared Features">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../shared-features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Shared Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/asset-administration-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asset Administration Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/checksums/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checksums
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/factory-reset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Factory Reset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/firmware-update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware Update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/ip-address-assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP Address Assignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/license-activation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR License Activation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/time-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/udp-unicast-multicast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDP Unicast / Multicast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/user-levels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Levels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Integration Notes">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integration-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integration Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/3d-with-2d-lidars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D With 2D LiDARs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cable-dimensioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cable Dimensioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/coding-tools-and-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coding Tools & Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cybersecurity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/kaitai-struct-parsers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kaitai Struct Parsers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/matlab-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MATLAB Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/milestones-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Milestones Camera Plugin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/model-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/plc-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PLC Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/ros-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested" data-title="Beginner Projects">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beginner Projects
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Beginner Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Building Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bulk-scan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Bulk Scan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../height-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) 3D Height Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../house-3d-capture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) House in 3D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reversing-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-ros2-slam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Native ROS 2 SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imu-jump-and-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) IMU Jump & Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smart-shelf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Smart Shelf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L3) ROS 2 Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Troubleshooting">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../troubleshooting/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/error-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You'll Learn
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Background
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before You Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-data-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested Data Path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check the Result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Solution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-and-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run and Display
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+<nav class="md-path" aria-label="Breadcrumb" >
+  <ol class="md-path__list">
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Beginner Projects
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+    <li class="md-path__item">
+      <span class="md-path__link" aria-current="page">(L3) ROS 2 Reversing Assistant</span>
+    </li>
+  </ol>
+</nav>
+              
+              <article class="md-content__inner md-typeset">
+                
+  <div class="web-app-offline" data-web-app-offline role="status" hidden>
+    Your device appears to be offline. Reconnect to load pages and search.
+  </div>
+  
+                  
+
+
+
+<h1 id="ros-2-reversing-assistant-with-an-ambient-light-image">ROS 2 Reversing Assistant with an Ambient-Light Image<a class="headerlink" href="#ros-2-reversing-assistant-with-an-ambient-light-image" title="Permanent link">&para;</a></h1>
+<div class="chips">
+  <span class="chips-label">Compatible with: </span>
+  <span class="chip chip--multiScan200">multiScan200</span>
+</div>
+
+<div class="tool-intro">
+<p><img alt="ROS 2" class="tool-logo" src="../../assets/integration-notes/ros2-logo.png" />
+This Level 3 project combines a multiScan270, an SDK-based <a class="glossary-link" href="../../glossary/#ros" title="Open source framework for robot software.">ROS</a> 2 wrapper,
+asynchronous field status, and an ambient-light view in RViz or another
+ROS-connected display.</p>
+</div>
+<h2 id="what-youll-learn">What You'll Learn<a class="headerlink" href="#what-youll-learn" title="Permanent link">&para;</a></h2>
+<ul>
+<li>How to wrap <a class="glossary-link" href="../../glossary/#sick-perception-sdk" title="SICK C++ SDK for configuring compatible sensors and receiving Compact data.">sick_perception_sdk</a> data as ROS 2 topics over Zenoh.</li>
+<li>How to combine <a class="glossary-link" href="../../glossary/#websocket" title="Protocol for a persistent connection over which the sensor pushes events.">WebSocket</a> field events with <a class="glossary-link" href="../../glossary/#rest" title="HTTP-based interface of the sensor for reading and writing variables and calling methods.">REST</a> field-group selection.</li>
+<li>How to show the ambient-light image next to the <a class="glossary-link" href="../../glossary/#point-cloud" title="Set of 3D points calculated from the measured distances and angles.">point cloud</a> in RViz.</li>
+</ul>
+<h2 id="application-background">Application Background<a class="headerlink" href="#application-background" title="Permanent link">&para;</a></h2>
+<p>A reversing assistant should show the area behind a vehicle and indicate
+whether the selected monitoring field is occupied. The operator switches
+between a close-range field for confined spaces and a wider monitoring field.
+The display must show the <strong>confirmed</strong> group, not just the requested mode.</p>
+<p><img loading="lazy" decoding="async" alt="Forklift reversing toward stacked material with an illustrative monitoring area and driver display" src="../../assets/beginner-projects/multiscan270-reversing-camera-application.png" /></p>
+<p class="caption">Application illustration: an obstacle warning and a view of the reversing area help the driver assess the situation.</p>
+
+<p>The multiScan270 provides a grayscale ambient-light image, not an RGB camera
+stream. Publish it as a ROS image so a display can show it alongside the point
+cloud and field status.</p>
+<p><img loading="lazy" decoding="async" alt="Example grayscale multiScan ambient-light image showing railway tracks, trees, hills and overhead line poles" src="../../assets/beginner-projects/multiscan270-ambient-light-example.png" /></p>
+<p class="caption">Ambient-light image example supplied for this project. The same type of image can be streamed through a ROS Image topic to RViz or a vehicle display; this picture is illustrative, not a capture from the current live session.</p>
+
+<p>This prototype is a warning aid, not a safety function. Do not connect it to
+braking, steering, or motion authorization. Missing data, inactive fields, and
+disconnected communication must appear unavailable, never as a clear reversing area.</p>
+<h2 id="before-you-start">Before You Start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Use a supported ROS 2 installation with compatible <code>rmw_zenoh_cpp</code>, RViz,
+  colcon, and C++17 build tools. The architecture does not require a particular
+  ROS distribution; match compiler, Python, and runtime libraries to your installation.</li>
+<li>Use SDK 2.0.0 or a compatible newer release with the multiScan200 driver.
+  Keep SDK build and dependency setup separate from the ROS workspace.</li>
+<li>Configure the two existing fields in <strong>different TELEGRAM-controlled groups</strong>.
+  Follow <a href="../../on-device-applications/field-evaluation/#activate-and-monitor-a-group">Field Evaluation</a>
+  rather than recreating the configuration procedure here. Record evaluation IDs,
+  group IDs, and result-list positions separately; confirm which volume is near/wide.</li>
+<li>Enable ambient data in Compact type 6 without overwriting other output options.
+  Check <code>compactTelegramType6Content</code> in the
+  <a href="../../multiScan200/api-rest-openapi/">multiScan200 REST reference</a>.</li>
+<li>Use the <a href="../../data-streaming/websocket-events/">WebSocket Events</a> registration
+  pattern for <code>FieldEvaluationResult</code>; verify support on the target device.
+  Offer compression, but do not require it when the server does not negotiate it.</li>
+</ul>
+<p><img loading="lazy" decoding="async" alt="multiScan270 configuration view showing a point cloud and two monitoring volumes" src="../../assets/beginner-projects/multiscan270-reversing-fields.png" width="50%" /></p>
+<p class="caption">Configuration example: retain the existing field geometry and assign each monitoring volume to its own selectable group.</p>
+
+<p><img loading="lazy" decoding="async" alt="Field-group activation settings showing the designation Close Range, activation Telegram, and Initially active enabled" src="../../assets/beginner-projects/multiscan270-field-group-activation.png" width="50%" /></p>
+<p class="caption">Field-group example: name the group <strong>Close Range</strong> and select <strong><a class="glossary-link" href="../../glossary/#telegram" title="One message exchanged with the sensor, for example a CoLa command or a Compact data packet.">Telegram</a></strong> activation so the application can control it. <strong>Initially active</strong> defines its startup state; the screenshot shows it enabled. Configure the wide-range field in a separate group and verify both groups' startup states before selecting a mode.</p>
+
+<h2 id="suggested-data-path">Suggested Data Path<a class="headerlink" href="#suggested-data-path" title="Permanent link">&para;</a></h2>
+<p>Unlike <a href="../../integration-notes/ros-integration/#native-ros-2">native ROS 2 integration</a>,
+this approach receives Compact data through the host SDK and publishes ROS
+messages itself. Zenoh transports those messages; it does not replace the
+device's TCP, WebSocket, or REST interfaces.</p>
+<pre class="mermaid"><code>flowchart TD
+    sensor["multiScan270"]
+    sdk["SDK scan/image node"]
+    events["Field status/control node"]
+    ros["ROS 2 over Zenoh"]
+    display["RViz or vehicle display"]
+    sensor --&gt;|"Compact TCP"| sdk
+    sensor --&gt;|"WebSocket events"| events
+    events --&gt;|"REST group selection"| sensor
+    sensor --&gt;|"REST contour read"| events
+    sdk --&gt;|"Point cloud + ambient image"| ros
+    events --&gt;|"Field status + colored contour markers"| ros
+    ros --&gt; display</code></pre>
+<p class="caption">Reversing-assistant data path: the SDK publishes point clouds and ambient-light images, while a separate node handles field events and REST control. ROS 2 over Zenoh carries the data to RViz or a vehicle display.</p>
+
+<p>The wrapper publishes <code>points</code> (<code>PointCloud2</code>), <code>ambient_light</code> (<code>Image</code>),
+<code>field_states</code> (both evaluations with validity/activity), <code>field_markers</code>
+(<code>MarkerArray</code> volumes colored by live state), and <code>diagnostics</code>
+under <code>/sick_multiscan200_node</code>. A <code>select_field_group</code> service selects
+<code>near</code> or <code>wide</code>, verifies REST success and group readback, then waits for a
+fresh event snapshot before declaring field results current.</p>
+<h2 id="check-the-result">Check the Result<a class="headerlink" href="#check-the-result" title="Permanent link">&para;</a></h2>
+<ul>
+<li>RViz shows the point cloud and the ambient-light image.</li>
+<li>The field volumes are green while free and turn red when an object enters.</li>
+<li>Calling <code>select_field_group</code> switches between <code>near</code> and <code>wide</code>, and the
+  group readback matches the selection.</li>
+</ul>
+<h2 id="example-solution">Example Solution<a class="headerlink" href="#example-solution" title="Permanent link">&para;</a></h2>
+<p><img loading="lazy" decoding="async" alt="RViz point cloud with the actual near field outlined in green and labeled FREE, and the farther field outlined in red and labeled INFRINGED" src="../../assets/beginner-projects/multiscan270-rviz-field-states.png" /></p>
+<p class="caption">RViz example: field volumes read through REST are overlaid on the SDK point cloud. Live field events color evaluation 1 green (FREE) and evaluation 2 red (INFRINGED); colors change with the reported state.</p>
+
+<p>Use the following <strong>single prompt</strong> to build the wrapper in your own workspace.
+Its phases also separate the reusable scan/image wrapper from field control.</p>
+<details>
+<summary>Expand the complete project prompt</summary>
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gh"># Build an SDK-Based ROS 2 Reversing Assistant</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Create an OS-neutral multiScan270 warning prototype. Use sick_perception_sdk
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>2.0.0 or a compatible newer release, not the sensor's native ROS publisher.
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Use the installed ROS 2 distribution with matching rmw_zenoh_cpp and RViz;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>do not require migration to a named distribution. Inspect the actual SDK
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>headers and device OpenAPI instead of guessing APIs or firmware capabilities.
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="gu">## Phase 1: Workspace and Interfaces</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Create a C++17 ament_cmake package sick_multiscan200_node for SDK reception
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>and custom ROS interfaces. Use a separate Python rclpy package
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>sick_multiscan200_events with an asyncio WebSocket/REST client so network
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>control never blocks scan callbacks. Deliver launch, YAML and RViz files.
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>Keep the SDK and ROS sources unchanged.
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>Parameters: sensor_address, scan_port (default 2115), frame_id (lidar),
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mirror_image, publish_identity_tf (false), mapping_verified (false),
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>and separate near/wide evaluation IDs, group IDs and zero-based result indexes.
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>Validate all values. Require verified mapping before trusting field status
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>or enabling switching; do not infer group IDs from evaluation IDs.
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Publish under /sick_multiscan200_node:
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="k">-</span><span class="w"> </span>points: sensor_msgs/PointCloud2
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="k">-</span><span class="w"> </span>ambient_light: sensor_msgs/Image
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="k">-</span><span class="w"> </span>field_states: custom FieldStateArray
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="k">-</span><span class="w"> </span>field_markers: visualization_msgs/MarkerArray
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="k">-</span><span class="w"> </span>diagnostics: diagnostic_msgs/DiagnosticArray
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="k">-</span><span class="w"> </span>select_field_group: custom service, string mode -&gt; success/message/group ID
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Each FieldState includes evaluation_id, group_id, raw_state, valid, active,
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>and reason. Use reliable KeepLast(5) for scan/image and reliable
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>transient-local KeepLast(1) for status. Report scan/image/event health separately.
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="gu">## Phase 2: SDK Point Cloud</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>Use sick::multiScan200::Driver and scanDataReceiver().setup(scan_port).
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>Attach an explicitly typed UnorganizedPointCloud callback plus a raw
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>MultiScan200Data callback; the SDK multiplexes them. Enable Cartesian
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>coordinates, intensity, time offsets, ring, layer and echo indexes.
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>Map SDK fields/offsets/types to PointCloud2, preserve meter scaling and
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>sensor acquisition time, and validate sizes, byte counts and endian order.
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>ROS PointField has no Int64/Uint64: reject them or numerically repack;
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>never relabel integer bytes as FLOAT64. Handle timestamp overflow explicitly.
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="gu">## Phase 3: Ambient Image and RViz</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>Read type-6 ambientLightData and its actual metadata dimensions. Convert
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>column-major samples to row-major mono16, with step=width*2 and explicit
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>little-endian bytes. Mirror horizontally only when mirror_image is enabled.
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>Preserve sensor time and raw pixel values. Reject malformed/partial frames;
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>skip missing image data with a diagnostic, never synthesize an image.
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>Configure RViz PointCloud2 and Image displays, reliable QoS and fixed frame
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>lidar. Normalize only the displayed image. Do not use Camera without
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>CameraInfo or invent calibration. Leave map-to-sensor identity TF disabled;
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>moving vehicles require real mounting/localization transforms and clock sync.
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="gu">## Phase 4: Field Events and Group Selection</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>Register FieldEvaluationResult at ws://&lt;sensor_address&gt;/apievents using
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>the documented event envelope. Handle both initial registration data and
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>subsequent events. Offer permessage-deflate, accept an uncompressed session,
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>and explicitly report unsupported registration or malformed data.
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>Preserve raw device states. Only a current FREE result for a confirmed
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>active group is clear; inactive, unknown, disconnected or pending is not.
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>Keep transition states as warnings. Reconnect with bounded backoff,
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>resubscribe and invalidate old results until a fresh snapshot arrives.
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>A quiet healthy subscription is not automatically stale.
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>The near/wide service touches only the two configured groups. Serialize
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>requests, mark status pending, check HTTP and device response headers and
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>every activation result, then verify target active/other inactive by readback.
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>Do not assume switching is atomic. Discard old in-flight results and obtain
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>a fresh subscription snapshot after switching. Monitor external group
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>changes even while field events continue arriving.
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>Read each evaluation's contour and configuration through the REST API,
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>using the documented authentication without storing credentials in the
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>workspace. Convert polygon coordinates and lower/upper Z limits from
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>millimeters to meters in the sensor frame. Publish the actual field volumes
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>as RViz markers, with green for FREE, red for INFRINGED, amber for transition
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>states, gray for inactive and a distinct unknown indication on invalid or
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>disconnected data. Show evaluation IDs and state labels. Never invent
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>geometry when access is denied; report the error and request authentication.
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a><span class="gu">## Phase 5: Build and Run</span>
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>Provide Windows and Linux build/environment instructions, a combined launch
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>file, YAML configuration and RViz layout. Match SDK/ROS compiler runtimes
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>(including /MD on Windows) and stop/join workers cleanly on shutdown.
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>Start a Zenoh router and use the same middleware/domain in all terminals.
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>Do not create/delete fields, write EEPROM or change network settings.
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>Keep verification scripts, captures and test reports local, outside the guide.
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>Explain clock synchronization, field-mapping and scene-orientation checks.
+</code></pre></div>
+
+</details>
+
+<h2 id="run-and-display">Run and Display<a class="headerlink" href="#run-and-display" title="Permanent link">&para;</a></h2>
+<p>After building the generated packages, activate ROS and your workspace in
+every terminal. Select the same middleware and domain for all processes:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows PowerShell</label><label for="__tabbed_1_2">Linux</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">$env:RMW_IMPLEMENTATION</span> <span class="p">=</span> <span class="s2">"rmw_zenoh_cpp"</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">$env:ROS_DOMAIN_ID</span> <span class="p">=</span> <span class="s2">"187"</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">ros2</span> <span class="n">run</span> <span class="n">rmw_zenoh_cpp</span> <span class="n">rmw_zenohd</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RMW_IMPLEMENTATION</span><span class="o">=</span><span class="s2">"rmw_zenoh_cpp"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROS_DOMAIN_ID</span><span class="o">=</span><span class="s2">"187"</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ros2<span class="w"> </span>run<span class="w"> </span>rmw_zenoh_cpp<span class="w"> </span>rmw_zenohd
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Use an available router endpoint and a domain appropriate for your system.
+In another activated terminal, launch with your edited YAML path; the launch
+file must load it for both nodes. In a third, open the generated RViz layout.
+These relative paths assume the generated workspace is the working directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ros2<span class="w"> </span>launch<span class="w"> </span>sick_multiscan200_node<span class="w"> </span>multiscan200.launch.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>config:<span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src/sick_multiscan200_node/config/reversing_assistant.yaml"</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>rviz2<span class="w"> </span>-d<span class="w"> </span>src/sick_multiscan200_node/rviz/reversing_assistant.rviz
+</code></pre></div>
+<p>On PowerShell, use native paths and its continuation syntax instead:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">ros2</span> <span class="n">launch</span> <span class="n">sick_multiscan200_node</span> <span class="n">multiscan200</span><span class="p">.</span><span class="n">launch</span><span class="p">.</span><span class="n">py</span> <span class="p">`</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  <span class="s2">"config:=$PWD\src\sick_multiscan200_node\config\reversing_assistant.yaml"</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">rviz2</span> <span class="n">-d</span> <span class="p">.\</span><span class="n">src</span><span class="p">\</span><span class="n">sick_multiscan200_node</span><span class="p">\</span><span class="n">rviz</span><span class="p">\</span><span class="n">reversing_assistant</span><span class="p">.</span><span class="n">rviz</span>
+</code></pre></div>
+<p>The <strong>Image</strong> display subscribes to <code>/sick_multiscan200_node/ambient_light</code>.
+A custom vehicle display can subscribe to that same topic. Keep <strong>Fixed <a class="glossary-link" href="../../glossary/#frame" title="One complete scan. A frame is split into segments for output.">Frame</a></strong>
+at <code>lidar</code> for the stationary example; the ambient view is not a calibrated
+overlay on the point cloud.</p>
+<p>Inspect status and request a group using the generated interfaces:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>--once<span class="w"> </span>/sick_multiscan200_node/field_states
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>/sick_multiscan200_node/select_field_group<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>sick_multiscan200_node/srv/SelectFieldGroup<span class="w"> </span><span class="s2">"{mode: near}"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">ros2</span> <span class="n">service</span> <span class="n">call</span> <span class="p">/</span><span class="n">sick_multiscan200_node</span><span class="p">/</span><span class="n">select_field_group</span> <span class="p">`</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  <span class="n">sick_multiscan200_node</span><span class="p">/</span><span class="n">srv</span><span class="p">/</span><span class="n">SelectFieldGroup</span> <span class="s2">"{mode: wide}"</span>
+</code></pre></div>
+<p>Confirm the returned group and current field status. Before vehicle use,
+check actual near/wide geometry, sensor clock synchronization and image
+orientation with an asymmetric scene. Do not change a working installation
+or persistent sensor settings merely to follow the example.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+<div class="page-end">
+  
+  <p id="page-feedback-title" class="page-feedback__title">Was this page helpful?</p>
+  
+  <div class="page-end__controls">
+    
+    <a class="page-end__link page-end__link--prev" href="../smart-shelf/" aria-label="Previous page: (L2) Smart Shelf" title="Previous page: (L2) Smart Shelf">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 16.58 10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></span>
+    </a>
+    
+    
+    <section class="page-feedback" data-page-feedback="beginner-projects/ros2-reversing-assistant-camera/">
+      <div class="page-feedback__buttons" role="group" aria-labelledby="page-feedback-title" hidden>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Helpful" aria-label="This page was helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z"/></svg></span>
+        </button>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Not helpful" aria-label="This page was not helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 15V3h4v12zM15 3a2 2 0 0 1 2 2v10c0 .55-.22 1.05-.59 1.41L9.83 23l-1.06-1.06c-.27-.27-.44-.64-.44-1.06l.03-.31.95-4.57H3a2 2 0 0 1-2-2v-2c0-.26.05-.5.14-.73l3.02-7.05C4.46 3.5 5.17 3 6 3zm0 2H5.97L3 12v2h8.78l-1.13 5.32L15 14.97z"/></svg></span>
+        </button>
+      </div>
+      <p class="page-feedback__status" role="status" aria-live="polite"></p>
+    </section>
+    
+    
+    <a class="page-end__link page-end__link--next" href="../../troubleshooting/" aria-label="Next page: Overview" title="Next page: Overview">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></span>
+    </a>
+    
+  </div>
+</div>
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="sick-footer">
+  <nav class="sick-footer__links" aria-label="Legal information">
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/imprint/s/imprint" target="_blank" rel="noopener noreferrer">Imprint</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-and-conditions/s/tac" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-of-use/s/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of use</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/sick-data-privacy-declaration/w/dataprotection" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <span aria-hidden="true">|</span>
+    </span>
+  </nav>
+  <div class="sick-footer__item sick-footer__version">
+    <span>Version: v0.3.6</span>
+    <span aria-hidden="true">|</span>
+    <span>Last update: 2026-10-30</span>
+  </div>
+  <div class="sick-footer__item sick-footer__copyright">
+    <span aria-hidden="true">|</span>
+    © 2026 SICK AG
+  </div>
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.indexes", "navigation.path", "navigation.sections", "content.code.copy", "content.code.annotate", "toc.follow", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "v0.3.6"}</script>
+    
+    
+  
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js?language-alternates=1"></script>
+      
+        <script src="../../javascripts/web-app.js?v=1"></script>
+      
+        <script src="../../javascripts/search-paths.js?v=1"></script>
+      
+        <script src="../../javascripts/page-feedback.js?v=2"></script>
+      
+        <script src="../../javascripts/navigation-scroll.js?v=1"></script>
+      
+        <script src="../../javascripts/device-filter.js?v=12"></script>
+      
+        <script src="../../javascripts/google-translate.js?v=7"></script>
+      
+        <script src="../../javascripts/cable-calculator.js?v=7"></script>
+      
+        <script src="../../javascripts/kaltura-lazy.js?v=2"></script>
+      
+        <script src="../../javascripts/object-size-calculator.js?v=12"></script>
+      
+        <script src="../../javascripts/bandwidth-calculator.js?v=9"></script>
+      
+        <script src="../../javascripts/product-id-lookup.js?v=2"></script>
+      
+        <script src="../../javascripts/openapi-reference.js?v=3"></script>
+      
+    
+  
+    <script src="../../javascripts/copy-for-ai.js?v=11"></script>
+  
+
+  </body>
+</html>

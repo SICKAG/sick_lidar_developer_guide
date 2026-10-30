@@ -1,0 +1,158 @@
+# LiDAR Developer Guide
+
+> Developer guide for SICK LRS4000, multiScan100, multiScan200, and picoScan100 LiDAR sensors: configuration, data streaming, integration, and code examples.
+
+Official SICK developer documentation. Page entries link to Markdown
+exports. Each export includes its canonical HTML source URL.
+Use individual pages for focused retrieval; the complete export is large.
+Match device family, model, and firmware before applying an example.
+Compatibility labels and firmware-specific OpenAPI files are authoritative
+for their stated scope; do not infer support for other devices or releases.
+
+- [Complete Markdown export](https://sickag.github.io/sick_lidar_developer_guide/llms-full.txt)
+- [Sitemap](https://sickag.github.io/sick_lidar_developer_guide/sitemap.xml)
+
+## Home
+
+- [LiDAR Developer Guide](https://sickag.github.io/sick_lidar_developer_guide/index.md): Developer guide for SICK LRS4000, multiScan100, multiScan200, and picoScan100 LiDAR sensors, with setup, configuration, data streaming, and integration.
+- [Getting Started with SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/getting-started/index.md): Connect a SICK LiDAR sensor, open its web interface at the default IP 192.168.0.1, and check the first measurement data in Wireshark.
+- [LiDAR Basics: Time-of-Flight, Echoes, and Scanning](https://sickag.github.io/sick_lidar_developer_guide/lidar-basics/index.md): How LiDAR sensors measure distance with laser pulses, what remission and echoes mean, and how 2D scans and 3D point clouds are created.
+
+## Simulation
+
+- [SICK Virtual Sensor Lab: Try LiDAR Sensors in the Browser](https://sickag.github.io/sick_lidar_developer_guide/simulation/virtual-sensor-lab/index.md): Use the SICK Virtual Sensor Lab to run virtual LRS4000, multiScan100, multiScan200, and picoScan100 web interfaces in the browser.
+- [LiDAR Simulation Overview](https://sickag.github.io/sick_lidar_developer_guide/simulation/index.md): Explore SICK LiDAR web interfaces in the Virtual Sensor Lab or simulate sensor measurements in NVIDIA Isaac Sim before hardware is available.
+- [SICK LiDAR Models in NVIDIA Isaac Sim](https://sickag.github.io/sick_lidar_developer_guide/simulation/nvidia-isaac-sim/index.md): Simulate SICK LRS4000, multiScan100, and picoScan100 LiDAR models in NVIDIA Isaac Sim before hardware is available. multiScan200 is coming soon.
+
+## Visualization
+
+- [SOPASair: The Built-In LiDAR Web Interface](https://sickag.github.io/sick_lidar_developer_guide/visualization/sopasair/index.md): SOPASair is the built-in web interface for SICK LRS4000, multiScan100, multiScan200, and picoScan100 sensors.
+- [LiDAR Visualization: SOPASair, SOPAS ET, rviz2, and More](https://sickag.github.io/sick_lidar_developer_guide/visualization/index.md): Choose SICK LiDAR software for live sensor setup, device commissioning, ROS topic checks, or offline point-cloud viewing.
+- [View LiDAR Point Clouds (PCD) in CloudCompare](https://sickag.github.io/sick_lidar_developer_guide/visualization/cloudcompare/index.md): Open and inspect .pcd point clouds from 3D scan recording or the sick_perception_sdk in the free CloudCompare viewer.
+- [ROS 2 rviz: Visualize LiDAR Data](https://sickag.github.io/sick_lidar_developer_guide/visualization/rviz2/index.md): Use rviz2 to visualize SICK LiDAR point clouds and topics in ROS 2 before any custom application code is written.
+- [Sentio Creator for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/visualization/sentio-creator/index.md): Use SICK Sentio Creator to commission supported SICK devices and obtain firmware packages for LRS4000, multiScan100, multiScan200, and picoScan100.
+- [SOPAS ET: Legacy Engineering Tool and Device Search](https://sickag.github.io/sick_lidar_developer_guide/visualization/sopas-et/index.md): Find SICK LiDAR sensors on the local network with SOPAS ET. Use SOPAS ET Terminal to send CoLa A and CoLa B commands over TCP.
+
+## On-Device Applications
+
+- [LiDAR On-Device Applications Overview](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/index.md): Explore SICK LiDAR field evaluation, object detection, perpendicular-distance measurement, contamination indication, and 3D scan recording.
+- [LiDAR Field Evaluation: Polygons, Teach-In, and REST API](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/field-evaluation/index.md): Configure on-device field evaluation on LRS4000, multiScan100, multiScan200, and picoScan100: evaluation groups, polygons via GUI, REST, or CoLa, and teach-in.
+- [LiDAR Object Evaluation with multiScan100](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/object-evaluation/index.md): Configure multiScan100 object evaluation using tracked object properties, spatial regions, motion criteria, and REST result states.
+- [Perpendicular Distance Measurement on SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/perpendicular-distance-measurement/index.md): Review perpendicular-distance availability on LRS4000, multiScan100, and picoScan100, with a detailed picoScan100 configuration and API workflow.
+- [LiDAR Contamination Indication: Monitor the Optics Cover](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/contamination-indication/index.md): Monitor dirt on the optics cover of LRS4000, multiScan100, multiScan200, and picoScan100 sensors by sector, and read or configure contamination results via REST.
+- [3D Scan Recording: On-Device Point Clouds from a 2D LiDAR](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/3d-scan-recording/index.md): Record a 3D point cloud on an LRS4000 or picoScan150 that rotates on an axis, using the IMU or an encoder, and download it as a PCD file.
+
+## Data Streaming
+
+- [LiDAR Data Streaming: Compact, MSGPACK, LMDscandata](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/index.md): Choose a SICK LiDAR data format or event interface for measurement streams, notifications, and on-sensor filtering.
+- [SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/index.md): Parse the SICK Compact binary format over UDP or TCP: frame layout, scan telegrams, IMU and encoder data, multiScan200 formats, and Wireshark decoding.
+- [LiDAR Filters: Echo, Fog, Particle, and Moving Average](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/filter-details/index.md): How SICK LiDAR on-sensor filters change measurement data, including echo, particle, ground, averaging, layer, field-of-view, and distance filters.
+- [LMDscandata: CoLa Scan Data Telegram over TCP](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/lmdscandata-format/index.md): LMDscandata is the CoLa measurement telegram for SICK LiDAR sensors over TCP. Learn when to use it instead of Compact or MSGPACK.
+- [MSGPACK Data Format for SICK LiDAR Scan Data](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/msgpack-format/index.md): Decode SICK MSGPACK scan data: framing, CRC32, uint8 keyword codes, ScanSegment and Scan structures, and binary array encoding.
+- [WebSocket Event API for multiScan200 and picoScan100](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/websocket-events/index.md): Subscribe to multiScan200 and picoScan100 change events over ws://<ip>/apievents: permessage-deflate, register messages, throttling, queues, and event list.
+
+## Configuration
+
+- [SICK LiDAR REST API: Requests, Authentication, OpenAPI](https://sickag.github.io/sick_lidar_developer_guide/configuration/rest-interface/index.md): Configure SICK LiDAR sensors over REST: base URL, JSON envelope, persistence, challenge-response authentication, and session tokens.
+- [LiDAR Configuration Interfaces: REST, CoLa, Backup, HTTPS](https://sickag.github.io/sick_lidar_developer_guide/configuration/index.md): Choose how to configure SICK LiDAR sensors using REST, CoLa, backups, HTTPS, or interactive API clients.
+- [LiDAR Configuration Backup and Restore via GUI and REST](https://sickag.github.io/sick_lidar_developer_guide/configuration/configuration-backup-and-restore/index.md): Back up and restore a complete multiScan100, multiScan200, or picoScan100 configuration file through SOPASair or the REST API, with optional passphrase encryption.
+- [CoLa A and CoLa B Protocol: SICK Command Language Reference](https://sickag.github.io/sick_lidar_developer_guide/configuration/cola-interface/index.md): SICK CoLa protocol reference: CoLa A (ASCII) and CoLa B (binary) framing, checksum, command types, variable types, TCP ports 2111 and 2112, and error codes.
+- [Enable HTTPS on SICK LiDAR Sensors: Certificates and TLS](https://sickag.github.io/sick_lidar_developer_guide/configuration/https-and-certificates/index.md): Enable HTTPS on supported SICK LiDAR sensors: certificate requirements, OpenSSL commands for a CA and leaf certificate, and REST endpoints for upload and removal.
+- [SICK LiDAR Test Tools: Insomnia, Postman, and Hercules](https://sickag.github.io/sick_lidar_developer_guide/configuration/third-party-tools/index.md): Test REST requests with Insomnia or Postman and challenge-response authentication, or send CoLa telegrams over TCP with Hercules.
+
+## Recording
+
+- [LiDAR Recording Methods: SOPASair, pcap, ROS Bag, JSON](https://sickag.github.io/sick_lidar_developer_guide/recording/index.md): Choose how to capture SICK LiDAR data, from raw packets and ROS topics to structured recordings and custom applications.
+- [LiDAR ROS Bag (db3) Recording and Sample Downloads](https://sickag.github.io/sick_lidar_developer_guide/recording/ros-bag-db3/index.md): Record SICK LiDAR ROS topics with ros2 bag, replay them, and download picoScan150 sample recordings for SLAM, perception, and AMR validation.
+- [Record LiDAR Data as JSON with ScanSegmentAPI](https://sickag.github.io/sick_lidar_developer_guide/recording/scansegmentapi-json/index.md): Receive LRS4000, multiScan100, or picoScan100 Compact or MSGPACK data with the Python ScanSegmentAPI for offline analysis and tests.
+- [sick_perception_sdk: C++ SDK for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/recording/sick-perception-sdk/index.md): C++17 SDK for receiving, configuring, and diagnosing SICK LRS4000, multiScan100, and picoScan100 sensors, with PCD conversion and examples.
+- [Record LiDAR Scenarios with the SOPASair Data Recorder](https://sickag.github.io/sick_lidar_developer_guide/recording/sopasair/index.md): Record LRS4000, multiScan100, or picoScan100 measurement scenarios to .sc files with the SOPASair Data recorder.
+- [Record and Decode LiDAR Traffic with Wireshark (pcap)](https://sickag.github.io/sick_lidar_developer_guide/recording/wireshark-pcap/index.md): Capture SICK LiDAR Ethernet traffic as .pcap or .pcapng with Wireshark and decode Compact data with the SICK Lua dissector.
+
+## Device-specific
+
+- [SICK LiDAR Device Guides](https://sickag.github.io/sick_lidar_developer_guide/device-specific/index.md): Open the LRS4000, multiScan100, multiScan200, or picoScan100 guide for device-specific wiring, interfaces, downloads, and release notes.
+- [LRS4000 Overview](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/index.md): Developer entry point for the SICK LRS4000 long-range 2D LiDAR sensor: SOPASair, REST and CoLa, measurement data, synchronization, and applications.
+- [LRS4000 API | REST | OpenAPI V1.10.0](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/api-rest-openapi/index.md): Download the LRS4000 V1.10.0 OpenAPI description and search REST endpoints, request parameters, and response schemas.
+- [LRS4000 API | CoLa Telegrams (CoLa A and CoLa B)](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/api-cola-telegrams/index.md): LRS4000 CoLa telegram reference with sRN, sWN, sMN, and sEN commands, parameter structures, and CoLa A and CoLa B examples.
+- [LRS4000 Electrical Connection and Pin Assignment](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/electrical-connection/index.md): Wire the LRS4000 power, Ethernet, encoder, and digital I/O connectors to a controller using the documented M12 pin assignments.
+- [LRS4000 Motor Synchronization](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/motor-synchronization/index.md): Synchronize LRS4000 scan start angles with PTP over Ethernet or with an index signal between a reference sensor and synchronized sensors.
+- [LRS4000 Firmware Release Notes](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/release-notes/index.md): LRS4000 firmware history, update guidance, feature changes, fixes, and known issues from versions 1.10.0 to 1.4.0.
+- [LRS4000 Web GUI (SOPASair): Screens and Settings](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/graphical-user-interface/index.md): Walk through the LRS4000 SOPASair web interface for status, configuration, data output, applications, cybersecurity, and diagnostics.
+- [LRS4000 Starter Kit](https://sickag.github.io/sick_lidar_developer_guide/LRS4000/starter-kit/index.md): Three SICK products for an LRS4000 starter kit, with product photos, direct product links, and a link to getting started.
+- [multiScan100 Overview](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/index.md): Developer entry point for the SICK multiScan100 multi-layer 3D LiDAR family: setup, REST and CoLa interfaces, scan data, and device applications.
+- [multiScan100 API | REST | OpenAPI V2.5.0](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/api-rest-openapi/index.md): Download the multiScan100 V2.5.0 OpenAPI description and search REST endpoints, request parameters, and response schemas.
+- [multiScan100 API | CoLa Telegrams (CoLa A and CoLa B)](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/api-cola-telegrams/index.md): multiScan100 CoLa telegram reference with sRN, sWN, sMN, and sEN commands, parameter structures, and CoLa A and CoLa B examples.
+- [multiScan100 Electrical Connection and Pin Assignment](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/electrical-connection/index.md): Wire a multiScan100 power, Ethernet, and digital I/O system plug to a controller using the documented M12 pin assignments.
+- [multiScan100 Licenses and Part Numbers](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/licenses/index.md): multiScan100 software licenses and part numbers for streaming, 3D object detection and tracking, filters, multi-echo, IMU, PTP, and interlaced mode.
+- [multiScan100 Firmware Release Notes](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/release-notes/index.md): Changes, new features, improvements, bug fixes, and known issues in the multiScan100 firmware 2.x.x releases.
+- [multiScan100 Web Interface (SOPASair)](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/graphical-user-interface/index.md): Navigate the multiScan100 SOPASair web interface to configure scan output, filters, field evaluation, and device settings.
+- [multiScan100 Starter Kit](https://sickag.github.io/sick_lidar_developer_guide/multiScan100/starter-kit/index.md): Three SICK products for a multiScan166 starter kit, with product photos, direct product links, and a link to getting started.
+- [multiScan200 Overview](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/index.md): Developer entry point for the SICK multiScan200 3D LiDAR family (multiScan270): web GUI, REST API, CoLa telegrams, native ROS 2, and firmware release notes.
+- [multiScan200 API | REST | OpenAPI V1.1.0](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/api-rest-openapi/index.md): Download the multiScan200 V1.1.0 OpenAPI description and search REST endpoints, request parameters, and response schemas.
+- [multiScan200 API | CoLa Telegrams (CoLa A and CoLa B)](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/api-cola-telegrams/index.md): multiScan200 CoLa telegram reference with sRN, sWN, sMN, and sEN commands, parameter structures, and CoLa A and CoLa B examples.
+- [multiScan200 Electrical Connection and Pin Assignment](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/electrical-connection/index.md): Wire a multiScan270 power, Gigabit Ethernet, and digital I/O system plug to a controller using the documented M12 pin assignments.
+- [multiScan200 Firmware Release Notes](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/release-notes/index.md): multiScan200 firmware release history, starting with the V1.1.0 initial release for the multiScan270.
+- [multiScan200 Web GUI (SOPASair): All Screens and Settings](https://sickag.github.io/sick_lidar_developer_guide/multiScan200/graphical-user-interface/index.md): Walkthrough of every multiScan200 SOPASair web interface screen, captured on a multiScan270: configuration, data output, contamination indication, and diagnostics.
+- [picoScan100 Overview](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/index.md): Developer guide for the SICK picoScan100 2D LiDAR family (picoScan120, picoScan150): web GUI, REST API, CoLa telegrams, licenses, and release notes.
+- [picoScan100 API | REST | OpenAPI](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/api-rest-openapi/index.md): Download the picoScan120 and picoScan150 OpenAPI descriptions and search model-specific REST endpoints, request parameters, and response schemas.
+- [picoScan100 API | CoLa Telegrams (CoLa A and CoLa B)](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/api-cola-telegrams/index.md): Complete picoScan100 CoLa telegram reference with sRN, sWN, sMN, and sEN commands, parameter structures, and CoLa A and CoLa B examples.
+- [picoScan100 Electrical Connection and Pin Assignment](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/electrical-connection/index.md): Wire a picoScan150 power, Ethernet, and digital I/O system plug to a controller using the documented M12 pin assignments.
+- [picoScan100 Licenses and Part Numbers](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/licenses/index.md): picoScan100 software licenses: streaming, field evaluation, teach-in, perpendicular distance, native ROS 2, and more, with part numbers and firmware availability.
+- [picoScan100 Firmware Release Notes](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/release-notes/index.md): picoScan100 firmware release history from V1.0.2 to V2.3.3: new features, fixes, new CoLa telegrams and REST endpoints, and update instructions.
+- [picoScan100 Web GUI (SOPASair): All Screens and Settings](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/graphical-user-interface/index.md): Walkthrough of every picoScan100 SOPASair screen: basic settings, mounting, I/O, data output, field evaluation, contamination, and diagnostics.
+- [picoScan100 Starter Kit](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/starter-kit/index.md): Three SICK products for a picoScan150 PRO-1 starter kit, with product photos, direct product links, and a link to getting started.
+
+## Shared Features
+
+- [LiDAR Shared Features Overview](https://sickag.github.io/sick_lidar_developer_guide/shared-features/index.md): Find SICK LiDAR discovery, addressing, status, firmware, licensing, time synchronization, transport, and access-management workflows.
+- [Asset Administration Shell (AAS) for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/shared-features/asset-administration-shell/index.md): Overview of the SICK Asset Administration Shell for LiDAR product part numbers and the product data it provides.
+- [Verify LiDAR Firmware and Parameters with LFTchecksum (MD5)](https://sickag.github.io/sick_lidar_developer_guide/shared-features/checksums/index.md): Use the LFTchecksum REST resource to verify firmware, calibration, and persisted parameters with MD5 digests, and understand RAM versus EEPROM state.
+- [Device State and Availability](https://sickag.github.io/sick_lidar_developer_guide/shared-features/device-state/index.md): Check sensor availability with its status LEDs, a configurable digital output, or the REST and CoLa device-state interfaces.
+- [Find SICK LiDAR Sensors on the Network (Device Discovery)](https://sickag.github.io/sick_lidar_developer_guide/shared-features/device-discovery/index.md): Find a SICK LiDAR sensor: default IP 192.168.0.1, SOPAS ET search, ARP, and the UDP broadcast discovery protocol on port 30718 with telegram layout.
+- [Factory Reset and Application Reset](https://sickag.github.io/sick_lidar_developer_guide/shared-features/factory-reset/index.md): Compare factory reset and application reset on SICK LiDAR sensors, including their parameter scope, REST and CoLa methods, and recovery precautions.
+- [Firmware Update for SICK LiDAR Sensors via GUI or REST API](https://sickag.github.io/sick_lidar_developer_guide/shared-features/firmware-update/index.md): Update SICK LiDAR firmware through a supported web interface, SOPAS ET, Sentio Creator, or the REST API, depending on the product family.
+- [IP Address Assignment and IP Change Policy](https://sickag.github.io/sick_lidar_developer_guide/shared-features/ip-address-assignment/index.md): Change the sensor IP address with SOPAS ET device search and configure the IP change policy that controls when this is possible without login.
+- [LiDAR License Management](https://sickag.github.io/sick_lidar_developer_guide/shared-features/license-activation/index.md): General instructions for activating, reviewing, and deactivating licenses on SICK LiDAR devices.
+- [Time Synchronization with NTP and PTP on SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/shared-features/time-synchronization/index.md): Synchronize SICK LiDAR clocks with NTP or IEEE 1588 PTPv2: offline NTP server setup, REST parameters, and PTP grandmaster settings.
+- [UDP Unicast, UDP Multicast, and TCP](https://sickag.github.io/sick_lidar_developer_guide/shared-features/udp-unicast-multicast/index.md): Compare UDP unicast, UDP multicast, and TCP for measurement data output and configure the sensor for each transport.
+- [User Levels and Passwords on SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/shared-features/user-levels/index.md): Service, Maintenance, and Authorized Client user levels on SICK LiDAR sensors: authentication, level management, and password reset.
+
+## Integration Notes
+
+- [LiDAR Integration Notes Overview](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/index.md): Find SICK LiDAR integration guidance for power cables, security, SDKs, Compact parsers, ROS, MATLAB, PLCs, and camera systems.
+- [Create 3D Point Clouds with a 2D LiDAR and an Encoder](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/3d-with-2d-lidars/index.md): Build 3D point clouds with an LRS4000 or picoScan100 on a moving axis: host-side transform with encoder data, or the on-device scan merger.
+- [SICK LiDAR Cable Dimensioning: Avoid Undervoltage](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/cable-dimensioning/index.md): Calculate the voltage drop on the supply cable of a SICK LiDAR sensor and check that the sensor still receives its minimum supply voltage.
+- [SICK LiDAR Coding Tools and Examples: C++, Python, and C#](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/coding-tools-and-examples/index.md): Find SICK LiDAR SDKs, REST clients, scan receivers, and Kaitai Struct definitions to generate Compact parsers in your preferred language.
+- [Cybersecurity for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/cybersecurity/index.md): Cybersecurity recommendations for LRS4000, multiScan100, multiScan200, and picoScan100 sensors: network access, passwords, HTTPS, and data integrity.
+- [SICK LiDAR: Generate Parsers with Kaitai Struct](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/kaitai-struct-parsers/index.md): Generate Compact data parsers for SICK LiDAR sensors using Kaitai Struct, with a browser-based workflow or the command-line compiler.
+- [Use SICK LiDAR Data in MATLAB via ROS 2](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/matlab-integration/index.md): Subscribe to picoScan100 PointCloud2 data in MATLAB with the ROS Toolbox over native ROS 2 (DDS), without a SICK driver.
+- [Set Up a SICK Camera Plugin in Milestone XProtect](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/milestones-camera/index.md): Install a SICK camera integration package, add the camera in Milestone XProtect, and align camera and LiDAR timing.
+- [Model Context for SICK LiDAR Projects](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/model-context/index.md): Use a local clone of the SICK LiDAR Developer Guide and related repositories to give coding assistants more context about a project.
+- [PLC Integration of SICK LiDAR Sensors via CoLa B over TCP](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/plc-integration/index.md): Connect SICK LiDAR sensors to Siemens, Beckhoff, Mitsubishi, or Rockwell PLCs using CoLa B over TCP port 2112: framing, polling, telegrams, and troubleshooting.
+- [SICK LiDAR ROS 2 Integration: Native ROS 2 and sick_scan_xd](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/ros-integration/index.md): Get SICK LiDAR data into ROS 2 with native ROS 2 on selected families or the sick_scan_xd host driver, with setup, topics, limitations, and CPU notes.
+
+## Beginner Projects
+
+- [Beginner Projects](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/index.md): Try LiDAR building security, bulk scanning, height measurement, 3D capture, ROS 2 localization, reversing aids, or a picoScan IMU-controlled game.
+- [Building Security Example with LiDAR](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/building-security/index.md): Explore a building-monitoring example with LiDAR field evaluation and a video demonstration of teach-in.
+- [Bulk Scan with LiDAR: Material Height on a Conveyor](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/bulk-scan/index.md): Measure the height of woodchips or other bulk material on a conveyor belt with on-device perpendicular distance measurement.
+- [3D Height Measurement with LiDAR](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/height-measurement/index.md): Measure body height with a multiScan100 by evaluating the maximum perpendicular distance above a floor reference inside a 3D field.
+- [House in 3D with picoScan](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/house-3d-capture/index.md): Use picoScan 3D scan recording to create PCD point clouds from selected viewpoints around a house, then inspect the captures in CloudCompare.
+- [Reversing Assistant](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/reversing-assistant/index.md): Build a picoScan warning aid that finds the nearest obstacle and flashes the sensor LEDs faster as the obstacle gets closer.
+- [Native ROS 2 SLAM with picoScan150](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/native-ros2-slam/index.md): Explore driverless-vehicle localization with LiDAR, with a beginner introduction to ROS 2 and saved-map localization using SLAM Toolbox.
+- [picoScan150 Jump & Run: IMU-Controlled Browser Game](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/index.md): Turn a picoScan into a game controller: decode the IMU stream with a Kaitai Python parser and steer a browser jump-and-run game by moving the sensor.
+- [Smart Shelf with picoScan](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/smart-shelf/index.md): Detect which shelf compartment a hand reaches into. Use on-sensor perpendicular distance, WebSocket events and a browser shelf with pick-to-light checks.
+- [ROS 2 Reversing Assistant with an Ambient-Light Image](https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/ros2-reversing-assistant-camera/index.md): Level 3 multiScan270 project: publish SDK point clouds and ambient-light images over ROS 2 with Zenoh, receive field events, and select monitoring groups.
+
+## Troubleshooting
+
+- [Troubleshooting SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/troubleshooting/index.md): Fix common SICK LiDAR issues, look up error codes, and create a diagnostic file for SICK support.
+- [Common SICK LiDAR Issues and Quick Fixes](https://sickag.github.io/sick_lidar_developer_guide/troubleshooting/common-issues/index.md): Symptom and check tables for SICK LiDAR connection, configuration, REST access, and measurement-data problems.
+- [Diagnostic File for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/troubleshooting/diagnostics/index.md): Create a diagnostic file on a SICK LiDAR sensor in SOPASair and send it to your local SICK contact for analysis.
+- [Error Codes for SICK LiDAR Sensors](https://sickag.github.io/sick_lidar_developer_guide/troubleshooting/error-codes/index.md): General list of SICK customer error IDs with their meaning and the recommended action for SICK LiDAR sensors.
+
+## Guide
+
+- [Glossary: SICK LiDAR, CoLa, REST, and ROS Terms](https://sickag.github.io/sick_lidar_developer_guide/glossary/index.md): Definitions of the terms, abbreviations, and SICK-specific names used in this developer guide.
+- [Contact SICK](https://sickag.github.io/sick_lidar_developer_guide/contact/index.md): Contact local SICK sales, open a technical support case, or discuss LiDAR integration questions with the community.

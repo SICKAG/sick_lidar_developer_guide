@@ -1,0 +1,5573 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Parse the SICK Compact binary format over UDP or TCP: frame layout, scan telegrams, IMU and encoder data, multiScan200 formats, and Wireshark decoding.">
+      
+      
+        <meta name="author" content="SICK AG">
+      
+      
+        <link rel="canonical" href="https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../filter-details/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/SICK-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+  <title>SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data | SICK</title>
+
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/fonts/fonts.css?v=2">
+    
+      <link rel="stylesheet" href="../../sick-brand.css?v=125">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/web-app/apple-touch-icon.png">
+  <meta name="application-name" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-title" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="LiDAR Developer Guide">
+  <meta property="og:title" content="SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data">
+  <meta property="og:description" content="Parse the SICK Compact binary format over UDP or TCP: frame layout, scan telegrams, IMU and encoder data, multiScan200 formats, and Wireshark decoding.">
+  <meta property="og:url" content="https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/">
+  <meta property="og:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SICK logo">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data">
+  <meta name="twitter:description" content="Parse the SICK Compact binary format over UDP or TCP: frame layout, scan telegrams, IMU and encoder data, multiScan200 formats, and Wireshark decoding.">
+  <meta name="twitter:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta name="twitter:image:alt" content="SICK logo">
+  <link rel="sitemap" type="application/xml" href="https://sickag.github.io/sick_lidar_developer_guide/sitemap.xml">
+  <link rel="alternate" type="text/plain" title="LLM-friendly index (llms.txt)" href="https://sickag.github.io/sick_lidar_developer_guide/llms.txt">
+  <link rel="alternate" type="text/plain" title="Complete guide in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/llms-full.txt">
+  <link rel="alternate" type="text/markdown" title="This page in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/index.md">
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "TechArticle", "author": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "dateModified": "2026-10-30", "description": "Parse the SICK Compact binary format over UDP or TCP: frame layout, scan telegrams, IMU and encoder data, multiScan200 formats, and Wireshark decoding.", "headline": "SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data", "image": "https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "name": "LiDAR Developer Guide", "url": "https://sickag.github.io/sick_lidar_developer_guide/"}, "publisher": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "url": "https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://sickag.github.io/sick_lidar_developer_guide/data-streaming/compact-format/", "name": "Compact Format (recommended)", "position": 1}]}]</script>
+  <script src="../../assets/javascripts/device-page-scopes.js"></script>
+  <script src="../../javascripts/matomo.js"></script>
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#compact-format" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LiDAR Developer Guide" class="md-header__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LiDAR Developer Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SICK Compact Format: Parse LiDAR Scan, IMU, Encoder Data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-device-filter" role="group" aria-label="Filter pages by device family">
+      <span class="md-device-filter__label">Filter by device</span>
+      <button class="md-device-filter__button md-device-filter__button--lrs4000" type="button" data-device-filter="LRS4000" aria-label="Filter by LRS4000" aria-pressed="false" title="LRS4000">
+        <span class="md-device-filter__name">LRS4000</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan100" type="button" data-device-filter="multiScan100" aria-label="Filter by multiScan100" aria-pressed="false" title="multiScan100">
+        <span class="md-device-filter__name">multiScan100</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan200" type="button" data-device-filter="multiScan200" aria-label="Filter by multiScan200" aria-pressed="false" title="multiScan200">
+        <span class="md-device-filter__name">multiScan200</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--picoscan100" type="button" data-device-filter="picoScan100" aria-label="Filter by picoScan100" aria-pressed="false" title="picoScan100">
+        <span class="md-device-filter__name">picoScan100</span>
+      </button>
+      <span class="md-device-filter__status" aria-live="polite"></span>
+    </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    <div class="md-translate notranslate" translate="no">
+      <button class="md-translate__button" type="button" data-google-translate aria-expanded="false" aria-controls="google_translate_element" aria-label="Translate this page" title="Translate this page">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.9 17.39c-.26-.8-1.01-1.39-1.9-1.39h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.984 7.984 0 0 1 2.9 12.8M11 19.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1a2 2 0 0 0 2 2m1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+      </button>
+      <div id="google_translate_element" class="md-translate__panel" hidden></div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9.4-9.8.6-14.8.6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4s-8.6-18.3-18.5-20.5C294.4 2.2 275.4 0 256 0"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      
+<script>
+  (() => {
+    const form = document.querySelector('[data-md-component="palette"]');
+    if (!form) return;
+    const inputs = Array.from(form.querySelectorAll("input"));
+    const explicit = () => __md_get("__palette_explicit") === true;
+    if (!explicit()) __md_set("__palette", null);
+    const saved = __md_get("__palette");
+    const index = saved && inputs[saved.index]
+      ? saved.index
+      : Math.max(0, inputs.findIndex(input => matchMedia(input.dataset.mdColorMedia).matches));
+    const input = inputs[index];
+    input.checked = true;
+    for (const key of ["media", "scheme", "primary", "accent"]) {
+      document.body.setAttribute("data-md-color-" + key, input.getAttribute("data-md-color-" + key));
+    }
+    let automaticChange = false;
+    form.addEventListener("change", () => {
+      if (!automaticChange) __md_set("__palette_explicit", true);
+    });
+    // Use the native control so icons and theme-color metadata stay in sync.
+    // This also works regardless of Material's media-listener ordering.
+    const preference = matchMedia("(prefers-color-scheme: light)");
+    const resetAutomatic = () => {
+      if (explicit()) return;
+      __md_set("__palette", null);
+      const next = inputs.find(input => matchMedia(input.dataset.mdColorMedia).matches) || inputs[0];
+      automaticChange = true;
+      next.click();
+      automaticChange = false;
+    };
+    if (preference.addEventListener) preference.addEventListener("change", resetAutomatic);
+    else if (preference.addListener) preference.addListener(resetAutomatic);
+  })();
+</script>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LiDAR Developer Guide" class="md-nav__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    LiDAR Developer Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Home">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lidar-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Simulation">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../simulation/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/virtual-sensor-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Sensor Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/nvidia-isaac-sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Isaac Sim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Visualization">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../visualization/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/cloudcompare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CloudCompare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/rviz2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS 2 rviz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sentio-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentio Creator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopas-et/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPAS ET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="On-Device Applications">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../on-device-applications/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Device Applications
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    On-Device Applications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/field-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/object-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Object Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/perpendicular-distance-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Perpendicular Distance Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/contamination-indication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contamination Indication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/3d-scan-recording/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Scan Recording
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested" data-title="Data Streaming">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Streaming
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Streaming
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compact Format (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter-details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lmdscandata-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMDscandata Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../msgpack-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSGPACK Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../websocket-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebSocket Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Configuration">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../configuration/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/rest-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST Interface (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/configuration-backup-and-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/cola-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoLa Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/https-and-certificates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPS & Certificates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/third-party-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-Party Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Recording">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../recording/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recording
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recording
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/ros-bag-db3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Bag | db3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/scansegmentapi-json/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScanSegmentAPI | JSON
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sick-perception-sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sick_perception_sdk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair | sc
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/wireshark-pcap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wireshark | pcap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Device-specific">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../device-specific/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device-specific
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Device-specific
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="LRS4000">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../LRS4000/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LRS4000
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LRS4000
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/motor-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motor Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan200">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan200/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan200
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan200
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="picoScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../picoScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    picoScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    picoScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Shared Features">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../shared-features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Shared Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/asset-administration-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asset Administration Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/checksums/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checksums
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/factory-reset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Factory Reset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/firmware-update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware Update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/ip-address-assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP Address Assignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/license-activation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR License Activation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/time-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/udp-unicast-multicast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDP Unicast / Multicast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/user-levels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Levels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Integration Notes">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integration-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integration Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/3d-with-2d-lidars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D With 2D LiDARs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cable-dimensioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cable Dimensioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/coding-tools-and-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coding Tools & Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cybersecurity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/kaitai-struct-parsers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kaitai Struct Parsers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/matlab-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MATLAB Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/milestones-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Milestones Camera Plugin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/model-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/plc-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PLC Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/ros-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Beginner Projects">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../beginner-projects/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beginner Projects
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Beginner Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/building-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Building Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/bulk-scan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Bulk Scan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/height-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) 3D Height Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/house-3d-capture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) House in 3D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/reversing-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/native-ros2-slam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Native ROS 2 SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/imu-jump-and-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) IMU Jump & Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/smart-shelf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Smart Shelf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beginner-projects/ros2-reversing-assistant-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L3) ROS 2 Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Troubleshooting">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../troubleshooting/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/error-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#frames-and-segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frames and Segments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transport
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wireshark-dissector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wireshark Dissector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wireshark Dissector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-the-dissector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install the Dissector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decode-compact-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decode Compact Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imu-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IMU Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frame-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard Header
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-1-scan-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 1: Scan Data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-2-imu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 2: IMU
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-3-ambient-light" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 3: Ambient Light
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-4-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 4: Encoder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-6-scan-data-multiscan200" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 6: Scan Data (multiScan200)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-7-imu-with-standard-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type 7: IMU with Standard Header
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#measurement-data-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measurement Data Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Measurement Data Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#azimuth-angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Azimuth Angles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-counters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment Counters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rssi-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RSSI Values
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bit-fields-and-beam-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bit Fields and Beam Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segments-lrs4000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segments (LRS4000)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segments-picoscan100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segments (picoScan100)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segments-multiscan100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segments (multiScan100)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample-packet-captures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Packet Captures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sample Packet Captures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lrs4000-capture-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LRS4000 Capture Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiscan165-capture-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        multiScan165 Capture Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiscan270-capture-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        multiScan270 Capture Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#picoscan150-capture-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        picoScan150 Capture Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bandwidth-calculator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bandwidth Calculator
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+<nav class="md-path" aria-label="Breadcrumb" >
+  <ol class="md-path__list">
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Data Streaming
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+    <li class="md-path__item">
+      <span class="md-path__link" aria-current="page">Compact Format (recommended)</span>
+    </li>
+  </ol>
+</nav>
+              
+              <article class="md-content__inner md-typeset">
+                
+  <div class="web-app-offline" data-web-app-offline role="status" hidden>
+    Your device appears to be offline. Reconnect to load pages and search.
+  </div>
+  
+                  
+
+
+
+<h1 id="compact-format">Compact Format<a class="headerlink" href="#compact-format" title="Permanent link">&para;</a></h1>
+<div class="chips">
+  <span class="chips-label">Compatible with: </span>
+  <span class="chip chip--LRS4000">LRS4000</span>
+  <span class="chip chip--multiScan100">multiScan100</span>
+  <span class="chip chip--multiScan200">multiScan200</span>
+  <span class="chip chip--picoScan100">picoScan100</span>
+</div>
+
+<p>The Compact format is SICK's binary format for measurement data. It uses the least bandwidth of all formats and can be parsed very efficiently, for example by copying the bytes into a C struct with <code>memcpy</code>. The fields are not self-describing: your parser must know the layout, which SICK publishes as <a href="https://kaitai.io/">Kaitai Struct</a> definitions.</p>
+<p>The authoritative definitions are in the <a href="https://github.com/SICKAG/KaitaiStructDescriptions/tree/public/formats"><code>formats</code> folder on GitHub</a>. Paste a captured <a class="glossary-link" href="../../glossary/#telegram" title="One message exchanged with the sensor, for example a CoLa command or a Compact data packet.">telegram</a> into the browser-based <a href="https://ide.kaitai.io/">Kaitai Web IDE</a> to inspect it field by field, or <a href="../../integration-notes/kaitai-struct-parsers/">generate a parser</a> for your application.</p>
+<p>To receive Compact data without writing your own parser, use the C++ <a href="../../recording/sick-perception-sdk/">sick_perception_sdk</a>. It receives the scan, <a class="glossary-link" href="../../glossary/#imu" title="Built-in sensor that measures acceleration, angular velocity, and orientation.">IMU</a>, and <a class="glossary-link" href="../../glossary/#encoder" title="Sensor that measures the rotation or position of a moving axis. Encoder data can be combined with 2D LiDAR scans to build 3D point clouds.">encoder</a> data and provides the scans as <a class="glossary-link" href="../../glossary/#point-cloud" title="Set of 3D points calculated from the measured distances and angles.">point clouds</a>.</p>
+<h2 id="frames-and-segments">Frames and Segments<a class="headerlink" href="#frames-and-segments" title="Permanent link">&para;</a></h2>
+<p>The multiScan100 and picoScan100 send each scan <a class="glossary-link" href="../../glossary/#segment" title="Part of a scan restricted to an azimuth (horizontal) and/or elevation (vertical) angle range. In the segmented output described in this guide, parts of a frame are sent as separate telegrams so they can be processed immediately.">segment</a> in a UDP datagram.
+The LRS4000 and multiScan200 carry it as a framed telegram in the TCP stream.
+Every segment can be processed on its own, which keeps latency low. To work
+with a full scan (<a class="glossary-link" href="../../glossary/#frame" title="One complete scan. A frame is split into segments for output.">frame</a>), collect all segments with the same <code>frame_number</code>.</p>
+<p>The Compact format is organized as one frame definition that dispatches to the
+individual <a class="glossary-link" href="../../glossary/#telegram-type" title="Number in a Compact telegram that identifies its content, for example scan data or IMU data.">telegram types</a>. Types 3, 4, 6, and 7 also share the standard header:</p>
+<pre class="mermaid"><code>---
+config:
+    flowchart:
+        nodeSpacing: 8
+        rankSpacing: 30
+        padding: 4
+---
+flowchart LR
+    CF["Compact&lt;br/&gt;frame"]
+    T1["Type 1: Scan data"]
+    T2["Type 2: IMU"]
+    T3["Type 3: Ambient light"]
+    T4["Type 4: Encoder"]
+    T6["Type 6: Scan data (multiScan200)"]
+    T7["Type 7: IMU"]
+    CH["Standard&lt;br/&gt;header"]
+
+    CF --&gt; T1
+    CF --&gt; T2
+    CF --&gt; T3
+    CF --&gt; T4
+    CF --&gt; T6
+    CF --&gt; T7
+
+    T3 --&gt; CH
+    T4 --&gt; CH
+    T6 --&gt; CH
+    T7 --&gt; CH</code></pre>
+<p class="caption">Compact parser structure: the frame definition selects the telegram-specific parser. Types 3, 4, 6, and 7 reuse the standard header definition.</p>
+
+<h2 id="transport">Transport<a class="headerlink" href="#transport" title="Permanent link">&para;</a></h2>
+<p>The multiScan100 and picoScan100 send Compact data over UDP; the LRS4000 and
+multiScan200 send it over TCP. For a comparison of UDP <a class="glossary-link" href="../../glossary/#unicast" title="Transmission of a data stream to one receiver.">unicast</a>, UDP <a class="glossary-link" href="../../glossary/#multicast" title="Transmission of one data stream to a group of receivers.">multicast</a>,
+and TCP, see <a href="../../shared-features/udp-unicast-multicast/">UDP Unicast / Multicast</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LRS4000</label><label for="__tabbed_1_2">multiScan100</label><label for="__tabbed_1_3">multiScan200</label><label for="__tabbed_1_4">picoScan100</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Select Compact with the <code>ScanDataFormat</code> <a class="glossary-link" href="../../glossary/#rest" title="HTTP-based interface of the sensor for reading and writing variables and calling methods.">REST</a> parameter or in the data-output
+settings. Connect a TCP client to port <code>2115</code>. <a href="../lmdscandata-format/">LMDscandata</a>
+is available as an alternative TCP format.</p>
+</div>
+<div class="tabbed-block">
+<p>Select <strong>Compact</strong> or <a class="glossary-link" href="../../glossary/#messagepack" title="Compact binary serialization format for exchanging data between programming languages.">MSGPACK</a> in the data-output settings and set the
+destination IP address and port. UDP multicast supports Compact only. The
+REST <a class="glossary-link" href="../../glossary/#api" title="Interface through which programs access the sensor, for example REST or CoLa.">API</a> exposes the same Ethernet destination settings.</p>
+</div>
+<div class="tabbed-block">
+<p>Select <strong>TCP Compact</strong> as <a class="glossary-link" href="../../glossary/#data-output" title="Application in SOPASair that configures which measurement data the sensor sends and in which format.">data output</a> mode (<code>sWN dataOutputMode 1</code>); see the
+<a href="../../multiScan200/api-cola-telegrams/#set-data-output-mode-swn-dataoutputmode">multiScan200 CoLa Telegram Listing</a>.
+The sensor uses a separate TCP port per content:</p>
+<p><p class="table-caption" markdown><strong>Transport:</strong> multiScan200 TCP port, content, and telegram type.</p></p>
+<table>
+<thead>
+<tr>
+<th>TCP port</th>
+<th>Content</th>
+<th>Telegram type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2115</code></td>
+<td>Distance and <a class="glossary-link" href="../../glossary/#rssi" title="Measure of the strength of an echo.">RSSI</a>, optionally with ambient light</td>
+<td><a href="#type-6-scan-data-multiscan200">6</a></td>
+</tr>
+<tr>
+<td><code>2116</code></td>
+<td>Ambient light only</td>
+<td><a href="#type-3-ambient-light">3</a></td>
+</tr>
+<tr>
+<td><code>2117</code></td>
+<td>IMU</td>
+<td><a href="#type-7-imu-with-standard-header">7</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tabbed-block">
+<p>Select <strong>Compact</strong> or MSGPACK in the data-output settings and set the
+destination IP address and port. The factory default destination is
+<code>192.168.0.100:2115</code>. The REST API exposes the same Ethernet destination
+settings.</p>
+<p><div class="video">
+<iframe loading="lazy" id="kaltura_player_0_6tjpjd8d_260"  data-kaltura-src="https://api.eu.kaltura.com/p/205/sp/20500/embedIframeJs/uiconf_id/23452804/partner_id/205?iframeembed=true&amp;playerId=kaltura_player_0_6tjpjd8d_260&amp;entry_id=0_6tjpjd8d&amp;flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;wid=0_c6erwrx8" width="800" height="450" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="picoScan100: How to enable measurement data (Compact, UDP unicast)"></iframe>
+</div>
+<p class="caption">picoScan100 example: Enable Compact measurement data over UDP unicast and set the receiver destination address.</p></p>
+</div>
+</div>
+</div>
+<p>For UDP multicast, set the destination to an address from <code>224.0.0.0</code> to
+<code>239.255.255.255</code>. The network requirements are on
+<a href="../../shared-features/udp-unicast-multicast/#udpip-multicast">UDP Unicast / Multicast</a>.</p>
+<h2 id="wireshark-dissector">Wireshark Dissector<a class="headerlink" href="#wireshark-dissector" title="Permanent link">&para;</a></h2>
+<p>SICK provides a <a class="glossary-link" href="../../glossary/#wireshark" title="Network analysis tool. SICK provides a Wireshark dissector for the Compact format.">Wireshark</a> dissector for Compact measurement and IMU data, so you can inspect the stream field by field instead of reading raw bytes. It supports the Compact format only. Use it to confirm framing, ports, CRCs, and decoded values before you debug your own parser.</p>
+<h3 id="install-the-dissector">Install the Dissector<a class="headerlink" href="#install-the-dissector" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Download and install <a href="https://www.wireshark.org/download.html">Wireshark</a>.</li>
+<li>Download the dissector: <a href="../../assets/data-streaming/COMPACT_Dissector.lua">COMPACT_Dissector.lua</a>.</li>
+<li>In Wireshark, open <strong>Help &gt; About Wireshark &gt; Folders</strong> and copy the file to the <strong>Personal Lua Plugins</strong> folder.</li>
+<li>Restart Wireshark.</li>
+</ol>
+<h3 id="decode-compact-data">Decode Compact Data<a class="headerlink" href="#decode-compact-data" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Configure the sensor to output Compact data. For multiScan100 and picoScan100, select UDP and set the destination to your PC's IP address and listening port. For LRS4000 and multiScan200, use the <a href="#transport">TCP connection</a>.</li>
+<li>Open Wireshark and double-click the Ethernet interface connected to the sensor to start capturing.</li>
+<li>Enter <code>compact</code> in the display-filter bar and press Enter. Decoded packets show <code>COMPACT</code> in the <strong>Protocol</strong> column.</li>
+<li>Select a packet and expand the Compact tree in the packet-details pane. Inspect the telegram type, header, and measurement values, such as distance. For an IMU telegram, inspect acceleration and angular velocity instead.</li>
+</ol>
+<p>On Windows, the sensor adapter must use the Private network profile; see <a href="../../getting-started/#connect-the-sensor">Getting Started</a>.
+If no Compact packets appear, clear the display filter first to check whether traffic arrives at all. Verify the sensor's output format, destination address, and port. If you use a non-default port, add it to the corresponding port list near the top of the Lua file, such as <code>CompactPorts</code> or <code>IMUPorts</code>, and restart Wireshark.</p>
+<p>To disable the plug-in temporarily, choose <strong>Analyze &gt; Enabled Protocols</strong> and clear its checkbox. See <a href="#frame-layout">Frame Layout</a> for the telegram structure and <a href="../../recording/wireshark-pcap/">Wireshark | pcap</a> for recording traffic.</p>
+<h3 id="imu-example">IMU Example<a class="headerlink" href="#imu-example" title="Permanent link">&para;</a></h3>
+<p>Enable IMU output on a supported sensor and capture its IMU stream as well as the measurement stream. The video shows how to receive and inspect IMU telegrams in Wireshark.</p>
+<div class="video">
+<iframe loading="lazy" id="kaltura_player_0_jnvpbvv5_301"  data-kaltura-src="https://api.eu.kaltura.com/p/205/sp/20500/embedIframeJs/uiconf_id/23452804/partner_id/205?iframeembed=true&amp;playerId=kaltura_player_0_jnvpbvv5_301&amp;entry_id=0_jnvpbvv5&amp;flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;wid=0_l6bcsew2" width="800" height="450" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="How to receive IMU data and dissect it with Wireshark"></iframe>
+</div>
+<p class="caption">How to receive IMU data and dissect it with Wireshark.</p>
+
+<h2 id="frame-layout">Frame Layout<a class="headerlink" href="#frame-layout" title="Permanent link">&para;</a></h2>
+<p>All multi-byte values are little-endian. The frame contains a start marker, a
+telegram type, the type-specific payload, and a <a class="glossary-link" href="../../glossary/#crc32" title="32-bit cyclic redundancy check. Protects each Compact and MSGPACK telegram.">CRC32</a> <a class="glossary-link" href="../../glossary/#checksum" title="Value calculated over data to detect transmission errors or changes. CoLa B uses an XOR checksum, the Compact format CRC32, and the device reports MD5 checksums of its software and parameters.">checksum</a>. Verify the
+checksum before processing the payload. Use the authoritative
+<a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/compact_frame.ksy"><code>compact_frame.ksy</code> definition on GitHub</a>
+for the complete frame layout.</p>
+<h2 id="standard-header">Standard Header<a class="headerlink" href="#standard-header" title="Permanent link">&para;</a></h2>
+<p>Telegram types 3, 4, 6, and 7 start their payload with the same header. Types
+1 and 2 do not. For the complete field layout, use the authoritative
+<a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/compact_header.ksy"><code>compact_header.ksy</code> definition on GitHub</a>.</p>
+<p>For type 4 with <code>telegram_version</code> 1, <code>payload_length</code> includes <code>sender_id</code>; from version 2 onwards it does not.</p>
+<h2 id="type-1-scan-data">Type 1: Scan Data<a class="headerlink" href="#type-1-scan-data" title="Permanent link">&para;</a></h2>
+<p>The scan payload is a header followed by one or more modules. Each module carries per-layer metadata plus the <a class="glossary-link" href="../../glossary/#beam" title="One measurement direction of the sensor. Each beam can return one or more echoes.">beam</a> data for its <a class="glossary-link" href="../../glossary/#layer" title="One horizontal scan line at a fixed elevation angle. A multi-layer sensor provides several layers; a single-layer sensor provides one.">layers</a>. Read the first module size from the telegram header, then use each module's <code>next_module_size</code> to find the next one; zero marks the last module. Do not assume all modules have the same size.</p>
+<p>Read <code>telegram_version</code>, <code>data_content_echos</code>, and <code>data_content_beams</code> before parsing beam data. Versions 3 and 4 have different beam-field ordering; version 4 also adds a distance scaling factor to the module metadata. For version 4, convert a raw distance to millimeters as <code>distance_mm = distance_raw × distance_scaling_factor</code>. All segments of one scan share <code>frame_number</code> and differ by segment index. The authoritative definition is <a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_1_primary_data_spherical_coordinates.ksy"><code>type_1_primary_data_spherical_coordinates.ksy</code> on GitHub</a>.</p>
+<p>The following annotated dump shows the first bytes of a real type 1 telegram
+from the <a href="#sample-packet-captures">picoScan150 sample capture</a>. All values are
+little-endian. Offsets are decimal.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Offset  Bytes                     Field                      Value
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>     0  02 02 02 02               start_of_frame
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>     4  01 00 00 00               telegram_type              1 (scan data)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>     8  a1 47 00 00 00 00 00 00   telegram_counter           18337
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    16  24 07 d4 07 00 00 00 00   transmit_timestamp         131335972 µs
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    24  04 00 00 00               telegram_version           4
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    28  70 23 00 00               size_module_0              9072 bytes
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    32  02 00 00 00 00 00 00 00   segment_counter            2
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    40  53 0e 00 00 00 00 00 00   frame_number               3667
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    48  99 df 71 01               sender_id                  24240025 (serial number)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    52  01 00 00 00 58 02 00 00   lines, beams per scan      1 layer, 600 beams
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    60  03 00 00 00               number_of_echos_per_beam   3
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    64  56 d8 d3 07 00 00 00 00   timestamp_start            131323990 µs (16 bytes with timestamp_stop)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    80  00 00 00 00               phi                        0.0 rad
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    84  78 d9 a0 be 06 36 3b 3f   theta_start, theta_stop    -0.3142 rad (-18°), 0.7313 rad (41.9°)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    92  00 00 80 3f               distance_scaling_factor    1.0
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    96  00 00 00 00               next_module_size           0 (last module)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>   100  01 03 03 00               reserved, echo/beam flags  distance + RSSI, azimuth + properties
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>   104  6e 00 e5 e5               beam 1, echo 1             distance 110 mm, RSSI 58853
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>   108  00 00 00 00 00 00 00 00   beam 1, echoes 2 and 3     no echo
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>   116  00 9a 39                  properties, theta          0, 14746 → -18.0°
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>   119  ...                       beams 2 to 600             15 bytes each
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  9104  5c 7d ab ce               CRC32                      over bytes 0 to 9103
+</code></pre></div>
+<p>The beam <a class="glossary-link" href="../../glossary/#azimuth" title="Horizontal angle of a beam (theta).">azimuth</a> converts to radians as <code>(theta - 16384) / 5215</code>.</p>
+<p><code>phi</code> is the beam <a class="glossary-link" href="../../glossary/#elevation" title="Vertical angle of a beam (phi).">elevation</a> above the XY plane of the scan coordinate system,
+and <code>theta</code> is the beam azimuth in that plane, measured from +X towards +Y.
+They are not the IMU orientation angles roll, pitch, and yaw, and the
+conversion below does not transform points into a world coordinate system.</p>
+<p>To convert a beam to a 3D point, use <code>phi</code> (elevation), <code>theta</code> (azimuth), and the distance <code>d</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>x = d · cos(phi) · cos(theta)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>y = d · cos(phi) · sin(theta)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>z = d · sin(phi)
+</code></pre></div>
+<h2 id="type-2-imu">Type 2: IMU<a class="headerlink" href="#type-2-imu" title="Permanent link">&para;</a></h2>
+<p>A flat, fixed-size payload from the integrated inertial measurement unit. It
+has no standard Compact header and no optional fields. IMU output is available
+on multiScan100 and picoScan100; sampling and available fields depend on the
+product. The LRS4000 provides IMU data through <a class="glossary-link" href="../../glossary/#cola" title="SICK protocol for monitoring, maintaining, and using sensors, including configuration and data requests. CoLa A uses ASCII text on TCP port 2111, CoLa B binary data on TCP port 2112, and CoLa 2 uses TCP port 2122.">CoLa</a> events or
+<code>GET /api/InertialMeasurementUnit</code>, not as a Compact telegram. The authoritative Compact layout is
+<a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_2_imu.ksy"><code>type_2_imu.ksy</code> on GitHub</a>.</p>
+<p>The data is specified in the following coordinate system based on the DIN 70000
+system: The x-axis lies on the 90° beam of the 0° plane. The y-axis is
+perpendicular to the x-axis and lies in the 0° plane. The y-values increase in
+the counter rotation direction (right-handed system). The z-axis is
+perpendicular to the y-axis and the top of the device points towards increasing
+z-values.</p>
+<p>Roll, pitch, and yaw are rotations about X, Y, and Z. They describe the sensor
+orientation, not the beam angles of the <a href="#type-1-scan-data">scan data</a>.</p>
+<p><img alt="IMU coordinate system showing the x, y, and z axes and their rotation directions" src="../../assets/data-streaming/imu-coordinate-system.png" width="520" /></p>
+<p class="caption">IMU axes and roll, pitch, and yaw rotation directions based on DIN 70000; these are distinct from scan-beam angles.</p>
+
+<h2 id="type-3-ambient-light">Type 3: Ambient Light<a class="headerlink" href="#type-3-ambient-light" title="Permanent link">&para;</a></h2>
+<p>The ambient-light image of the multiScan200 is sent as a separate telegram.
+The sensor captures it passively through the same receiver as the distance
+data. It follows the <a href="#standard-header">standard header</a>.</p>
+<p>Distance and ambient-light data measured at the same time share the same
+<code>frame_number</code>. Use the authoritative
+<a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_3_ambient_light.ksy"><code>type_3_ambient_light.ksy</code> definition on GitHub</a>
+for the complete payload layout.</p>
+<h2 id="type-4-encoder">Type 4: Encoder<a class="headerlink" href="#type-4-encoder" title="Permanent link">&para;</a></h2>
+<p>Reports an external rotary encoder attached to a moving axis (picoScan150).
+One encoder telegram is sent per scan frame and linked to it by <code>frame_number</code>.
+It follows the <a href="#standard-header">standard header</a>.</p>
+<p>See <a href="../../integration-notes/3d-with-2d-lidars/">3D With 2D LiDARs</a> for how to fuse encoder and scan data.</p>
+<p>Use the authoritative <a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_4_encoder.ksy"><code>type_4_encoder.ksy</code> definition on GitHub</a> for the complete payload layout.</p>
+<h2 id="type-6-scan-data-multiscan200">Type 6: Scan Data (multiScan200)<a class="headerlink" href="#type-6-scan-data-multiscan200" title="Permanent link">&para;</a></h2>
+<p>The scan data of the multiScan200. One telegram carries one segment: a block
+of columns (<a class="glossary-link" href="../../glossary/#slot" title="One column of measurements at a horizontal angle step.">slots</a>), each with all layers. It follows the <a href="#standard-header">standard
+header</a>.</p>
+<p>Convert each pixel to a 3D point with the <a href="#type-1-scan-data">formula for type 1</a>, using the elevation angle of its layer as <code>phi</code> and the azimuth angle of its column as <code>theta</code>. Use the authoritative <a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_6_primary_data_multiscan200.ksy"><code>type_6_primary_data_multiscan200.ksy</code> definition on GitHub</a> for the complete segment header and data-block layout.</p>
+<p>For interlaced <a class="glossary-link" href="../../glossary/#scan-configuration" title="Predefined combination of aperture angle, scanning frequency, and angular resolution, identified by a number.">scan configurations</a>, <code>number_of_interlace_steps</code> is greater than 1 and consecutive frames must be combined to cover the full field of view; <code>current_interlace_index</code> identifies each frame's position in that sequence. Configured data reduction can also leave zero-filled distance and RSSI values in the fixed-size Compact segment, including for angles outside the selected range. A zero value alone therefore does not mean that the beam or column is absent.</p>
+<h2 id="type-7-imu-with-standard-header">Type 7: IMU with Standard Header<a class="headerlink" href="#type-7-imu-with-standard-header" title="Permanent link">&para;</a></h2>
+<p>The IMU data of the multiScan200. The content matches <a href="#type-2-imu">type 2</a>, but the payload starts with the <a href="#standard-header">standard header</a> and has no <code>telegram_version</code> field of its own:</p>
+<p>Use the authoritative <a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_7_imu_standard_header.ksy"><code>type_7_imu_standard_header.ksy</code> definition on GitHub</a> for the complete payload layout.</p>
+<h2 id="measurement-data-conventions">Measurement Data Conventions<a class="headerlink" href="#measurement-data-conventions" title="Permanent link">&para;</a></h2>
+<h3 id="azimuth-angles">Azimuth Angles<a class="headerlink" href="#azimuth-angles" title="Permanent link">&para;</a></h3>
+<p>The <code>theta</code> values within a segment are monotonically
+increasing. For a 360° sensor, a segment that crosses the +180°/−180° boundary
+can therefore continue beyond 180° instead of wrapping immediately to a
+negative value. In the example below, the blue segment runs from 160° to 189°,
+while the following green segment uses −170° to −141°. Preserve this ordering
+while parsing; normalize the angles only afterwards if your application needs
+the range (−180°, 180°].</p>
+<p><img loading="lazy" decoding="async" alt="Azimuth angles of segments crossing the 180-degree boundary" src="../../assets/data-streaming/azimuth-angle-wrap.png" width="360" /></p>
+<p class="caption">Azimuth values remain monotonically increasing within a segment.</p>
+
+<h3 id="segment-counters">Segment Counters<a class="headerlink" href="#segment-counters" title="Permanent link">&para;</a></h3>
+<p>Normally, the segment counter is between <code>0</code> and
+<code>number_of_segments - 1</code> and increases with the azimuth. The multiScan100 has
+one exception: when most beams in a segment lie beyond 180°, that segment
+belongs to the next frame and receives counter <code>0</code>. With 30° segments, an
+angle-only calculation would produce counter <code>12</code>, which wraps to <code>0</code>. Use the
+transmitted counter rather than deriving it from <code>theta</code>.</p>
+<p><img loading="lazy" decoding="async" alt="Segment counter at the 180-degree boundary" src="../../assets/data-streaming/segment-counter-wrap.png" width="480" /></p>
+<p class="caption">The blue segment belongs mainly to the next frame and therefore receives counter 0.</p>
+
+<h3 id="rssi-values">RSSI Values<a class="headerlink" href="#rssi-values" title="Permanent link">&para;</a></h3>
+<p>Compact and MSGPACK represent RSSI as a dimensionless 16-bit
+unsigned integer. Treat the full range from <code>0</code> to <code>65535</code> as valid, although a
+device may never reach the maximum. RSSI is not standardized, so absolute
+values are not directly comparable between device families.</p>
+<p>Some device outputs scale an internally measured 8-bit RSSI value depending on
+the output format:</p>
+<p class="table-caption"><strong>RSSI Values:</strong> format, bit depth, and conversion.</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Bit depth</th>
+<th>Conversion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compact type 1</td>
+<td>16-bit</td>
+<td><code>16bit = (8bit / 255) × 65535</code></td>
+</tr>
+<tr>
+<td>MSGPACK</td>
+<td>16-bit</td>
+<td><code>16bit = (8bit / 255) × 65535</code></td>
+</tr>
+<tr>
+<td><code>LMDscandata</code> (CoLa)</td>
+<td>8-bit</td>
+<td>none; value <code>254</code> = <a class="glossary-link" href="../../glossary/#reflector" title="Highly reflective target, such as a retroreflector. The sensor can mark points on reflectors.">reflector</a> detected; this representation is compatible with TiM5/7</td>
+</tr>
+</tbody>
+</table>
+<p>For example, an internal 8-bit value of <code>1</code> becomes <code>257</code> (<code>0x0101</code>) in
+16-bit output. The low byte equals the high byte (for example <code>0xe6e6</code>), which
+is expected.</p>
+<h3 id="bit-fields-and-beam-properties">Bit Fields and Beam Properties<a class="headerlink" href="#bit-fields-and-beam-properties" title="Permanent link">&para;</a></h3>
+<p><code>data_content_echos</code>,
+<code>data_content_beams</code>, and each beam's <code>properties</code> value are bit fields. Test
+bit <code>i</code> with <code>(value &amp; (1 &lt;&lt; i)) != 0</code>; do not interpret the complete decimal
+value as a single state. In <code>properties</code>, bit 0 means that a reflector was
+detected for at least one <a class="glossary-link" href="../../glossary/#echo" title="Reflection of one laser pulse. One beam can return several echoes, for example from a raindrop and a wall behind it.">echo</a> of the beam. This can be treated as applying to
+the last echo because a reflector echo is not physically followed by another
+echo on the same beam. Bits 1 through 7 are reserved and must be ignored.</p>
+<h3 id="segments-lrs4000">Segments (LRS4000)<a class="headerlink" href="#segments-lrs4000" title="Permanent link">&para;</a></h3>
+<p>LRS4000 sends one Compact scan telegram per frame. The <code>DataOutputRange</code>
+setting replaces measurements outside the selected angles with zeros; it does
+not reduce the telegram size.</p>
+<h3 id="segments-picoscan100">Segments (picoScan100)<a class="headerlink" href="#segments-picoscan100" title="Permanent link">&para;</a></h3>
+<p>The picoScan100 scans a range of 276°. One 276° rotation of the scan layer is one scan (frame). For output, each scan is split into segments of a fixed angular size:</p>
+<p class="table-caption"><strong>Segments (picoScan100):</strong> scanning frequency, segment size, and segments at 276°.</p>
+<table>
+<thead>
+<tr>
+<th>Scanning frequency</th>
+<th>Segment size</th>
+<th>Segments at 276°</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≤ 25 Hz</td>
+<td>30°</td>
+<td>10</td>
+</tr>
+<tr>
+<td>≥ 30 Hz</td>
+<td>60°</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p><img loading="lazy" decoding="async" alt="picoScan100 scan segments" src="../../assets/picoScan100/img/data-format-picoscan-scan-segments.png" /></p>
+<p class="caption">Example of 30° scan segments within the 276° <a class="glossary-link" href="../../glossary/#scan-range" title="Angle range covered by the sensor.">scan range</a>.</p>
+<p>Segment boundaries do not move when you reduce the scan range. Measured values in hidden angle ranges are filled with zeros, and a segment that is completely hidden is not sent. Example: 180° (−90° to +90°) at 40 Hz gives 4 segments.</p>
+<h3 id="segments-multiscan100">Segments (multiScan100)<a class="headerlink" href="#segments-multiscan100" title="Permanent link">&para;</a></h3>
+<p>The multiScan100 captures a 360° frame across its scan layers and divides the
+output into time-based segments. Each segment contains data from all scan
+layers, but the azimuth ranges of those layers do not necessarily line up
+spatially. Raw output keeps the original layer timing. Rectified output aligns
+the layer start angles as closely as possible and adds at least one segment
+interval of latency. See the <a href="../../multiScan100/">multiScan100 overview</a>
+for device-specific output context.</p>
+<p><img loading="lazy" decoding="async" alt="multiScan100 scan segments" src="../../assets/multiScan100/img/data-format-multiscan-scan-segments.png" /></p>
+<p class="caption">A 360° frame split into twelve 30° segments, each with its own time stamp.</p>
+<p>Each segment covers a different time within the rotation, so <code>t0</code> to <code>t11</code>
+increase in the scan direction. Use the per-segment time stamps rather than the
+frame time when you fuse the data with motion or another sensor.</p>
+<h2 id="sample-packet-captures">Sample Packet Captures<a class="headerlink" href="#sample-packet-captures" title="Permanent link">&para;</a></h2>
+<p>Open these one-second <code>.pcap.gz</code> recordings directly in Wireshark with the
+<a href="#wireshark-dissector">Compact dissector</a>. All recordings contain only measurement traffic,
+with original packet bytes and timestamps.</p>
+<p>In every sample, <code>192.168.0.1</code> is the sensor and <code>192.168.0.100</code> is the
+receiver; your PC does not need matching addresses for offline inspection.
+The tables describe recorded settings, not required defaults.</p>
+<p>Enable IPv4 reassembly for UDP and TCP stream reassembly for TCP.
+UDP scan frames can be partial at the recording boundaries; group segments
+by <code>frame_number</code>. For TCP, use <strong>Follow TCP Stream</strong>: a telegram spans
+multiple packets. Reference pictures show scene context, not synchronized
+<a class="glossary-link" href="../../glossary/#pcap" title="File format for recorded network traffic, created for example with Wireshark.">PCAP</a> frames.</p>
+<p class="table-caption">Compact sample availability and transport by device family.</p>
+
+<table>
+<thead>
+<tr>
+<th>Device family</th>
+<th>Sample</th>
+<th>Compact transport</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LRS4000</td>
+<td><a href="../../assets/data-streaming/lrs4000-compact-scan-tcp.pcap.gz">LRS4000 scan capture (gzip PCAP, 605 KB)</a></td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>multiScan100</td>
+<td><a href="../../assets/data-streaming/multiscan165-compact-scan-imu-udp.pcap.gz">multiScan165 scan and IMU capture (gzip PCAP, 1.16 MB)</a></td>
+<td>UDP unicast</td>
+</tr>
+<tr>
+<td>multiScan200</td>
+<td><a href="../../assets/data-streaming/multiscan270-compact-scan-ambient-imu-tcp.pcap.gz">multiScan270 scan, ambient-light, and IMU capture (gzip PCAP, 13.4 MB)</a></td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>picoScan100</td>
+<td><a href="../../assets/data-streaming/picoscan150-compact-scan-imu-encoder-udp.pcap.gz">picoScan150 scan, IMU, and encoder capture (gzip PCAP, 327 KB)</a></td>
+<td>UDP unicast</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lrs4000-capture-settings">LRS4000 Capture Settings<a class="headerlink" href="#lrs4000-capture-settings" title="Permanent link">&para;</a></h3>
+<p><img loading="lazy" decoding="async" alt="LRS4000 planar scan showing blue and green measurement points on a distance grid with coordinate axes" src="../../assets/data-streaming/lrs4000-compact-sample-reference.png" /></p>
+<p class="caption">LRS4000 reference view: planar scan points on a grid, with distance in meters.</p>
+
+<p class="table-caption">LRS4000 settings and recorded TCP scan data.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device and <a class="glossary-link" href="../../glossary/#firmware" title="Software that runs on the sensor.">firmware</a></td>
+<td>LRS4581R-230001, firmware <code>1.10.0.0R</code></td>
+</tr>
+<tr>
+<td>Scan connection</td>
+<td>Sensor TCP port <code>2115</code> → receiver port <code>49455</code>; Compact (<code>ScanDataFormat = 2</code>)</td>
+</tr>
+<tr>
+<td>Scan telegrams</td>
+<td>13 complete type 1 telegrams, version 4; no partial telegrams</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>More recorded settings</summary>
+<p class="table-caption">Additional recorded settings.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>0.994874 s</td>
+</tr>
+<tr>
+<td>Scan configuration</td>
+<td>12.5 Hz, 0.04°; −180° to +180°</td>
+</tr>
+<tr>
+<td>Scan geometry</td>
+<td>One module, one layer, 9,000 beams, three echoes per frame</td>
+</tr>
+<tr>
+<td>Filters</td>
+<td>All echoes; particle, mean, median, and radial-distance filters disabled</td>
+</tr>
+<tr>
+<td>Distance scale</td>
+<td><code>ScanDataScaleFactor = 2</code></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Wireshark filter: <code>ip.addr == 192.168.0.1 &amp;&amp; tcp.port == 2115</code>.</p>
+<h3 id="multiscan165-capture-settings">multiScan165 Capture Settings<a class="headerlink" href="#multiscan165-capture-settings" title="Permanent link">&para;</a></h3>
+<p><img loading="lazy" decoding="async" alt="multiScan165 scan showing blue and green measurement points on a perspective grid with coordinate axes" src="../../assets/data-streaming/multiscan165-compact-sample-reference.png" /></p>
+<p class="caption">multiScan165 reference view: scan points on a perspective grid, colored by echo.</p>
+
+<p class="table-caption">multiScan165 settings and recorded UDP scan and IMU data.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device and firmware</td>
+<td>multiScan165, firmware <code>2.5.0.0R</code></td>
+</tr>
+<tr>
+<td>Scan connection</td>
+<td>Sensor UDP port <code>39493</code> → receiver port <code>2115</code>; Compact (<code>ScanDataFormat = 2</code>)</td>
+</tr>
+<tr>
+<td>Scan telegrams</td>
+<td>242 type 1 telegrams, version 4; 20 complete 12-segment frames and one partial frame</td>
+</tr>
+<tr>
+<td>IMU connection and telegrams</td>
+<td>Sensor UDP port <code>58362</code> → receiver port <code>7503</code>; 101 type 2 telegrams</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>More recorded settings</summary>
+<p class="table-caption">Additional recorded settings.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>0.998802 s</td>
+</tr>
+<tr>
+<td>Scan configuration</td>
+<td>20 Hz, 0.5° angular resolution; configured azimuth range −180° to +180°</td>
+</tr>
+<tr>
+<td>Recorded scan geometry</td>
+<td>Two modules of eight layers each; 60 beams per layer per segment; three echoes; 12 segments per complete frame</td>
+</tr>
+<tr>
+<td><a class="glossary-link" href="../../glossary/#echo-filter" title="Filter that selects which echoes are output, for example the first, the last, or all echoes.">Echo filter</a></td>
+<td>All echoes (<code>FREchoFilter = 1</code>)</td>
+</tr>
+<tr>
+<td>Angle, layer, radial-distance, and <a class="glossary-link" href="../../glossary/#interval-filter" title="Filter that outputs only every n-th scan.">interval filters</a></td>
+<td>Disabled; all 16 layers selected</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Wireshark filter:
+<code>ip.src == 192.168.0.1 &amp;&amp; (udp.dstport == 2115 || udp.dstport == 7503)</code>.</p>
+<h3 id="multiscan270-capture-settings">multiScan270 Capture Settings<a class="headerlink" href="#multiscan270-capture-settings" title="Permanent link">&para;</a></h3>
+<p><img loading="lazy" decoding="async" alt="multiScan270 SOPASair view showing a 3D point cloud above a grayscale ambient-light image of the outdoor scene" src="../../assets/data-streaming/multiscan270-compact-sample-reference.png" /></p>
+<p class="caption">multiScan270 reference view: <a class="glossary-link" href="../../glossary/#sopasair" title="Application for parameterization, configuration, diagnostics, and monitoring of SICK sensors. In this guide, it is the sensor&#x27;s web interface, opened in a browser.">SOPASair</a> point cloud above the ambient-light image.</p>
+
+<p class="table-caption">multiScan270 settings and recorded TCP scan, ambient-light, and IMU data.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device and firmware</td>
+<td>multiScan270, firmware <code>1.1.0.0R</code></td>
+</tr>
+<tr>
+<td>Output mode</td>
+<td>TCP Compact (<code>dataOutputMode = 1</code>)</td>
+</tr>
+<tr>
+<td>Scan connection</td>
+<td>Sensor <code>192.168.0.1:2115</code> to receiver port <code>59003</code>; 19 complete type 6 telegrams, version 1</td>
+</tr>
+<tr>
+<td>Ambient-light connection</td>
+<td>Sensor <code>192.168.0.1:2116</code> to receiver port <code>59004</code>; 19 complete type 3 telegrams, version 1; 592 × 192 pixels</td>
+</tr>
+<tr>
+<td>IMU connection</td>
+<td>Sensor <code>192.168.0.1:2117</code> to receiver port <code>59005</code>; 97 complete type 7 telegrams, version 1</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>More recorded settings</summary>
+<p class="table-caption">Additional recorded settings.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>0.991826 s</td>
+</tr>
+<tr>
+<td>Scan content</td>
+<td>Distance, RSSI, echo properties, and ambient light</td>
+</tr>
+<tr>
+<td>Scan geometry</td>
+<td>One segment per frame; 592 columns, 192 layers, three echoes; 192 ambient-light layers included</td>
+</tr>
+<tr>
+<td><a class="glossary-link" href="../../glossary/#performance-profile" title="See scan configuration.">Performance profile</a></td>
+<td><code>12</code>: 20 Hz frame rate; four interlace steps per full scan (5 Hz full-scan rate)</td>
+</tr>
+<tr>
+<td>Configured angular range and resolution</td>
+<td>Azimuth −138° to +138°, 0.4662° per frame; elevation −22.5° to +22.5°, 0.2344°</td>
+</tr>
+<tr>
+<td>Ambient-light vertical setting</td>
+<td>Matching (<code>ambientPixelCountVertical = 1</code>), not full vertical pixel count</td>
+</tr>
+<tr>
+<td>Echo and <a class="glossary-link" href="../../glossary/#particle-filter" title="Filter that removes isolated points caused by dust, rain, or snow.">particle filters</a></td>
+<td>All echoes (<code>FREchoFilter = 1</code>); particle filter enabled, minimum one neighbor, <code>distanceThreshold = 500</code></td>
+</tr>
+<tr>
+<td>Other filters</td>
+<td>Interval, angle-range/focus, and <a class="glossary-link" href="../../glossary/#blooming" title="False points that appear near highly reflective objects such as retroreflectors.">blooming</a> filters disabled</td>
+</tr>
+<tr>
+<td>Recording boundary</td>
+<td>Scan and ambient-light streams each end partway through one additional telegram; these tails are not counted as complete telegrams</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Wireshark filter:
+<code>ip.addr == 192.168.0.1 &amp;&amp; (tcp.port == 2115 || tcp.port == 2116 || tcp.port == 2117)</code>.
+Combine the four interlace indices before treating the scan as full coverage.</p>
+<h3 id="picoscan150-capture-settings">picoScan150 Capture Settings<a class="headerlink" href="#picoscan150-capture-settings" title="Permanent link">&para;</a></h3>
+<p>Encoder positions use fixed-velocity mode, not physical encoder measurements.</p>
+<p><img loading="lazy" decoding="async" alt="picoScan150 planar scan showing orange measurement points on an XY grid with distance in meters" src="../../assets/data-streaming/picoscan150-compact-sample-reference.png" /></p>
+<p class="caption">picoScan150 reference view: planar scan points on an XY grid, with distance in meters.</p>
+
+<p class="table-caption">picoScan150 settings and recorded UDP scan, IMU, and encoder data.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device and firmware</td>
+<td>picoScan150, firmware <code>2.3.3.0R</code></td>
+</tr>
+<tr>
+<td>Scan connection</td>
+<td>Sensor UDP port <code>52593</code> → receiver port <code>2115</code>; Compact (<code>ScanDataFormat = 2</code>)</td>
+</tr>
+<tr>
+<td>Scan telegrams</td>
+<td>150 type 1 telegrams, version 4; 29 complete five-segment frames and two partial frames</td>
+</tr>
+<tr>
+<td>IMU connection and telegrams</td>
+<td>Sensor UDP port <code>46180</code> → receiver port <code>7503</code>; 99 type 2 telegrams</td>
+</tr>
+<tr>
+<td>Encoder connection and telegrams</td>
+<td>Sensor UDP port <code>41656</code> → receiver port <code>7504</code>; 30 type 4 telegrams, version 1</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>More recorded settings</summary>
+<p class="table-caption">Additional recorded settings.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value in this recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>0.999805 s</td>
+</tr>
+<tr>
+<td>Performance profile</td>
+<td><code>6</code>: 30 Hz, 0.1°; −138° to +138°</td>
+</tr>
+<tr>
+<td>Echo filter</td>
+<td>All echoes (<code>FREchoFilter = 1</code>); three echoes per beam</td>
+</tr>
+<tr>
+<td>Angle, distance, interval, and averaging filters</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Encoder settings</td>
+<td>Fixed velocity (<code>EncSetting = 4</code>); reported speed <code>1000</code>; <code>EncResolution = 1</code></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Wireshark filter:
+<code>ip.src == 192.168.0.1 &amp;&amp; (udp.dstport == 2115 || udp.dstport == 7503 || udp.dstport == 7504)</code>.</p>
+<h2 id="bandwidth-calculator">Bandwidth Calculator<a class="headerlink" href="#bandwidth-calculator" title="Permanent link">&para;</a></h2>
+<p>Estimate Compact scan frame sizes, segment counts, and network traffic for
+supported devices and scan settings. The optional IMU and encoder estimates
+model IMU output at 100 Hz independently of the scan rate and encoder output
+once per scan frame.</p>
+<noscript>This calculator requires JavaScript.</noscript>
+<div class="calculator" data-bandwidth-calculator>
+<form class="calculator__form">
+<p class="calculator__heading">Device and Compact Output</p>
+</form>
+<div class="calculator__results">
+<p class="calculator__heading">Estimated Result</p>
+<div data-bandwidth-results aria-live="polite"></div>
+<p class="calculator__status" data-bandwidth-status data-state="info" aria-live="polite">Loading the calculator…</p>
+</div>
+</div>
+
+<p>Remarks:</p>
+<ul>
+<li>The calculator provides an estimate of bandwidth requirements. It considers scan data and selected IMU or encoder telegrams, but not additional configuration traffic.</li>
+<li>Ensure that your network infrastructure can handle the estimated bandwidth to avoid data loss or latency issues.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+<div class="page-end">
+  
+  <p id="page-feedback-title" class="page-feedback__title">Was this page helpful?</p>
+  
+  <div class="page-end__controls">
+    
+    <a class="page-end__link page-end__link--prev" href="../" aria-label="Previous page: Choose a Data Streaming Option" title="Previous page: Choose a Data Streaming Option">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 16.58 10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></span>
+    </a>
+    
+    
+    <section class="page-feedback" data-page-feedback="data-streaming/compact-format/">
+      <div class="page-feedback__buttons" role="group" aria-labelledby="page-feedback-title" hidden>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Helpful" aria-label="This page was helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z"/></svg></span>
+        </button>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Not helpful" aria-label="This page was not helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 15V3h4v12zM15 3a2 2 0 0 1 2 2v10c0 .55-.22 1.05-.59 1.41L9.83 23l-1.06-1.06c-.27-.27-.44-.64-.44-1.06l.03-.31.95-4.57H3a2 2 0 0 1-2-2v-2c0-.26.05-.5.14-.73l3.02-7.05C4.46 3.5 5.17 3 6 3zm0 2H5.97L3 12v2h8.78l-1.13 5.32L15 14.97z"/></svg></span>
+        </button>
+      </div>
+      <p class="page-feedback__status" role="status" aria-live="polite"></p>
+    </section>
+    
+    
+    <a class="page-end__link page-end__link--next" href="../filter-details/" aria-label="Next page: Filter Details" title="Next page: Filter Details">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></span>
+    </a>
+    
+  </div>
+</div>
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="sick-footer">
+  <nav class="sick-footer__links" aria-label="Legal information">
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/imprint/s/imprint" target="_blank" rel="noopener noreferrer">Imprint</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-and-conditions/s/tac" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-of-use/s/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of use</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/sick-data-privacy-declaration/w/dataprotection" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <span aria-hidden="true">|</span>
+    </span>
+  </nav>
+  <div class="sick-footer__item sick-footer__version">
+    <span>Version: v0.3.6</span>
+    <span aria-hidden="true">|</span>
+    <span>Last update: 2026-10-30</span>
+  </div>
+  <div class="sick-footer__item sick-footer__copyright">
+    <span aria-hidden="true">|</span>
+    © 2026 SICK AG
+  </div>
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.indexes", "navigation.path", "navigation.sections", "content.code.copy", "content.code.annotate", "toc.follow", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "v0.3.6"}</script>
+    
+    
+  
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js?language-alternates=1"></script>
+      
+        <script src="../../javascripts/web-app.js?v=1"></script>
+      
+        <script src="../../javascripts/search-paths.js?v=1"></script>
+      
+        <script src="../../javascripts/page-feedback.js?v=2"></script>
+      
+        <script src="../../javascripts/navigation-scroll.js?v=1"></script>
+      
+        <script src="../../javascripts/device-filter.js?v=12"></script>
+      
+        <script src="../../javascripts/google-translate.js?v=7"></script>
+      
+        <script src="../../javascripts/cable-calculator.js?v=7"></script>
+      
+        <script src="../../javascripts/kaltura-lazy.js?v=2"></script>
+      
+        <script src="../../javascripts/object-size-calculator.js?v=12"></script>
+      
+        <script src="../../javascripts/bandwidth-calculator.js?v=9"></script>
+      
+        <script src="../../javascripts/product-id-lookup.js?v=2"></script>
+      
+        <script src="../../javascripts/openapi-reference.js?v=3"></script>
+      
+    
+  
+    <script src="../../javascripts/copy-for-ai.js?v=11"></script>
+  
+
+  </body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "id": ".",
+  "name": "LiDAR Developer Guide",
+  "short_name": "LiDAR Developer Guide",
+  "description": "Configuration, data streaming, and integration guidance for SICK LiDAR sensors.",
+  "lang": "en",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#000a36",
+  "theme_color": "#005aff",
+  "icons": [
+    {
+      "src": "assets/web-app/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/web-app/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/web-app/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Getting Started",
+      "url": "getting-started/",
+      "description": "Connect and set up your LiDAR sensor."
+    },
+    {
+      "name": "Troubleshooting",
+      "url": "troubleshooting/",
+      "description": "Diagnose connection, configuration, and scan-data problems."
+    }
+  ]
+}

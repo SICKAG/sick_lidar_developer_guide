@@ -1,0 +1,328 @@
+# picoScan100 Web GUI (SOPASair): All Screens and Settings
+
+> Walkthrough of every picoScan100 SOPASair screen: basic settings, mounting, I/O, data output, field evaluation, contamination, and diagnostics.
+
+Source: https://sickag.github.io/sick_lidar_developer_guide/picoScan100/graphical-user-interface/
+
+# SOPASair Walkthrough
+
+This page describes the picoScan100 web interface and the settings in each view. Use it to commission the sensor before you automate the configuration through the API. To try the interface without a device, open it in the [Virtual Sensor Lab](https://sickag.github.io/sick_lidar_developer_guide/simulation/virtual-sensor-lab/).
+
+## Home
+
+The Home page summarizes the sensor's state: device, connection, measurement,
+field evaluation, and data-output status, device information with the
+firmware version, the live scan, and the I/O states. Use it to confirm that the
+sensor is online and healthy before you change settings.
+
+![SOPASair Home page of a picoScan100](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-home.png)
+*Live capture of the picoScan100 SOPASair Home page.*
+
+## Configuration
+
+Choose the scan configuration and the core measurement behavior. Resolution, frequency, and range trade off against each other.
+
+*Live capture from a picoScan100's web interface.*
+
+The live scan on the left updates as you change the configuration, which is the quickest way to judge a setting.
+
+### Basic Settings
+
+Basic Settings controls the scan configuration used by the sensor. The settings
+are shown on the right; the live scan on the left shows the effect of the
+selected frequency, angular resolution, and other settings immediately. Use
+this view to check coverage and measurement behavior while commissioning.
+
+**Coordinate System**
+
+The device coordinate system uses one point as the origin and reference for all
+laser beams and distance measurements. With no translation into a world
+coordinate system, this point is also the world origin.
+
+The horizontal beam angle is **theta** (`θ`). A beam at `θ = 0°` points along
+the middle of the sensor's main viewing direction, making the scan symmetric
+around the X axis. The vertical elevation angle is **phi** (`φ`) and is
+measured from the X/Y plane. For a single-plane picoScan, `φ = 0°` when the
+sensor is ideally mounted.
+
+<div>
+<img src="https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/configuration-coordinate-system-xy.png" alt="Device coordinate system: theta" style="width: 220px; height: 220px; object-fit: contain;">
+*Horizontal beam angle <strong>theta</strong>.*
+</div>
+<div>
+<img src="https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/configuration-coordinate-system-xz.png" alt="Device coordinate system: phi" style="width: 220px; height: 220px; object-fit: contain;">
+*Vertical beam angle <strong>phi</strong>.*
+</div>
+
+Measurement data is always output in the device coordinate system. Transform it
+into a world or application frame on the receiving system after accounting for
+the sensor's mounting position and orientation. See
+[3D point clouds with 2D LiDARs](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/3d-with-2d-lidars/) for an
+example coordinate transform.
+
+**Date and system time**
+
+The time base can be set using various methods:
+
+- Explicitly setting the date and time
+- Transferring the time from the computer used
+- Via an external NTP server (Network Time Protocol) that is accessible in the network. The technology uses UDP on port 123. This setting is recommended to ensure a correct time stamp in the detection history or error entries.
+- Via an external PTP (Precision Time Protocol) master that is accessible in the network. The technology uses UDP on ports 319 and 320. This setting is recommended for precise synchronization requirements (e.g. between several devices).
+
+**Dynamic Sensing Profiles**
+
+LiDAR applications often need different sensor characteristics at different
+times. An AMR may need the shortest response time in busy areas, a large
+scanning range and good angular resolution in a warehouse, and the highest
+close-range angular resolution while docking. Higher angular resolution
+requires a lower scanning frequency, so choose the priority for each
+application.
+
+Dynamic Sensing Profiles allow the scan's core parameters to be changed during
+operation without restarting the sensor. The Scan Data Configuration function
+allows fast switching between profiles:
+
+<p class="table-caption" markdown>**Basic Settings:** profile, frequency, angular resolution, and typical use.</p>
+
+| Profile | Frequency | Angular resolution | Typical use |
+| ---: | ---: | ---: | --- |
+| 1 | 15 Hz | 0.5° | Object detection with large scanning ranges |
+| 2 | 15 Hz | 0.33° | TiM series retrofit |
+| 3 | 20 Hz | 0.1° | Fine positioning or environment maps |
+| 4 | 20 Hz | 0.25° | Low-noise measurements; recommended for LiDAR-LOC |
+| 5 | 25 Hz | 0.25° | LMS100 series retrofit |
+| 6 | 30 Hz | 0.1° | Fine positioning or environment maps |
+| 7 | 40 Hz | 0.25° | Fast object detection at a large scanning range |
+| 8 | 50 Hz | 0.25° | Very fast object detection |
+| 9 | 15 Hz | 0.05° | Highest angular resolution for static measurements |
+| 10 | 40 Hz | 0.125° | High angular resolution and high scan rate |
+| 11 | 15 Hz | 1° | TiM series retrofit |
+
+Available profiles depend on the device variant and license; see
+[Licenses](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/licenses/).
+
+*How to change the device name.*
+*How to change scanning frequency and angular resolution.*
+
+### Filter
+
+Clean up the scan before it leaves the sensor by suppressing extra echoes, artifacts and airborne particles.
+
+![Filter settings](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-configuration-filter-tile.png)
+*Example filter settings in the picoScan100 web interface. Select parameters according to the requirements of each application.*
+
+If present, the filters are applied in the following order:
+
+1. Fog filter
+2. Echo filter
+3. Particle filter
+4. Moving average filter
+5. Filters for data reduction and the region of interest filter
+
+For detailed behavior and examples, see [Filter details](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/filter-details/).
+
+### Inertial Measuring Unit (IMU)
+
+Use the IMU view to inspect the sensor's current orientation and acceleration.
+
+*Live capture from a picoScan100's web interface.*
+
+The IMU view displays the yaw, pitch, and roll angles in degrees, together with the measured acceleration on the X, Y, and Z axes in meters per second squared. The orientation indicator provides a visual representation of the current sensor position.
+
+Use these values as a guide when checking the sensor installation or interpreting the scan coordinate system.
+
+### Contamination Indication
+
+Monitor the optics cover for dirt and get a warning before measurement quality drops.
+
+*Live capture from a picoScan100's web interface.*
+
+The contamination status provides a live reading of Clean, Minor, Heavy, or Blocked. The segment wheel identifies where contamination is accumulating around the optics cover. Configure whether contamination triggers a warning, an error, or both, and adjust the sensitivity and outputs for the environment.
+
+*How to receive contamination indication through event-driven CoLa.*
+
+### Connection Options
+
+Give the sensor its permanent Ethernet identity so it fits your network.
+
+*Live capture from a picoScan100's web interface.*
+
+Choose static addressing to enter a fixed IP address, or DHCP to have a server assign the address automatically, according to your application and network requirements. The IP address must be unique on your network. The subnet mask defines which addresses are local, for example `255.255.255.0`, and the default gateway provides access to other subnets. The MAC address and calculated speed are read-only values for reference and firewall rules.
+
+1. Set the addressing mode to Static.
+2. Enter the IP, subnet mask, and gateway for your network.
+3. Press Apply.
+4. Reconnect the browser at the new address.
+
+Pressing Apply drops your current browser connection.
+
+### Inputs and Outputs
+
+Configure the multifunction I/O ports and map field-evaluation results and device states to physical outputs.
+
+*Live capture from a picoScan100's web interface.*
+
+Set each port as an input or an output and give it a name.
+Bind an output to a source, such as a field-evaluation result or a device state.
+Configure the logic (HIGH or LOW active), inversion, restart behavior, and status log.
+The right panel shows the live status and counters for every port.
+
+I/O is a simple way to connect a PLC when you do not want to parse the data stream.
+
+*How to switch digital outputs by API.*
+
+## Application
+
+### Data Output
+
+Decide what measurement data leaves the sensor and how it is streamed to your system.
+
+*Live capture from a picoScan100's web interface.*
+
+For data output, select Compact, MSGPACK, LMDscandata, or Native ROS 2 according to your application. For Compact or MSGPACK, configure serialization to include only the RSSI and properties layers your application needs. Reduce bandwidth at the source with an angular-range filter that retains one sector or an interval filter that reduces the number of scans sent per second.
+
+![Compact measurement data output](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-compact.png)
+*Compact outputs measurement data over UDP and provides separate controls for RSSI and properties serialization.*
+
+![MSGPACK measurement data output](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-msgpack.png)
+*MSGPACK outputs measurement data over UDP to the configured destination address and port.*
+
+![LMDscandata measurement data output](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-lmdscandata.png)
+*LMDscandata provides CoLa ASCII and CoLa Binary TCP ports. Restart the sensor after changing a port.*
+
+![Native ROS 2 measurement data output](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-native-ros2.png)
+*Native ROS 2 configures the sensor and reference coordinate frames, namespace, and DDS domain ID.*
+
+![IMU data output settings](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-imu.png)
+*The IMU data output panel enables IMU streaming and configures the destination port and IP address.*
+
+![Encoder data output settings](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-encoder.png)
+*The Encoder data output panel enables encoder-data streaming and configures the destination port and IP address.*
+
+![Data reduction settings](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-reduction.png)
+*The Data reduction panel reduces the transmitted data with an interval filter and an angular range filter.*
+
+For detailed filter behavior, see [Filter details](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/filter-details/).
+
+For the Compact format, a segment that lies entirely outside the selected range
+is omitted. A segment that is only partly within the range remains in the output
+and its outside values are filled with `0`.
+
+![Range filter settings](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-range-filter.png)
+*The Range filter panel limits data by rectangular X/Y coordinates or by minimum and maximum distance.*
+
+![Region of interest in the scan view](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-data-output-region-of-interest.png)
+*The scan view shows the selected region of interest and the points detected within it.*
+
+### Field Evaluation
+
+Draw 2D fields in the sensor's scan plane. The sensor detects points inside them without an external computer.
+
+*Live capture from a picoScan100's web interface.*
+
+Each field belongs to an evaluation group that combines field geometry, logic, and output. A field state can drive a physical output (see [Inputs and outputs](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/graphical-user-interface/#inputs-and-outputs)) or appear in the detection list for your software. A group can remain active continuously or be switched by an input, for example to monitor a zone only while a machine is moving. Pan and zoom the scan view to check field coverage across the full aperture angle.
+
+*Live capture of creating a detection field on a picoScan100.*
+
+1. On the Field evaluation panel, click **Add group** to create an evaluation group.
+2. The group opens an evaluation chain: Field → Evaluation → Output.
+3. Click the Field node to define the field geometry: draw a contour, or use Teach-in to capture the current environment as the field.
+4. Set the evaluation logic and wire the result to an output; the field then appears live in the 2D view.
+5. Click the floppy-disk icon in the toolbar to save the configuration permanently (until you do, changes live in RAM and are lost on restart).
+
+The [REST API](https://sickag.github.io/sick_lidar_developer_guide/configuration/rest-interface/) can also create, change, and activate evaluation groups; see [Field Evaluation](https://sickag.github.io/sick_lidar_developer_guide/on-device-applications/field-evaluation/#configure-over-the-api).
+
+- [How to draw fields and detect objects](https://support.sick.com/sick-knowledgebase/article?id=b3822c6c-a151-f011-877b-7c1e52272c21)
+- [How to use a taught background for field evaluation](https://support.sick.com/sick-knowledgebase/article?id=cf43c5fc-4350-f011-b4cc-7c1e52272c21)
+
+*How to configure a field for retro-reflectors only.*
+*How to use a contour as a reference.*
+*How to activate fields through HTTP.*
+*How to read field evaluation state through HTTP.*
+*How to receive field evaluation state via event-driven CoLa.*
+*How to use the REST API client.*
+
+### Perpendicular Distance Measurement
+
+Each evaluation group measures the perpendicular distance from the sensor's
+scan line to the nearest object inside a zone. Like [field evaluation](https://sickag.github.io/sick_lidar_developer_guide/picoScan100/graphical-user-interface/#field-evaluation),
+it runs on the sensor, but returns a distance rather than a
+field-clear/field-infringed state; no raw-scan processing on a host is needed.
+
+*Perpendicular distance measurement in SOPASair.*
+
+The Max. blanking size setting ignores gaps smaller than the set width, and the Detection time setting sets how long an object must be present (in scans) before it counts.
+
+1. On the Perpendicular distance measurement panel, click **Add group**.
+2. Draw the zone the measurement applies to, the same way you draw a field.
+3. Set Max. blanking size and Detection time under Object detection to
+   match your target and required responsiveness.
+4. Read the distance in the Result list for distance measurement, or wire it
+   into your software over the [REST API](https://sickag.github.io/sick_lidar_developer_guide/configuration/rest-interface/)
+   or [WebSocket events](https://sickag.github.io/sick_lidar_developer_guide/data-streaming/websocket-events/).
+5. Click the floppy-disk icon to save the configuration permanently (until you do,
+   changes live in RAM and are lost on restart).
+
+![Result list for distance measurement](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-application-perpendicular-distance-result-list.png)
+*The Result list shows the minimum and maximum distance and the coordinates of the measuring points for each evaluation.*
+
+## Diagnostics
+
+The health dashboard shows device, connection, measurement, and data-output status; the power-on counter, operating hours, temperature, and most recent parameterization; and a filterable event log with message severity, ID, time, and description. You can create and download a diagnostic file for SICK service; creating a new file overwrites the previous one.
+
+![Diagnostics overview screen](https://sickag.github.io/sick_lidar_developer_guide/assets/picoScan100/img/sopasair-diagnosis-overview.png)
+*Live capture from a picoScan100's web interface.*
+
+*How to read internal device temperature.*
+
+### Status LEDs
+
+The two status LEDs on the housing show the device state at a glance.
+
+<p class="table-caption" markdown>**Status LEDs:** LED1, LED2, and meaning.</p>
+
+| LED1 | LED2 | Meaning |
+| --- | --- | --- |
+| <span class="led led--red"></span> Red | <span class="led led--red"></span> Red | Booting, parameterizing or firmware update |
+| – | – | Off |
+| <span class="led led--red led--flash"></span> Red, flashing fast | <span class="led led--red led--flash"></span> Red, flashing fast | Fatal error |
+| <span class="led led--red led--flash"></span> Red, flashing slowly | <span class="led led--red led--flash"></span> Red, flashing slowly | Recoverable error |
+| <span class="led led--green"></span> Green | <span class="led led--green"></span> Green | Ready, no object detected in configured fields |
+| – | <span class="led led--green"></span> Green | Ready, no fields configured |
+| <span class="led led--green"></span> Green | <span class="led led--yellow led--flash"></span> Yellow, flashing | Warning |
+| <span class="led led--yellow"></span> Yellow | <span class="led led--green led--flash"></span> Green, flashing | Restart after time or digital input |
+| <span class="led led--green"></span> Green | <span class="led led--yellow led--flash"></span> Yellow, flashing | Contamination warning |
+| <span class="led led--red led--flash"></span> Red, flashing | <span class="led led--yellow led--flash"></span> Yellow, flashing | Contamination error |
+| <span class="led led--green"></span><span class="led led--yellow"></span><span class="led led--red"></span> Green, yellow, red | <span class="led led--green"></span><span class="led led--yellow"></span><span class="led led--red"></span> Green, yellow, red | Identify device |
+| <span class="led led--red"></span> Red | <span class="led led--red led--flash"></span><span class="led led--yellow led--flash"></span> Red and yellow, flashing | Teach-in environment |
+| <span class="led led--yellow"></span> Yellow | <span class="led led--green"></span> Green | Object detected |
+
+<p class="led-legend" markdown><span class="led led--neutral"></span> illuminated · <span class="led led--neutral led--flash"></span> flashing · – off</p>
+
+You can switch the LEDs off in the web interface or with `sWN LEDEnable`, and
+read their state with `sRN LEDState`.
+
+### Cybersecurity
+
+Harden the sensor by managing certificates and switching network services on or off.
+
+*Live capture from a picoScan100's web interface.*
+
+Use this page to create an HTTPS certificate for encrypted access and enable only the required services and protocols, such as CoLa, device search, the web server, HTTPS, or SSH. Each row shows its purpose and physical and logical port to support firewall planning. Disable legacy protocols and developer access in production.
+
+For the picoScan150 ports and the documented factory defaults, see the
+[Cybersecurity network-services matrix](https://sickag.github.io/sick_lidar_developer_guide/integration-notes/cybersecurity/#picoscan100-picoscan150).
+
+### Detection History
+
+Record and review how often each field evaluation triggered.
+
+*Live capture from a picoScan100's web interface.*
+
+Start or stop recording detections across all evaluation groups.
+Choose which groups and fields to include.
+The statistics section shows the detection count per evaluation as live bars.
+A link jumps to the field evaluation to adjust fields.
+
+*How to use the object history feature.*
+*How to visualize detection-history bounding boxes.*

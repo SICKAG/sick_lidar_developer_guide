@@ -1,0 +1,4871 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Turn a picoScan into a game controller: decode the IMU stream with a Kaitai Python parser and steer a browser jump-and-run game by moving the sensor.">
+      
+      
+        <meta name="author" content="SICK AG">
+      
+      
+        <link rel="canonical" href="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/">
+      
+      
+        <link rel="prev" href="../native-ros2-slam/">
+      
+      
+        <link rel="next" href="../smart-shelf/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/SICK-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+  <title>picoScan150 Jump & Run: IMU-Controlled Browser Game | SICK</title>
+
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/fonts/fonts.css?v=2">
+    
+      <link rel="stylesheet" href="../../sick-brand.css?v=125">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/web-app/apple-touch-icon.png">
+  <meta name="application-name" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-title" content="LiDAR Developer Guide">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="LiDAR Developer Guide">
+  <meta property="og:title" content="picoScan150 Jump & Run: IMU-Controlled Browser Game">
+  <meta property="og:description" content="Turn a picoScan into a game controller: decode the IMU stream with a Kaitai Python parser and steer a browser jump-and-run game by moving the sensor.">
+  <meta property="og:url" content="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/">
+  <meta property="og:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SICK logo">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="picoScan150 Jump & Run: IMU-Controlled Browser Game">
+  <meta name="twitter:description" content="Turn a picoScan into a game controller: decode the IMU stream with a Kaitai Python parser and steer a browser jump-and-run game by moving the sensor.">
+  <meta name="twitter:image" content="https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png">
+  <meta name="twitter:image:alt" content="SICK logo">
+  <link rel="sitemap" type="application/xml" href="https://sickag.github.io/sick_lidar_developer_guide/sitemap.xml">
+  <link rel="alternate" type="text/plain" title="LLM-friendly index (llms.txt)" href="https://sickag.github.io/sick_lidar_developer_guide/llms.txt">
+  <link rel="alternate" type="text/plain" title="Complete guide in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/llms-full.txt">
+  <link rel="alternate" type="text/markdown" title="This page in Markdown" href="https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/index.md">
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "TechArticle", "author": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "dateModified": "2026-10-30", "description": "Turn a picoScan into a game controller: decode the IMU stream with a Kaitai Python parser and steer a browser jump-and-run game by moving the sensor.", "headline": "picoScan150 Jump \u0026 Run: IMU-Controlled Browser Game", "image": "https://sickag.github.io/sick_lidar_developer_guide/assets/SICK-social-preview.png", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "name": "LiDAR Developer Guide", "url": "https://sickag.github.io/sick_lidar_developer_guide/"}, "publisher": {"@type": "Organization", "name": "SICK AG", "url": "https://www.sick.com/"}, "url": "https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://sickag.github.io/sick_lidar_developer_guide/beginner-projects/imu-jump-and-run/", "name": "(L2) IMU Jump \u0026 Run", "position": 1}]}]</script>
+  <script src="../../assets/javascripts/device-page-scopes.js"></script>
+  <script src="../../javascripts/matomo.js"></script>
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#picoscan150-jump-run" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LiDAR Developer Guide" class="md-header__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LiDAR Developer Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              picoScan150 Jump & Run: IMU-Controlled Browser Game
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-device-filter" role="group" aria-label="Filter pages by device family">
+      <span class="md-device-filter__label">Filter by device</span>
+      <button class="md-device-filter__button md-device-filter__button--lrs4000" type="button" data-device-filter="LRS4000" aria-label="Filter by LRS4000" aria-pressed="false" title="LRS4000">
+        <span class="md-device-filter__name">LRS4000</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan100" type="button" data-device-filter="multiScan100" aria-label="Filter by multiScan100" aria-pressed="false" title="multiScan100">
+        <span class="md-device-filter__name">multiScan100</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--multiscan200" type="button" data-device-filter="multiScan200" aria-label="Filter by multiScan200" aria-pressed="false" title="multiScan200">
+        <span class="md-device-filter__name">multiScan200</span>
+      </button>
+      <button class="md-device-filter__button md-device-filter__button--picoscan100" type="button" data-device-filter="picoScan100" aria-label="Filter by picoScan100" aria-pressed="false" title="picoScan100">
+        <span class="md-device-filter__name">picoScan100</span>
+      </button>
+      <span class="md-device-filter__status" aria-live="polite"></span>
+    </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    <div class="md-translate notranslate" translate="no">
+      <button class="md-translate__button" type="button" data-google-translate aria-expanded="false" aria-controls="google_translate_element" aria-label="Translate this page" title="Translate this page">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.9 17.39c-.26-.8-1.01-1.39-1.9-1.39h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.984 7.984 0 0 1 2.9 12.8M11 19.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1a2 2 0 0 0 2 2m1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+      </button>
+      <div id="google_translate_element" class="md-translate__panel" hidden></div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9.4-9.8.6-14.8.6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4s-8.6-18.3-18.5-20.5C294.4 2.2 275.4 0 256 0"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      
+<script>
+  (() => {
+    const form = document.querySelector('[data-md-component="palette"]');
+    if (!form) return;
+    const inputs = Array.from(form.querySelectorAll("input"));
+    const explicit = () => __md_get("__palette_explicit") === true;
+    if (!explicit()) __md_set("__palette", null);
+    const saved = __md_get("__palette");
+    const index = saved && inputs[saved.index]
+      ? saved.index
+      : Math.max(0, inputs.findIndex(input => matchMedia(input.dataset.mdColorMedia).matches));
+    const input = inputs[index];
+    input.checked = true;
+    for (const key of ["media", "scheme", "primary", "accent"]) {
+      document.body.setAttribute("data-md-color-" + key, input.getAttribute("data-md-color-" + key));
+    }
+    let automaticChange = false;
+    form.addEventListener("change", () => {
+      if (!automaticChange) __md_set("__palette_explicit", true);
+    });
+    // Use the native control so icons and theme-color metadata stay in sync.
+    // This also works regardless of Material's media-listener ordering.
+    const preference = matchMedia("(prefers-color-scheme: light)");
+    const resetAutomatic = () => {
+      if (explicit()) return;
+      __md_set("__palette", null);
+      const next = inputs.find(input => matchMedia(input.dataset.mdColorMedia).matches) || inputs[0];
+      automaticChange = true;
+      next.click();
+      automaticChange = false;
+    };
+    if (preference.addEventListener) preference.addEventListener("change", resetAutomatic);
+    else if (preference.addListener) preference.addListener(resetAutomatic);
+  })();
+</script>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LiDAR Developer Guide" class="md-nav__button md-logo" aria-label="LiDAR Developer Guide" data-md-component="logo">
+      
+  <img src="../../assets/SICK-logo.svg" alt="logo">
+
+    </a>
+    LiDAR Developer Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Home">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lidar-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Simulation">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../simulation/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/virtual-sensor-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Sensor Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simulation/nvidia-isaac-sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Isaac Sim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Visualization">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../visualization/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/cloudcompare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CloudCompare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/rviz2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS 2 rviz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sentio-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentio Creator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualization/sopas-et/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPAS ET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="On-Device Applications">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../on-device-applications/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Device Applications
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    On-Device Applications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/field-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/object-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Object Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/perpendicular-distance-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Perpendicular Distance Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/contamination-indication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contamination Indication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../on-device-applications/3d-scan-recording/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Scan Recording
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Data Streaming">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-streaming/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Streaming
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Streaming
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/compact-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compact Format (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/filter-details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/lmdscandata-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMDscandata Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/msgpack-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSGPACK Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-streaming/websocket-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebSocket Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Configuration">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../configuration/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/rest-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST Interface (recommended)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/configuration-backup-and-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/cola-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoLa Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/https-and-certificates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPS & Certificates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/third-party-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-Party Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Recording">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../recording/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recording
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recording
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/ros-bag-db3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Bag | db3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/scansegmentapi-json/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScanSegmentAPI | JSON
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sick-perception-sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sick_perception_sdk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/sopasair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair | sc
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recording/wireshark-pcap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wireshark | pcap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Device-specific">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../device-specific/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device-specific
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Device-specific
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="LRS4000">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../LRS4000/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LRS4000
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LRS4000
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/motor-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motor Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LRS4000/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="multiScan200">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multiScan200/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    multiScan200
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    multiScan200
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multiScan200/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested" data-title="picoScan100">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../picoScan100/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    picoScan100
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    picoScan100
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-rest-openapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | REST | OpenAPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/api-cola-telegrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API | CoLa Telegrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/electrical-connection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Electrical Connection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/graphical-user-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOPASair Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../picoScan100/starter-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Kit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Shared Features">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../shared-features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Shared Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/asset-administration-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asset Administration Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/checksums/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checksums
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/device-discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/factory-reset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Factory Reset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/firmware-update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware Update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/ip-address-assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP Address Assignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/license-activation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiDAR License Activation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/time-synchronization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Synchronization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/udp-unicast-multicast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDP Unicast / Multicast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared-features/user-levels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Levels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Integration Notes">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integration-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integration Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/3d-with-2d-lidars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D With 2D LiDARs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cable-dimensioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cable Dimensioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/coding-tools-and-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coding Tools & Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/cybersecurity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/kaitai-struct-parsers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kaitai Struct Parsers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/matlab-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MATLAB Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/milestones-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Milestones Camera Plugin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/model-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/plc-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PLC Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-notes/ros-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROS Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested" data-title="Beginner Projects">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beginner Projects
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Beginner Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Building Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bulk-scan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L1) Bulk Scan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../height-measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) 3D Height Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../house-3d-capture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) House in 3D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reversing-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-ros2-slam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Native ROS 2 SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) IMU Jump & Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smart-shelf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L2) Smart Shelf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ros2-reversing-assistant-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (L3) ROS 2 Reversing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested" data-title="Troubleshooting">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../troubleshooting/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/error-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You'll Learn
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before You Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-imu-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure IMU Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-movement-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Movement Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check the Result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+<nav class="md-path" aria-label="Breadcrumb" >
+  <ol class="md-path__list">
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Beginner Projects
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+    <li class="md-path__item">
+      <span class="md-path__link" aria-current="page">(L2) IMU Jump & Run</span>
+    </li>
+  </ol>
+</nav>
+              
+              <article class="md-content__inner md-typeset">
+                
+  <div class="web-app-offline" data-web-app-offline role="status" hidden>
+    Your device appears to be offline. Reconnect to load pages and search.
+  </div>
+  
+                  
+
+
+
+<h1 id="picoscan150-jump-run">picoScan150 Jump &amp; Run<a class="headerlink" href="#picoscan150-jump-run" title="Permanent link">&para;</a></h1>
+<div class="chips">
+  <span class="chips-label">Compatible with: </span>
+  <span class="chip chip--picoScan100">picoScan100</span>
+</div>
+
+<p>Build <strong>picoScan150 Jump &amp; Run</strong> and use the built-in <a class="glossary-link" href="../../glossary/#imu" title="Built-in sensor that measures acceleration, angular velocity, and orientation.">IMU</a> of a picoScan as a game controller. Move the sensor left
+or right and the player runs with it; a quick upward hop makes it jump. Points
+grow with time, and the game gets faster every 15 seconds. No scan data is
+used.</p>
+<div class="video">
+<iframe loading="lazy" id="kaltura_player_picoscan150_jump_and_run"  data-kaltura-src="https://api.eu.kaltura.com/p/205/sp/20500/embedIframeJs/uiconf_id/23452804/partner_id/205?iframeembed=true&amp;playerId=kaltura_player_picoscan150_jump_and_run&amp;entry_id=0_npl16u58&amp;flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;wid=0_8m7trij3" width="800" height="450" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="SLDG - Beginner Project - Jump and Run"></iframe>
+</div>
+<p class="caption">picoScan150 Jump &amp; Run: moving the sensor steers the player.</p>
+
+<h2 id="what-youll-learn">What You'll Learn<a class="headerlink" href="#what-youll-learn" title="Permanent link">&para;</a></h2>
+<ul>
+<li>How to enable the IMU stream over <a class="glossary-link" href="../../glossary/#rest" title="HTTP-based interface of the sensor for reading and writing variables and calling methods.">REST</a> and receive it as Compact type 2 over UDP.</li>
+<li>How to check the <a class="glossary-link" href="../../glossary/#crc32" title="32-bit cyclic redundancy check. Protects each Compact and MSGPACK telegram.">CRC32</a> and decode the <a class="glossary-link" href="../../glossary/#telegram" title="One message exchanged with the sensor, for example a CoLa command or a Compact data packet.">telegrams</a> with a generated Kaitai parser.</li>
+<li>How to turn acceleration into robust movement events.</li>
+</ul>
+<h2 id="before-you-start">Before You Start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A picoScan with IMU streaming, for example picoScan150, on the same network
+  as your computer (<a href="../../getting-started/">Getting Started</a>).</li>
+<li>Python, a browser, the
+  <a href="../../integration-notes/kaitai-struct-parsers/#generate-from-the-command-line">Kaitai Struct compiler and runtime</a>,
+  and <a href="https://github.com/SICKAG/sick_scan_rest_client">sick_scan_rest_client</a>.</li>
+<li>Hold the sensor firmly with slack in the cables. Short moves of 10 to 20 cm
+  are enough.</li>
+<li>Set the environment variable <code>SICK_PASSWORD</code> to the Service password. The
+  default passwords are documented in the operating instructions of your
+  device. Do not pass them on, and change them during commissioning.</li>
+</ul>
+<h2 id="data-path">Data Path<a class="headerlink" href="#data-path" title="Permanent link">&para;</a></h2>
+<p><strong>picoScan IMU → UDP → CRC32 check → Kaitai Python parser → motion
+controller → local web server → browser game</strong></p>
+<p>Python receives the UDP datagrams and serves the Canvas game on <code>127.0.0.1</code>.
+Generate the parser from the official
+<a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/compact_frame.ksy">Compact frame</a>
+and <a href="https://github.com/SICKAG/KaitaiStructDescriptions/blob/public/formats/type_2_imu.ksy">type-2 IMU</a>
+definitions. The parser does not verify the <a class="glossary-link" href="../../glossary/#checksum" title="Value calculated over data to detect transmission errors or changes. CoLa B uses an XOR checksum, the Compact format CRC32, and the device reports MD5 checksums of its software and parameters.">checksum</a>; check the CRC32 first
+(<a href="../../integration-notes/kaitai-struct-parsers/#reception-and-validation">Reception and Validation</a>).</p>
+<h2 id="configure-imu-output">Configure IMU Output<a class="headerlink" href="#configure-imu-output" title="Permanent link">&para;</a></h2>
+<p>The game sets up the stream through the
+<a href="../../configuration/rest-interface/">REST interface</a> at start and disables it
+on exit:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sick_scan_rest_client.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESTClient</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">client</span> <span class="o">=</span> <span class="n">RESTClient</span><span class="p">(</span><span class="s2">"192.168.0.1"</span><span class="p">)</span>  <span class="c1"># sensor IP address</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">client</span><span class="o">.</span><span class="n">setUserLevel</span><span class="p">(</span><span class="s2">"Service"</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SICK_PASSWORD"</span><span class="p">])</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">client</span><span class="o">.</span><span class="n">writeVariable</span><span class="p">(</span><span class="s2">"ImuDataEthSettings"</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                     <span class="p">{</span><span class="s2">"Protocol"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"IPAddress"</span><span class="p">:</span> <span class="p">[</span><span class="mi">192</span><span class="p">,</span> <span class="mi">168</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="s2">"Port"</span><span class="p">:</span> <span class="mi">7503</span><span class="p">})</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">client</span><span class="o">.</span><span class="n">writeVariable</span><span class="p">(</span><span class="s2">"ImuDataEnable"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p class="caption">Send the IMU stream by UDP (<code>Protocol</code> 1) to the computer at 192.168.0.100, port 7503. The change is RAM-only.</p>
+
+<p>Keep both IP addresses and the port configurable. If the sensor streams but
+nothing arrives, the computer's firewall is the usual cause; allow the port or
+pick one that is permitted.</p>
+<h2 id="how-movement-works">How Movement Works<a class="headerlink" href="#how-movement-works" title="Permanent link">&para;</a></h2>
+<p>The game uses gravity-corrected acceleration, not tilt. To calibrate, hold the sensor
+still, then push it right once.</p>
+<div class="imu-movement" role="group" aria-label="Move the picoScan left or right to steer, or lift it in a quick hop to jump">
+  <span class="imu-movement__jump">↑ Quick hop to jump</span>
+  <span class="imu-movement__left">← Move left</span>
+  <img src="../../assets/picoScan100/img/product-photo.png" alt="SICK picoScan sensor">
+  <p class="caption">Move the sensor sideways to steer; lift it for a quick hop to jump.</p>
+  <span class="imu-movement__right">Move right →</span>
+</div>
+
+<p class="table-caption">Game controls.</p>
+
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Move sensor left or right</td>
+<td>Player runs left or right.</td>
+</tr>
+<tr>
+<td>Quick upward hop</td>
+<td>One jump.</td>
+</tr>
+<tr>
+<td>Start, Pause, Stop</td>
+<td>Run, freeze, or end the game.</td>
+</tr>
+<tr>
+<td>Calibrate</td>
+<td>Hold still, then push right once.</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>Sensor IP, computer IP, port, sensitivity.</td>
+</tr>
+<tr>
+<td>Arrow keys and Space</td>
+<td>Play without a sensor.</td>
+</tr>
+</tbody>
+</table>
+<p>Jump over blocks, dodge falling rocks from level 2, and collect coins. You
+score 10 points per second and 50 per coin. The game pauses if IMU data stops
+for 500 ms.</p>
+<h2 id="check-the-result">Check the Result<a class="headerlink" href="#check-the-result" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Without a sensor, play with the keyboard; the high score survives a
+  restart.</li>
+<li>With the sensor, the status shows about 100 valid packets per second.</li>
+<li>Holding still or tilting slowly does not move the player; a short move
+  right does, then stops.</li>
+<li>A quick hop gives exactly one jump; a sideways push gives none.</li>
+<li>Quitting the program switches the IMU stream off.</li>
+</ul>
+<h2 id="project-prompt">Project Prompt<a class="headerlink" href="#project-prompt" title="Permanent link">&para;</a></h2>
+<p>Paste this prompt into your coding assistant in a new workspace. It asks for
+the receiver, the game, tests, and a Windows executable.</p>
+<details>
+<summary>Expand to view the complete project prompt</summary>
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Build a beginner-friendly level-two project called "picoScan150 Jump &amp; Run":
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>a SICK picoScan150 IMU is the game controller for a basic browser
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>jump-and-run game. The player moves left and
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>right when I move the sensor left and right (use the measured acceleration,
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>not tilt), and jumps when I lift the sensor with a quick upward hop.
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Deliver working files, not a plan. Work in a new folder outside the
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>developer guide. Use Python 3.12, the Kaitai Struct Python runtime, requests,
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>sick_scan_rest_client (https://github.com/SICKAG/sick_scan_rest_client) and
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>plain HTML, CSS and JavaScript with Canvas. Use only the Python standard
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>library for the web server. No ROS, SICK SDK, scan data, point clouds,
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>frontend framework or external game assets. Keep the code easy to follow.
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>Draw the player as a small picoScan: grey housing with a blue SICK badge,
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>black optics dome with a moving red scan point, short legs, and a faint scan
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>fan in the running direction.
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>1. Configuration
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>Read config.json next to the program (create it with defaults on first start)
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>and allow command-line overrides: sensor IP (default 192.168.0.1), PC IP on
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>the sensor network (default 192.168.0.100), UDP port (default 7503), local
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>HTTP port (default 8765), --no-configure and --no-browser. Validate IPv4
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>addresses and ports. Offer the same settings in a Settings dialog in the game,
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>list the PC's local IPv4 addresses as suggestions, save changes back to
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>config.json and reconnect without restarting the program.
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>2. Sensor setup with REST
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>At start, in a background thread, use sick_scan_rest_client: RESTClient(ip),
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>setUserLevel("Service", password from config), then writeVariable
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>"ImuDataEthSettings" = {"Protocol": 1, "IPAddress": [PC IP octets],
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>"Port": udp port} and "ImuDataEnable" = true. Check reachability with a short
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>TCP connect to port 80 first, because the client sets no timeouts. Bypass any
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>system HTTP proxy for the sensor IP. writeVariable returns (ok, data);
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>check ok. Both variables need the Service level. Use UDP: TCP output
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>(Protocol 2) was refused in tests, and polling the IMU over REST only
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>updates at about 4 Hz, which is too slow for a game. These are RAM-only
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>changes; do not call WriteEeprom. Show the result in the UI. On exit set
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>ImuDataEnable = false. On Windows, atexit does not run when the console
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>window is closed, so also register a console control handler
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>(SetConsoleCtrlHandler) for close and Ctrl+Break. Keep scan settings
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>untouched.
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>3. Receive and decode with the real Kaitai parser
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>Generate Python from SICKAG/KaitaiStructDescriptions (public branch),
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>formats/compact_frame.ksy with all imported formats, using
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>kaitai-struct-compiler -t python --outdir &lt;dir&gt; formats/*.ksy. Keep the
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>generated modules unmodified and record the command. They import each other
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>as top-level modules, so add their folder to sys.path, and use the
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>kaitaistruct runtime 0.11 or newer. Do not replace Kaitai
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>with a hand-written struct parser. Bind a UDP socket to the PC IP and port,
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>accept datagrams only from the sensor IP, check the start bytes 02 02 02 02,
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>verify CRC32 (zlib.crc32 over all bytes except the trailing 4-byte
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>little-endian checksum), then parse with CompactFrame and accept only
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>telegram_type == 2. Count good and rejected frames, compute the packet rate
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>(about 100 Hz on picoScan150) and keep the receiver alive on bad packets.
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>Report bind errors clearly (for example, the PC IP is not on this computer).
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>Record a few hundred real frames to a file for the tests.
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>4. Turn acceleration into controls
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>Rotate the acceleration into the world frame with the orientation quaternion
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>(w, x, y, z) and subtract a gravity/bias vector, so tilting the sensor does
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>not look like sideways motion. On picoScan150 the quaternion is
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>gravity-referenced: R(q) * acc is about (0, 0, 9.8) at rest. Without the
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>rotation, a 20 degree tilt leaks about 3.4 m/s^2 into the sideways axis and
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>the velocity drifts. Yaw has no magnetometer reference and can drift slowly,
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>so offer recalibration. Estimate that vector automatically from the
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>first 1.5 s, and track it slowly while the sensor is quiet.
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>Calibrate button: 1.5 s still (reject if the per-axis standard deviation is
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>above 0.35 m/s^2), then "move the sensor quickly to the RIGHT once": the
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>horizontal direction of the strongest push sample (above 2 m/s^2) becomes
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>the right axis. Without calibration, use the sensor y axis projected into
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>the horizontal plane. Add an invert option.
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>Sideways input: dead zone 0.35 m/s^2, then integrate into a velocity with a
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>leak (time constant 0.8 s while moving, 0.12 s after 0.15 s of quiet), so it
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>returns to zero when the sensor stops. The leak recovers only about half
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>of the real movement, so scale the velocity in the game (about 2600 px per
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>m/s at sensitivity 1). Do not double-integrate to an absolute position; it
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>drifts within seconds. Jump: vertical linear acceleration
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>above 3.5 m/s^2, re-arm below 1.0 m/s^2, cooldown 0.6 s; count jumps with a
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>sequence number so the browser consumes each jump once. Use sensor
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>timestamps for dt.
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>5. Game
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>Serve the game on 127.0.0.1 only. Push velocity, accelerations, jump
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>counter, calibration state, packet statistics and sensor status to the
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>browser with Server-Sent Events at about 50 Hz. Accept POST requests only
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>with Content-Type application/json. Give each calibration request an id and
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>let the dialog react only to status messages with that id, so a stale
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>"ready" message does not close it early. If the HTTP port is busy, try the
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>next ones and open the browser on the port actually used.
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>Canvas 960x540, scaled to the window without horizontal scrolling. The world
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>scrolls left; the player moves with sensor velocity times a sensitivity
+<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>setting, clamped to the screen; arrow keys and Space also work. Ground blocks
+<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>to jump over, from level 2 falling rocks with a shadow warning to dodge
+<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>sideways, coins for +50. Score 10 points per second of active play, level up
+<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>every 15 s with faster scrolling and more obstacles, capped so jumps stay
+<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a>possible. Collision ends the run.
+<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a>Buttons: Start, Pause/Resume, Stop, Calibrate, Settings. Show score, level,
+<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a>high score (saved in highscore.json next to the program), sensor status with
+<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>packet rate, a sideways acceleration and velocity meter, and a jump light.
+<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>If data is older than 500 ms while playing in sensor mode, pause and require
+<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a>Resume. If no packets arrive 3 s after a successful configuration, show a
+<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>hint to check the PC IP and the firewall, or choose another UDP port.
+<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a>Corporate Windows firewalls often block inbound UDP and ignore local rules,
+<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>or allow it only while the Ethernet network is classified as Private; then
+<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a>use a port the policy allows (for example 30719 in our tests).
+<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>
+<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>6. Tests and delivery
+<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>Unit-test the receiver with recorded real frames (good CRC, corrupted byte,
+<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>wrong start bytes) and the controller with synthetic samples: still sensor,
+<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>noise below the dead zone, push right/left, calibration learning a different
+<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>axis, invert, a tilted sensor that must not drift, a push while tilted,
+<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>an upward hop giving one jump, a sideways push giving no jump, and a shaky
+<a id="__codelineno-1-112" name="__codelineno-1-112" href="#__codelineno-1-112"></a>calibration being rejected. Provide a PowerShell build script that runs the
+<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>tests and builds one console .exe with PyInstaller (--onefile, add the static
+<a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a>folder as data, pass the Kaitai folder with --paths and the generated modules
+<a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a>as hidden imports, name it picoScan150JumpAndRun). Include a README
+<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>with run, settings, calibration and firewall notes. Test with the real sensor
+<a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a>and state clearly what was verified with hardware.
+</code></pre></div>
+
+</details>
+
+
+
+
+
+
+
+  
+  
+
+
+
+<div class="page-end">
+  
+  <p id="page-feedback-title" class="page-feedback__title">Was this page helpful?</p>
+  
+  <div class="page-end__controls">
+    
+    <a class="page-end__link page-end__link--prev" href="../native-ros2-slam/" aria-label="Previous page: (L2) Native ROS 2 SLAM" title="Previous page: (L2) Native ROS 2 SLAM">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 16.58 10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></span>
+    </a>
+    
+    
+    <section class="page-feedback" data-page-feedback="beginner-projects/imu-jump-and-run/">
+      <div class="page-feedback__buttons" role="group" aria-labelledby="page-feedback-title" hidden>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Helpful" aria-label="This page was helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z"/></svg></span>
+        </button>
+        <button type="button" class="page-feedback__button" data-feedback-rating="Not helpful" aria-label="This page was not helpful" aria-pressed="false">
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 15V3h4v12zM15 3a2 2 0 0 1 2 2v10c0 .55-.22 1.05-.59 1.41L9.83 23l-1.06-1.06c-.27-.27-.44-.64-.44-1.06l.03-.31.95-4.57H3a2 2 0 0 1-2-2v-2c0-.26.05-.5.14-.73l3.02-7.05C4.46 3.5 5.17 3 6 3zm0 2H5.97L3 12v2h8.78l-1.13 5.32L15 14.97z"/></svg></span>
+        </button>
+      </div>
+      <p class="page-feedback__status" role="status" aria-live="polite"></p>
+    </section>
+    
+    
+    <a class="page-end__link page-end__link--next" href="../smart-shelf/" aria-label="Next page: (L2) Smart Shelf" title="Next page: (L2) Smart Shelf">
+      <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></span>
+    </a>
+    
+  </div>
+</div>
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="sick-footer">
+  <nav class="sick-footer__links" aria-label="Legal information">
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/imprint/s/imprint" target="_blank" rel="noopener noreferrer">Imprint</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-and-conditions/s/tac" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/terms-of-use/s/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of use</a>
+      <span aria-hidden="true">|</span>
+    </span>
+    <span class="sick-footer__item">
+      <a href="https://www.sick.com/de/en/sick-data-privacy-declaration/w/dataprotection" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <span aria-hidden="true">|</span>
+    </span>
+  </nav>
+  <div class="sick-footer__item sick-footer__version">
+    <span>Version: v0.3.6</span>
+    <span aria-hidden="true">|</span>
+    <span>Last update: 2026-10-30</span>
+  </div>
+  <div class="sick-footer__item sick-footer__copyright">
+    <span aria-hidden="true">|</span>
+    © 2026 SICK AG
+  </div>
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.indexes", "navigation.path", "navigation.sections", "content.code.copy", "content.code.annotate", "toc.follow", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "v0.3.6"}</script>
+    
+    
+  
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js?language-alternates=1"></script>
+      
+        <script src="../../javascripts/web-app.js?v=1"></script>
+      
+        <script src="../../javascripts/search-paths.js?v=1"></script>
+      
+        <script src="../../javascripts/page-feedback.js?v=2"></script>
+      
+        <script src="../../javascripts/navigation-scroll.js?v=1"></script>
+      
+        <script src="../../javascripts/device-filter.js?v=12"></script>
+      
+        <script src="../../javascripts/google-translate.js?v=7"></script>
+      
+        <script src="../../javascripts/cable-calculator.js?v=7"></script>
+      
+        <script src="../../javascripts/kaltura-lazy.js?v=2"></script>
+      
+        <script src="../../javascripts/object-size-calculator.js?v=12"></script>
+      
+        <script src="../../javascripts/bandwidth-calculator.js?v=9"></script>
+      
+        <script src="../../javascripts/product-id-lookup.js?v=2"></script>
+      
+        <script src="../../javascripts/openapi-reference.js?v=3"></script>
+      
+    
+  
+    <script src="../../javascripts/copy-for-ai.js?v=11"></script>
+  
+
+  </body>
+</html>
