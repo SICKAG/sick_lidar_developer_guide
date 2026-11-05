@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" role="img" aria-labelledby="title desc">
+  <title id="title">Smart shelf demo setup</title>
+  <desc id="desc">A picoScan stands on the desk at the lower-left edge of a desktop monitor. Its scan plane runs just in front of the screen and covers it. A laser beam hits a pen on the screen. The sensor reports the pen's perpendicular distance d to a horizontal reference line through the sensor.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2a37"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0a5af5"/>
+    </marker>
+    <radialGradient id="fan" cx="160" cy="395" r="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7a3cf5" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7a3cf5" stop-opacity="0.04"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="900" height="500" fill="#ffffff"/>
+
+  <!-- Front view -->
+  <text x="20" y="30" font-weight="600" fill="#1f2a37">Front view</text>
+
+  <!-- Desk -->
+  <rect x="20" y="420" width="640" height="14" rx="3" fill="#c9b79c"/>
+
+  <!-- Monitor -->
+  <rect x="380" y="362" width="40" height="44" fill="#4b5563"/>
+  <rect x="320" y="404" width="160" height="16" rx="4" fill="#4b5563"/>
+  <rect x="166" y="48" width="468" height="318" rx="10" fill="#1f2937"/>
+  <rect x="178" y="60" width="444" height="290" fill="#eef2f7"/>
+
+  <!-- Shelf drawn on the screen -->
+  <g stroke="#9aa3ae" stroke-width="5">
+    <line x1="289" y1="60" x2="289" y2="350"/>
+    <line x1="400" y1="60" x2="400" y2="350"/>
+    <line x1="511" y1="60" x2="511" y2="350"/>
+    <line x1="178" y1="157" x2="622" y2="157"/>
+    <line x1="178" y1="254" x2="622" y2="254"/>
+  </g>
+  <rect x="403" y="160" width="105" height="91" fill="#0a5af5" fill-opacity="0.25" stroke="#f5b400" stroke-width="3"/>
+  <g fill="#3b5998">
+    <rect x="200" y="110" width="68" height="40" rx="3"/><rect x="311" y="110" width="68" height="40" rx="3"/>
+    <rect x="422" y="110" width="68" height="40" rx="3"/><rect x="533" y="110" width="68" height="40" rx="3"/>
+    <rect x="200" y="207" width="68" height="40" rx="3"/><rect x="311" y="207" width="68" height="40" rx="3"/>
+    <rect x="422" y="207" width="68" height="40" rx="3"/><rect x="533" y="207" width="68" height="40" rx="3"/>
+    <rect x="200" y="304" width="68" height="40" rx="3"/><rect x="311" y="304" width="68" height="40" rx="3"/>
+    <rect x="422" y="304" width="68" height="40" rx="3"/><rect x="533" y="304" width="68" height="40" rx="3"/>
+  </g>
+
+  <!-- Scan plane and evaluation field -->
+  <path d="M160,395 L85,95 L610,95 L610,395 Z" fill="url(#fan)"/>
+  <g stroke="#7a3cf5" stroke-width="1" stroke-opacity="0.45">
+    <line x1="160" y1="395" x2="610" y2="250"/>
+    <line x1="160" y1="395" x2="610" y2="120"/>
+    <line x1="160" y1="395" x2="420" y2="95"/>
+    <line x1="160" y1="395" x2="250" y2="95"/>
+  </g>
+  <line x1="160" y1="395" x2="452" y2="212" stroke="#d81b60" stroke-width="2.5"/>
+  <rect x="85" y="95" width="525" height="300" fill="none" stroke="#7a3cf5" stroke-width="2.5" stroke-dasharray="8 5"/>
+  <text x="190" y="84" fill="#5b21b6">Evaluation field</text>
+
+  <!-- Reference line and perpendicular distance -->
+  <line x1="85" y1="395" x2="610" y2="395" stroke="#0a5af5" stroke-width="4"/>
+  <line x1="455" y1="392" x2="455" y2="220" stroke="#0a5af5" stroke-width="3" marker-start="url(#arrowBlue)" marker-end="url(#arrowBlue)"/>
+  <rect x="463" y="292" width="40" height="34" rx="4" fill="#ffffff" fill-opacity="0.9"/>
+  <text x="468" y="318" font-weight="600" fill="#0a5af5">d</text>
+  <text x="290" y="470" font-weight="600" fill="#0a5af5">Reference line</text>
+
+  <!-- Pen -->
+  <g transform="rotate(-25 455 210)">
+    <rect x="449" y="120" width="12" height="80" rx="3" fill="#374151"/>
+    <path d="M449,200 L461,200 L455,214 Z" fill="#9ca3af"/>
+  </g>
+  <circle cx="455" cy="210" r="6" fill="#f5b400" stroke="#1f2a37" stroke-width="1.5"/>
+  <text x="478" y="204" font-weight="600" fill="#1f2a37">Pen</text>
+
+  <!-- picoScan -->
+  <rect x="140" y="376" width="40" height="44" rx="6" fill="#d1d5db" stroke="#6b7280"/>
+  <circle cx="160" cy="395" r="11" fill="#111827"/>
+  <rect x="148" y="410" width="24" height="6" rx="1" fill="#0a5af5"/>
+  <text x="100" y="470" font-weight="600" fill="#1f2a37">picoScan</text>
+
+  <!-- Sensor axes -->
+  <line x1="160" y1="395" x2="240" y2="395" stroke="#1f2a37" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="246" y="400" fill="#1f2a37">x</text>
+  <line x1="160" y1="395" x2="160" y2="318" stroke="#1f2a37" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="112" y="326" fill="#1f2a37">−y</text>
+
+  <!-- Side view -->
+  <text x="690" y="30" font-weight="600" fill="#1f2a37">Side view</text>
+  <rect x="690" y="420" width="190" height="14" rx="3" fill="#c9b79c"/>
+  <rect x="790" y="48" width="18" height="318" rx="4" fill="#1f2937"/>
+  <rect x="800" y="362" width="14" height="44" fill="#4b5563"/>
+  <rect x="770" y="404" width="80" height="16" rx="4" fill="#4b5563"/>
+  <line x1="772" y1="70" x2="772" y2="395" stroke="#7a3cf5" stroke-width="4" stroke-opacity="0.6"/>
+  <rect x="752" y="376" width="30" height="44" rx="6" fill="#d1d5db" stroke="#6b7280"/>
+  <circle cx="767" cy="395" r="8" fill="#111827"/>
+  <text x="822" y="220" fill="#1f2a37" transform="rotate(90 822 220)" text-anchor="middle">Screen</text>
+  <text x="690" y="130" fill="#5b21b6">Scan</text>
+  <text x="690" y="160" fill="#5b21b6">plane</text>
+  <line x1="735" y1="175" x2="768" y2="200" stroke="#5b21b6" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

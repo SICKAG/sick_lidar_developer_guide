@@ -1,0 +1,8 @@
+{
+  "family": "LRS4000",
+  "version": "1.10.0",
+  "file": "LRS4000_1.10.0.yaml",
+  "sha256": "759296a9a5a14bba8d4a82a1018e9d08e6695aa4547ef8480cdfae89b695e430",
+  "operations": 130,
+  "schemas": 15
+}
